@@ -5,33 +5,7 @@ import Empty from "../ui/Empty";
 import Spinner from "../ui/Spinner";
 import Pagination from "../ui/Pagination";
 
-export const ReportTable = () => {
-  const reports = [
-    {
-      id: 1,
-      title: "Server Downtime",
-      type: "Technical",
-      severity: "High",
-      priority: "Urgent",
-      date: "2025-02-09T14:30:00Z",
-      status: "Open",
-      submittedBy: { name: "Ahmed", email: "Ahmed@example.com" },
-      assignedTo: { name: "Belgacem", email: "Belgacem@example.com" },
-    },
-    {
-      id: 2,
-      title: "Data Breach",
-      type: "Security",
-      severity: "Critical",
-      priority: "Normal",
-      date: "2025-02-10T10:15:00Z",
-      status: "In Progress",
-      description: "A security breach was detected in the system.",
-      submittedBy: { name: "Azyz Hcini", email: "Azyz@example.com" },
-      assignedTo: { name: "Crush", email: "Sarrour@example.com" },
-    },
-  ];
-
+export const ReportTable = ({ reports }) => {
   const isLoading = false;
   const count = reports.length;
 
