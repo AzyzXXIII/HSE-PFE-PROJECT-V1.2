@@ -7,7 +7,6 @@ import Table from "../ui/Table";
 import Modal from "../ui/Modal";
 import Menus from "../ui/Menus";
 import ConfirmDelete from "../ui/ConfirmDelete";
-import ReportDetails from "./ReportDetails";
 
 // Styled pill for status, severity, and priority
 const Pill = styled.div`
@@ -94,26 +93,21 @@ function ReportRow({ report }) {
         <Menus.Menu>
           <Menus.Toggle id={report.id} />
           <Menus.List id={report.id}>
-            <Modal.Open opens="details">
-              <Menus.Button
-                icon={<HiEye />}
-                onClick={() => navigate(`/reports/${report.id}`)}
-              >
-                See details
-              </Menus.Button>
-            </Modal.Open>
+            <Menus.Button
+              icon={<HiEye />}
+              onClick={() =>
+                navigate(`/reports/${report.id}`, { state: { report } })
+              }
+            >
+              See details
+            </Menus.Button>
+
             <Modal.Open opens="delete">
               <Menus.Button icon={<HiTrash />}>Delete report</Menus.Button>
             </Modal.Open>
           </Menus.List>
         </Menus.Menu>
 
-        {/* Modal for Report Details */}
-        <Modal.Window name="details">
-          <ReportDetails report={report} />
-        </Modal.Window>
-
-        {/* Modal for Confirm Delete */}
         <Modal.Window name="delete">
           <ConfirmDelete
             resourceName="report"
@@ -124,38 +118,5 @@ function ReportRow({ report }) {
     </Table.Row>
   );
 }
-
-// Component for displaying report details in a modal
-/* function ReportDetails({ report }) {
-  return (
-    <div style={{ padding: "2rem", fontSize: "1.4rem" }}>
-      <h2 style={{ fontSize: "1.8rem", fontWeight: "bold" }}>{report.title}</h2>
-      <p>
-        <strong>Type:</strong> {report.type}
-      </p>
-      <p>
-        <strong>Status:</strong> {report.status}
-      </p>
-      <p>
-        <strong>Severity:</strong> {report.severity}
-      </p>
-      <p>
-        <strong>Priority:</strong> {report.priority}
-      </p>
-      <p>
-        <strong>Submitted By:</strong> {report.submittedBy.name} (
-        {report.submittedBy.email})
-      </p>
-      <p>
-        <strong>Assigned To:</strong> {report.assignedTo.name} (
-        {report.assignedTo.email})
-      </p>
-      <p>
-        <strong>Date:</strong>{" "}
-        {format(new Date(report.date), "MMM dd yyyy, hh:mm a")}
-      </p>
-    </div>
-  );
-} */
 
 export default ReportRow;

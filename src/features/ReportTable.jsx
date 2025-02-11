@@ -6,7 +6,6 @@ import Spinner from "../ui/Spinner";
 import Pagination from "../ui/Pagination";
 
 export const ReportTable = () => {
-  // Mock data for reports with additional fields
   const reports = [
     {
       id: 1,
@@ -16,8 +15,8 @@ export const ReportTable = () => {
       priority: "Urgent",
       date: "2025-02-09T14:30:00Z",
       status: "Open",
-      submittedBy: { name: "John Doe", email: "john@example.com" },
-      assignedTo: { name: "Jane Smith", email: "jane@example.com" },
+      submittedBy: { name: "Ahmed", email: "Ahmed@example.com" },
+      assignedTo: { name: "Belgacem", email: "Belgacem@example.com" },
     },
     {
       id: 2,
@@ -27,19 +26,9 @@ export const ReportTable = () => {
       priority: "Normal",
       date: "2025-02-10T10:15:00Z",
       status: "In Progress",
-      submittedBy: { name: "Alice Brown", email: "alice@example.com" },
-      assignedTo: { name: "Bob Johnson", email: "bob@example.com" },
-    },
-    {
-      id: 3,
-      title: "Network Latency",
-      type: "Performance",
-      severity: "Medium",
-      priority: "Medium",
-      date: "2025-02-11T09:00:00Z",
-      status: "Closed",
-      submittedBy: { name: "Emily Davis", email: "emily@example.com" },
-      assignedTo: { name: "Michael Wilson", email: "michael@example.com" },
+      description: "A security breach was detected in the system.",
+      submittedBy: { name: "Azyz Hcini", email: "Azyz@example.com" },
+      assignedTo: { name: "Crush", email: "Sarrour@example.com" },
     },
   ];
 
