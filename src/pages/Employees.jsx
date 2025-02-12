@@ -16,6 +16,7 @@ export const Employees = () => {
       address: "123 Main St, City",
       titleId: "Software Engineer",
       departmentId: "IT",
+      status: "accepted",
       qrCode: "qr_ahmed123.png",
     },
     {
@@ -27,6 +28,7 @@ export const Employees = () => {
       address: "456 Elm St, City",
       titleId: "Project Manager",
       departmentId: "Management",
+      status: "pending",
       qrCode: "qr_sarah456.png",
     },
   ]);
@@ -38,7 +40,7 @@ export const Employees = () => {
         <EmployeeTableOperations />
       </Row>
 
-      <Row>
+      <Row type="vertical">
         <EmployeeTable employees={employees} />
         <AddEmployee setEmployees={setEmployees} />
       </Row>

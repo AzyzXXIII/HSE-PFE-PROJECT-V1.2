@@ -8,7 +8,9 @@ export const AddEmployee = ({ setEmployees }) => {
       <Modal>
         {/* Open the modal when button is clicked */}
         <Modal.Open opens="employee-form">
-          <Button>Add new employee</Button>
+          <Button variation="primary" size="medium">
+            Add Employee
+          </Button>
         </Modal.Open>
 
         {/* Modal content */}

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { HiPencil, HiTrash } from "react-icons/hi2";
+import { HiPencil, HiTrash, HiCheck, HiX } from "react-icons/hi";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Menus from "../../ui/Menus";
@@ -34,7 +34,18 @@ const Department = styled.div`
   color: var(--color-blue-700);
 `;
 
-function EmployeeRow({ employee }) {
+const Status = styled.div`
+  font-family: "Sono";
+  font-weight: 500;
+  color: ${(props) =>
+    props.status === "accepted"
+      ? "var(--color-green-700)"
+      : props.status === "rejected"
+      ? "var(--color-red-700)"
+      : "var(--color-grey-700)"};
+`;
+
+function EmployeeRow({ employee, onAccept, onReject }) {
   const {
     id: employeeId,
     username,
@@ -44,6 +55,7 @@ function EmployeeRow({ employee }) {
     address,
     titleId,
     departmentId,
+    status,
   } = employee;
 
   return (
@@ -55,6 +67,7 @@ function EmployeeRow({ employee }) {
       <div>{address}</div>
       <Title>{titleId}</Title>
       <Department>{departmentId}</Department>
+      <Status status={status}>{status}</Status>
       <div>
         <Modal>
           <Menus.Menu>
@@ -68,6 +81,23 @@ function EmployeeRow({ employee }) {
               <Modal.Open opens="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
+
+              {status === "pending" && (
+                <>
+                  <Menus.Button
+                    icon={<HiCheck />}
+                    onClick={() => onAccept(employeeId)}
+                  >
+                    Accept
+                  </Menus.Button>
+                  <Menus.Button
+                    icon={<HiX />}
+                    onClick={() => onReject(employeeId)}
+                  >
+                    Reject
+                  </Menus.Button>
+                </>
+              )}
             </Menus.List>
 
             <Modal.Window name="edit">

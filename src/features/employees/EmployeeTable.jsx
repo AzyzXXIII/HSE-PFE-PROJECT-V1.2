@@ -29,7 +29,7 @@ function EmployeeTable({ employees }) {
 
   return (
     <Menus>
-      <Table columns="1fr 1.5fr 2fr 1.5fr 1fr 1fr 1fr 1fr">
+      <Table columns="1fr 1.5fr 2fr 1.5fr 1fr 1fr 1fr 1fr 1fr">
         <Table.Header>
           <div>Username</div>
           <div>Full Name</div>
@@ -38,6 +38,7 @@ function EmployeeTable({ employees }) {
           <div>Address</div>
           <div>Title</div>
           <div>Department</div>
+          <div>Status</div>
           <div>QR Code</div>
         </Table.Header>
 
