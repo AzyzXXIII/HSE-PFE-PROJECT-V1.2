@@ -11,6 +11,7 @@ import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import Reports from "./pages/Reports";
 import Report from "./pages/Report";
+import Employees from "./pages/Employees";
 function App() {
   return (
     <>
@@ -22,7 +23,7 @@ function App() {
             <Route path="dashboard" element={<p>Dashboard</p>} />
             <Route path="reports" element={<Reports />} />
             <Route path="reports/:id" element={<Report />} />
-            <Route path="permission" element={<h1>permission</h1>} />
+            <Route path="permissions" element={<Employees />} />
             <Route path="users" element={<Users />} />
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />

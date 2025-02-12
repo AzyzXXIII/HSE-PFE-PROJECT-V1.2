@@ -72,7 +72,7 @@ function MainNav() {
         <li>
           <StyledNavLink to="/permissions">
             <HiOutlineHomeModern />
-            <span>Permissions</span>
+            <span>Employees</span>
           </StyledNavLink>
         </li>
         <li>
