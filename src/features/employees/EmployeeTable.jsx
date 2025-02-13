@@ -10,22 +10,26 @@ function EmployeeTable({ employees }) {
 
   if (!employees.length) return <Empty resourceName="employees" />;
 
-  // 1) FILTER by department
-  const departmentFilter = searchParams.get("department") || "all";
+  // 1) FILTER by status
+  const statusFilter = searchParams.get("status") || "all";
   let filteredEmployees = employees;
-  if (departmentFilter !== "all") {
+  if (statusFilter !== "all") {
     filteredEmployees = employees.filter(
-      (employee) => employee.departmentId === departmentFilter
+      (employee) => employee.status === statusFilter
     );
   }
 
-  // 2) SORT by full name
+  // 2) SORT employees
   const sortBy = searchParams.get("sortBy") || "fullName-asc";
   const [field, direction] = sortBy.split("-");
   const modifier = direction === "asc" ? 1 : -1;
-  const sortedEmployees = [...filteredEmployees].sort(
-    (a, b) => a[field].localeCompare(b[field]) * modifier
-  );
+
+  const sortedEmployees = [...filteredEmployees].sort((a, b) => {
+    if (a[field] && b[field]) {
+      return a[field].localeCompare(b[field]) * modifier;
+    }
+    return 0;
+  });
 
   return (
     <Menus>
