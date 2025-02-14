@@ -23,7 +23,7 @@ function App() {
             <Route path="dashboard" element={<p>Dashboard</p>} />
             <Route path="reports" element={<Reports />} />
             <Route path="reports/:id" element={<Report />} />
-            <Route path="permissions" element={<Employees />} />
+            <Route path="employees" element={<Employees />} />
             <Route path="users" element={<Users />} />
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />

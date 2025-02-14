@@ -47,7 +47,7 @@ function ReportDetails() {
         setPriority(location.state.report.priority || "Normal");
       }
       setIsLoading(false);
-    }, 1000);
+    }, 400);
   }, [location.state?.report]);
 
   if (isLoading) return <Spinner />;
