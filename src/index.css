@@ -1,1 +1,34 @@
 @import "tailwindcss";
+/* Style for events inside the calendar */
+.fc-event {
+  background-color: #007bff !important; /* Blue color */
+  color: white !important; /* White text */
+  border: none !important; /* Remove border */
+  border-radius: 5px !important; /* Rounded corners */
+  padding: 5px !important; /* Spacing */
+  font-size: 14px !important; /* Text size */
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Style for external draggable events */
+#external-events {
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  width: 200px;
+}
+
+.fc-event {
+  padding: 5px;
+  margin-bottom: 5px;
+  background: #007bff;
+  color: white;
+  text-align: center;
+  cursor: grab;
+}
+
+/* Add hover effect */
+.fc-event:hover {
+  opacity: 0.8;
+}
