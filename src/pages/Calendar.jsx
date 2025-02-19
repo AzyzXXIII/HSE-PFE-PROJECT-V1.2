@@ -47,7 +47,7 @@ function CalendarComponent() {
       }}
       editable={true} // Enables drag & drop
       selectable={true} // Allows clicking to add events
-      events={events} // Renders events from state
+      events={events}
       dateClick={handleDateClick} // Click to add event
       eventDrop={handleEventDrop} // Drag & drop event handler
       eventTimeFormat={{
