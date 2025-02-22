@@ -25,6 +25,8 @@ function CalendarComponent() {
       ]);
     }
   };
+  console.log("w9ayet");
+  // Function to handle event click (to edit an event)
 
   // Function to handle event drop (when dragging)
   const handleEventDrop = (info) => {
