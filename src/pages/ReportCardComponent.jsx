@@ -85,7 +85,7 @@ function ReportCardComponent({ type, count, employees, image }) {
   };
 
   const { tag, bgColor, icon, color } = reportData[type] || {};
-
+  console.log(tag);
   return (
     <ReportCard onClick={() => navigate(`/reports/${type}`)}>
       <ReportImage src={image} alt={tag} />
