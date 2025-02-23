@@ -12,6 +12,7 @@ import AppLayout from "./ui/AppLayout";
 import Reports from "./pages/Reports";
 import Report from "./pages/Report";
 import Employees from "./pages/Employees";
+import ReportsV2 from "./pages/ReportsV2";
 
 import Calendar from "./pages/Calendar";
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />
             <Route path="calendar" element={<Calendar />} />
+            <Route path="repo" element={<ReportsV2 />} />
           </Route>
 
           <Route path="login" element={<Login />} />
