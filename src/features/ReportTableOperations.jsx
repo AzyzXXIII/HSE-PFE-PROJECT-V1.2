@@ -4,39 +4,13 @@ import TableOperations from "../ui/TableOperations";
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const mockData = [
-  {
-    id: 1,
-    title: "Server Downtime",
-    type: "Technical",
-    severity: "High",
-    priority: "Urgent",
-    date: "2025-02-09T14:30:00Z",
-    status: "Open",
-    submittedBy: { name: "Ahmed", email: "Ahmed@example.com" },
-    assignedTo: { name: "Belgacem", email: "Belgacem@example.com" },
-  },
-  {
-    id: 2,
-    title: "Data Breach",
-    type: "Security",
-    severity: "Critical",
-    priority: "Normal",
-    date: "2025-02-10T10:15:00Z",
-    status: "In Progress",
-    description: "A security breach was detected in the system.",
-    submittedBy: { name: "Azyz Hcini", email: "Azyz@example.com" },
-    assignedTo: { name: "Crush", email: "Sarrour@example.com" },
-  },
-];
-
-export const ReportTableOperations = ({ setFilteredReports }) => {
+export const ReportTableOperations = ({ reports, setFilteredReports }) => {
   const [searchParams] = useSearchParams();
   const filterStatus = searchParams.get("status") || "all";
   const sortBy = searchParams.get("sortBy") || "";
 
   useEffect(() => {
-    let filteredData = [...mockData];
+    let filteredData = [...reports]; // Use the passed reports instead of mockData
 
     if (filterStatus !== "all") {
       filteredData = filteredData.filter(
@@ -58,7 +32,7 @@ export const ReportTableOperations = ({ setFilteredReports }) => {
     });
 
     setFilteredReports(filteredData);
-  }, [filterStatus, sortBy, setFilteredReports]);
+  }, [filterStatus, sortBy, setFilteredReports]); // Remove reports from the dependency array
 
   return (
     <TableOperations>

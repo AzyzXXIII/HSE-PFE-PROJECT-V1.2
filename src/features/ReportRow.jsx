@@ -16,8 +16,8 @@ const Pill = styled.div`
   font-size: 1.3rem;
   font-weight: 600;
   text-transform: capitalize;
-  color: ${(props) => props.textColor || "white"};
-  background-color: ${(props) => props.bgColor || "gray"};
+  color: ${(props) => props.$textColor || "white"};
+  background-color: ${(props) => props.$bgColor || "gray"};
 `;
 
 const statusColors = {
@@ -39,7 +39,11 @@ const priorityColors = {
 };
 
 function ReportRow({ report }) {
+  console.log(report);
   const navigate = useNavigate();
+
+  // Check if the date is valid
+  const isValidDate = !isNaN(new Date(report.date));
 
   return (
     <Table.Row>
@@ -60,31 +64,37 @@ function ReportRow({ report }) {
       </div>
 
       <div>
-        <div>{format(new Date(report.date), "MMM dd yyyy")}</div>
+        <div>
+          {isValidDate
+            ? format(new Date(report.date), "MMM dd yyyy")
+            : "Invalid date"}
+        </div>
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
-          {format(new Date(report.date), "hh:mm a")}
+          {isValidDate
+            ? format(new Date(report.date), "hh:mm a")
+            : "Invalid time"}
         </div>
       </div>
 
       <div>{report.type}</div>
 
       <Pill
-        bgColor={statusColors[report.status]?.bg}
-        textColor={statusColors[report.status]?.text}
+        $bgColor={statusColors[report.status]?.bg}
+        $textColor={statusColors[report.status]?.text}
       >
         {report.status.replace("-", " ")}
       </Pill>
 
       <Pill
-        bgColor={severityColors[report.severity]?.bg}
-        textColor={severityColors[report.severity]?.text}
+        $bgColor={severityColors[report.severity]?.bg}
+        $textColor={severityColors[report.severity]?.text}
       >
         {report.severity}
       </Pill>
 
       <Pill
-        bgColor={priorityColors[report.priority]?.bg}
-        textColor={priorityColors[report.priority]?.text}
+        $bgColor={priorityColors[report.priority]?.bg}
+        $textColor={priorityColors[report.priority]?.text}
       >
         {report.priority}
       </Pill>

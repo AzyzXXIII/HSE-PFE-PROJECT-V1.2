@@ -25,6 +25,5 @@ const Form = styled.form`
 Form.defaultProps = {
   type: "regular",
 };
-console.log(Form);
 
 export default Form;

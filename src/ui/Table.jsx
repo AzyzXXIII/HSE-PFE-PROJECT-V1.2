@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
-
   font-size: 1.4rem;
   background-color: var(--color-grey-0);
   border-radius: 7px;
@@ -12,7 +11,7 @@ const StyledTable = styled.div`
 
 const CommonRow = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => props.columns};
+  grid-template-columns: ${(props) => props.$columns}; // Change to use $columns
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
@@ -20,7 +19,6 @@ const CommonRow = styled.div`
 
 const StyledHeader = styled(CommonRow)`
   padding: 1.6rem 2.4rem;
-
   background-color: var(--color-grey-50);
   border-bottom: 1px solid var(--color-grey-100);
   text-transform: uppercase;
@@ -73,15 +71,20 @@ function Table({ columns, children }) {
 function Header({ children }) {
   const { columns } = useContext(TableContext);
   return (
-    <StyledHeader role="row" columns={columns} as="header">
+    <StyledHeader role="row" $columns={columns} as="header">
+      {" "}
+      {/* Use $columns here */}
       {children}
     </StyledHeader>
   );
 }
+
 function Row({ children }) {
   const { columns } = useContext(TableContext);
   return (
-    <StyledRow role="row" columns={columns}>
+    <StyledRow role="row" $columns={columns}>
+      {" "}
+      {/* Use $columns here */}
       {children}
     </StyledRow>
   );

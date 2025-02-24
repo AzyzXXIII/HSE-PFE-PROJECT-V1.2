@@ -5,7 +5,11 @@ import {
   HiOutlineShieldCheck,
   HiOutlineEye,
 } from "react-icons/hi";
+import { IoPeople } from "react-icons/io5";
+import { MdOutlinePendingActions } from "react-icons/md";
 import Button from "../ui/Button";
+import DataItem from "../ui/DataItem";
+import { mockData } from "../data/mockReports"; // Import mock data
 
 const ReportCard = styled.div`
   width: 300px;
@@ -32,7 +36,7 @@ const ReportTag = styled.span`
   display: inline-block;
   background-color: ${(props) => props.bgColor || "#ddd"};
   color: white;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: bold;
   padding: 0.4rem 1rem;
   border-radius: 12px;
@@ -46,9 +50,10 @@ const ReportTitle = styled.h3`
 `;
 
 const ReportStats = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #555;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,11 +61,11 @@ const ReportStats = styled.p`
 `;
 
 const Icon = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.8em;
   color: ${(props) => props.color || "#333"};
 `;
 
-function ReportCardComponent({ type, count, employees, image }) {
+function ReportCardComponent({ type, image }) {
   const navigate = useNavigate();
 
   const reportData = {
@@ -85,20 +90,30 @@ function ReportCardComponent({ type, count, employees, image }) {
   };
 
   const { tag, bgColor, icon, color } = reportData[type] || {};
-  console.log(tag);
+  const reports = mockData[type] || [];
+  const reportCount = reports.length;
+  const uniqueEmployees = new Set(reports.map((r) => r.submittedBy)).size;
+
   return (
-    <ReportCard onClick={() => navigate(`/reports/${type}`)}>
+    <ReportCard onClick={() => navigate(`/reports?type=${type}`)}>
       <ReportImage src={image} alt={tag} />
       <ReportTag bgColor={bgColor}>{tag}</ReportTag>
       <ReportTitle>
         <strong>{tag} </strong>Reports
       </ReportTitle>
       <ReportStats>
-        <Icon color={color}>{icon}</Icon> <strong>{count} reports</strong>
+        <Icon color={color}>{icon}</Icon> <strong>{reportCount} Reports</strong>
       </ReportStats>
       <ReportStats>
-        <strong>{employees} Employees</strong>
+        <DataItem icon={<IoPeople />} label={`${uniqueEmployees} Employees`} />
       </ReportStats>
+      <ReportStats>
+        <DataItem
+          icon={<MdOutlinePendingActions />}
+          label={`${reportCount} in Pending`}
+        />
+      </ReportStats>
+
       <Button variation="primary" size="medium">
         View Reports
       </Button>
