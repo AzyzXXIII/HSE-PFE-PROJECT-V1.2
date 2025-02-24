@@ -64,7 +64,7 @@ function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/reports">
+          <StyledNavLink to="/reportCategory">
             <HiOutlineClipboardDocumentList />
             <span>Reports</span>
           </StyledNavLink>

@@ -39,10 +39,8 @@ const priorityColors = {
 };
 
 function ReportRow({ report }) {
-  console.log(report);
   const navigate = useNavigate();
 
-  // Check if the date is valid
   const isValidDate = !isNaN(new Date(report.date));
 
   return (

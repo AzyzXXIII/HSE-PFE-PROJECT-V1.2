@@ -12,7 +12,6 @@ const StyledFilter = styled.div`
   gap: 0.4rem;
 `;
 
-// Styled component for the filter button
 const FilterButton = styled.button`
   background-color: var(--color-grey-0);
   border: none;

@@ -12,8 +12,8 @@ import AppLayout from "./ui/AppLayout";
 import Reports from "./pages/Reports";
 import Report from "./pages/Report";
 import Employees from "./pages/Employees";
-import ReportsV2 from "./pages/ReportsV2";
 
+import ReportMain from "./pages/ReportMain";
 import Calendar from "./pages/Calendar";
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<p>Dashboard</p>} />
+            <Route path="reportCategory" element={<ReportMain />} />
             <Route path="reports" element={<Reports />} />
             <Route path="reports/:id" element={<Report />} />
             <Route path="employees" element={<Employees />} />
@@ -31,7 +32,6 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />
             <Route path="calendar" element={<Calendar />} />
-            <Route path="repo" element={<ReportsV2 />} />
           </Route>
 
           <Route path="login" element={<Login />} />
