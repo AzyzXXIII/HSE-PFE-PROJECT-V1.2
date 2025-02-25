@@ -8,8 +8,8 @@ const mockData = {
       priority: "Urgent",
       date: "2025-02-01T10:00:00Z",
       status: "Open",
-      submittedBy: { name: "John Doe", email: "john@example.com" },
-      assignedTo: { name: "Jane Smith", email: "jane@example.com" },
+      submittedBy: { name: "Fedi", email: "Fedi@gmail.com" },
+      assignedTo: { name: "Rhayem", email: "Rhayem@gmail.com" },
     },
     {
       id: 2,
@@ -19,8 +19,8 @@ const mockData = {
       priority: "High",
       date: "2025-02-05T12:00:00Z",
       status: "In Progress",
-      submittedBy: { name: "Mike Lee", email: "mike@example.com" },
-      assignedTo: { name: "Sarah Connor", email: "sarah@example.com" },
+      submittedBy: { name: "Mike Tyson", email: "mike@gmail.com" },
+      assignedTo: { name: "Connor McGregor", email: "connor@gmail.com" },
     },
   ],
   hazard: [
@@ -32,8 +32,8 @@ const mockData = {
       priority: "Urgent",
       date: "2025-02-07T09:00:00Z",
       status: "Open",
-      submittedBy: { name: "Emily Brown", email: "emily@example.com" },
-      assignedTo: { name: "James Bond", email: "james@example.com" },
+      submittedBy: { name: "Antony", email: "Antony@gmail.com" },
+      assignedTo: { name: "James Bond", email: "james@gmail.com" },
     },
   ],
   observation: [
