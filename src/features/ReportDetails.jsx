@@ -81,14 +81,14 @@ function ReportDetails() {
       <ButtonGroup>
         <Modal>
           <Modal.Open opens="delete">
-            <Button variation="danger" size="medium">
+            <Button $variation="danger" $size="medium">
               Delete Report
             </Button>
           </Modal.Open>
 
           <Button
-            variation="secondary"
-            size="medium"
+            $variation="secondary"
+            $size="medium"
             onClick={() => navigate(-1)}
           >
             Back

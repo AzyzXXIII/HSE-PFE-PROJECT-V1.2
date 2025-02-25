@@ -38,9 +38,9 @@ const Status = styled.div`
   font-family: "Sono";
   font-weight: 500;
   color: ${(props) =>
-    props.status === "accepted"
+    props.$status === "accepted"
       ? "var(--color-green-700)"
-      : props.status === "rejected"
+      : props.$status === "rejected"
       ? "var(--color-red-700)"
       : "var(--color-grey-700)"};
 `;
@@ -67,7 +67,7 @@ function EmployeeRow({ employee, onAccept, onReject }) {
       <div>{address}</div>
       <Title>{titleId}</Title>
       <Department>{departmentId}</Department>
-      <Status status={status}>{status}</Status>
+      <Status $status={status}>{status}</Status>
       <div>
         <Modal>
           <Menus.Menu>

@@ -123,15 +123,15 @@ function CalendarComponent() {
             />
             <ButtonGroup>
               <Button
-                variation="primary"
-                size="medium"
+                $variation="primary"
+                $size="medium"
                 onClick={handleAddEvent}
               >
                 Add Event
               </Button>
               <Button
-                variation="secondary"
-                size="medium"
+                $variation="secondary"
+                $size="medium"
                 onClick={() => setIsModalOpen(false)}
               >
                 Cancel

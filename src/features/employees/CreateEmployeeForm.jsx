@@ -108,8 +108,8 @@ function CreateEmployeeForm({
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
           <Input type="text" id="qrCode" disabled {...register("qrCode")} />
           <Button
-            variation="primary"
-            size="medium"
+            $variation="primary"
+            $size="medium"
             type="button"
             onClick={generateQRCode}
           >
@@ -122,16 +122,16 @@ function CreateEmployeeForm({
         style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}
       >
         <Button
-          variation="secondary"
-          size="medium"
+          $variation="secondary"
+          $size="medium"
           type="reset"
           onClick={onCloseModal}
         >
           Cancel
         </Button>
         <Button
-          variation="primary"
-          size="medium"
+          $variation="primary"
+          $size="medium"
           type="submit"
           onClick={() => {
             console.log("clicked");

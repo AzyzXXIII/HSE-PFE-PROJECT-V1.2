@@ -34,7 +34,7 @@ const ReportImage = styled.img`
 
 const ReportTag = styled.span`
   display: inline-block;
-  background-color: ${(props) => props.bgColor || "#ddd"};
+  background-color: ${(props) => props.$bgColor || "#ddd"}; // Use $bgColor
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
@@ -49,7 +49,7 @@ const ReportTitle = styled.h3`
   color: #333;
 `;
 
-const ReportStats = styled.p`
+const ReportStats = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   color: #555;
@@ -97,7 +97,7 @@ function ReportCardComponent({ type, image }) {
   return (
     <ReportCard onClick={() => navigate(`/reports?type=${type}`)}>
       <ReportImage src={image} alt={tag} />
-      <ReportTag bgColor={bgColor}>{tag}</ReportTag>
+      <ReportTag $bgColor={bgColor}>{tag}</ReportTag>
       <ReportTitle>
         <strong>{tag} </strong>Reports
       </ReportTitle>
@@ -105,7 +105,12 @@ function ReportCardComponent({ type, image }) {
         <Icon color={color}>{icon}</Icon> <strong>{reportCount} Reports</strong>
       </ReportStats>
       <ReportStats>
-        <DataItem icon={<IoPeople />} label={`${uniqueEmployees} Employees`} />
+        <span>
+          <DataItem
+            icon={<IoPeople />}
+            label={`${uniqueEmployees} Employees`}
+          />
+        </span>
       </ReportStats>
       <ReportStats>
         <DataItem
@@ -114,7 +119,7 @@ function ReportCardComponent({ type, image }) {
         />
       </ReportStats>
 
-      <Button variation="primary" size="medium">
+      <Button $variation="primary" $size="medium">
         View Reports
       </Button>
     </ReportCard>

@@ -80,14 +80,14 @@ function SignupForm() {
 
       <FormRow>
         <Button
-          size="medium"
-          variation="secondary"
+          $size="medium"
+          $variation="secondary"
           type="reset"
           onClick={reset}
         >
           Cancel
         </Button>
-        <Button size="medium" variation="primary">
+        <Button $size="medium" $variation="primary">
           Create new user
         </Button>
       </FormRow>

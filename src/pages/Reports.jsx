@@ -1,14 +1,17 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import ReportTable from "../features/ReportTable";
 import ReportTableOperations from "../features/ReportTableOperations";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import { useState, useEffect } from "react";
 import { mockData } from "../data/mockReports.js";
+import Button from "../ui/Button";
+import ButtonGroup from "../ui/ButtonGroup.jsx";
 
 export const Reports = () => {
   const [filteredReports, setFilteredReports] = useState([]);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const reportType = searchParams.get("type");
   const filterStatus = searchParams.get("status") || "all";
@@ -50,7 +53,17 @@ export const Reports = () => {
         </Heading>
         <ReportTableOperations />
       </Row>
+
       <ReportTable reports={filteredReports} />
+      <ButtonGroup>
+        <Button
+          $variation="primary"
+          $size="medium"
+          onClick={() => navigate(-1)}
+        >
+          ← Go Back
+        </Button>
+      </ButtonGroup>
     </>
   );
 };
