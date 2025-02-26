@@ -16,7 +16,7 @@ export const Reports = () => {
   const reportType = searchParams.get("type");
   const filterStatus = searchParams.get("status") || "all";
   const sortBy = searchParams.get("sortBy") || "";
-
+  console.log("Azyzzzzzzz");
   useEffect(() => {
     let reports =
       reportType && mockData[reportType] ? [...mockData[reportType]] : [];
