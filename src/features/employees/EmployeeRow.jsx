@@ -6,7 +6,6 @@ import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 import CreateEmployeeForm from "./CreateEmployeeForm";
 
-// You can customize the style based on your design system
 const Img = styled.img`
   display: block;
   width: 6.4rem;
