@@ -8,7 +8,6 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import ButtonGroup from "../ui/ButtonGroup";
 
-// Styled Modal Components
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -31,12 +30,6 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
 `;
 
 function CalendarComponent() {
@@ -80,7 +73,6 @@ function CalendarComponent() {
 
   return (
     <>
-      {/* FullCalendar Component */}
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -102,7 +94,6 @@ function CalendarComponent() {
         displayEventEnd={true}
       />
 
-      {/* Modal for Adding Event */}
       {isModalOpen && (
         <ModalOverlay>
           <ModalContent>
