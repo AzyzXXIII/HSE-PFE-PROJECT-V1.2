@@ -22,7 +22,6 @@ function Stats({ reports, confirmedStays, numEmployees, numHighSeverity }) {
   /* const occupation =
     confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
     (numDays * cabinCount); */
-  // num checked in nights / all available nights (num days * num cabins)
 
   return (
     <>

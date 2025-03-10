@@ -28,7 +28,7 @@ function DashboardLayout() {
         numEmployees={numEmployees}
         numHighSeverity={numHighSeverity}
       />
-      <ReportsChart /> {/* Add Reports Chart after Stats */}
+      <ReportsChart />
     </StyledDashboardLayout>
   );
 }

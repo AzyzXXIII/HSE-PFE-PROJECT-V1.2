@@ -29,7 +29,6 @@ const StyledReportsChart = styled(DashboardBox)`
   height: 400px; /* Increase the height */
   padding: 20px;
 
-  /* Ensure the chart fills the box */
   canvas {
     width: 100% !important;
     height: 100% !important;
@@ -37,7 +36,6 @@ const StyledReportsChart = styled(DashboardBox)`
 `;
 
 function ReportsChart() {
-  // Sample data for reports over time
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
     datasets: [
