@@ -15,6 +15,7 @@ import Employees from "./pages/Employees";
 
 import ReportMain from "./pages/ReportMain";
 import Calendar from "./pages/Calendar";
+import Dashboard from "./pages/Dashboard";
 function App() {
   return (
     <>
@@ -23,7 +24,7 @@ function App() {
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<p>Dashboard</p>} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="reportCategory" element={<ReportMain />} />
             <Route path="reports" element={<Reports />} />
             <Route path="reports/:id" element={<Report />} />
