@@ -29,6 +29,7 @@ function DashboardLayout() {
         numHighSeverity={numHighSeverity}
       />
       <ReportsChart />
+      Todays Acticity
     </StyledDashboardLayout>
   );
 }
