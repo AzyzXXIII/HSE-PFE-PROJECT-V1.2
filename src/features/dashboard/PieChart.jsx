@@ -24,10 +24,10 @@ const ChartBox = styled.div`
 `;
 
 const data = [
-  { name: "Incidents", value: 35, color: "#ef4444" }, // Red
-  { name: "Hazards", value: 50, color: "#facc15" }, // Yellow
-  { name: "Observations", value: 30, color: "#3b82f6" }, // Blue
-  { name: "Near Misses", value: 18, color: "#10b981" }, // Green
+  { name: "Incidents", value: 35, color: "#ef4444" },
+  { name: "Hazards", value: 50, color: "#facc15" },
+  { name: "Observations", value: 30, color: "#3b82f6" },
+  { name: "Near Misses", value: 18, color: "#10b981" },
 ];
 
 export const PieChart = () => {

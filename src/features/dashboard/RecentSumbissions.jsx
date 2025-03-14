@@ -47,8 +47,7 @@ const activities = [
 ];
 
 function RecentActivity() {
-  const isLoading = false; // Simulating a non-loading state
-
+  const isLoading = false;
   return (
     <StyledToday>
       <Row type="horizontal">
