@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Stats from "./Stats";
 import ReportsChart from "./ReportsChart"; // Import the new chart
-
+import TodayActivity from "./TodayActivity";
+import PieChart from "./PieChart";
 const StyledDashboardLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -28,8 +29,9 @@ function DashboardLayout() {
         numEmployees={numEmployees}
         numHighSeverity={numHighSeverity}
       />
+      <TodayActivity />
+      <PieChart />
       <ReportsChart />
-      Todays Acticity
     </StyledDashboardLayout>
   );
 }
