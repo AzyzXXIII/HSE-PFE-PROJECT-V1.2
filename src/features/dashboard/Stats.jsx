@@ -6,7 +6,6 @@ import {
 import { MdOutlinePendingActions } from "react-icons/md";
 
 import Stat from "./Stat";
-//import { formatCurrency } from "../../utils/helpers";
 
 function Stats({ reports, confirmedStays, numEmployees, numHighSeverity }) {
   const numReports = reports.length;

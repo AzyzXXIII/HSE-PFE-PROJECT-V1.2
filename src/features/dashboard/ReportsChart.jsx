@@ -26,7 +26,7 @@ ChartJS.register(
 const StyledReportsChart = styled(DashboardBox)`
   grid-column: 1 / -1;
   width: 100%;
-  height: 400px; /* Increase the height */
+  height: 400px;
   padding: 20px;
 
   canvas {

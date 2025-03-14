@@ -66,7 +66,7 @@ const activities = [
 ];
 
 function TodayActivity() {
-  const isLoading = false; // Simulating a non-loading state
+  const isLoading = false;
 
   return (
     <StyledToday>
