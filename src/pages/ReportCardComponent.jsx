@@ -34,7 +34,7 @@ const ReportImage = styled.img`
 
 const ReportTag = styled.span`
   display: inline-block;
-  background-color: ${(props) => props.$bgColor || "#ddd"}; // Use $bgColor
+  background-color: ${(props) => props.$bgColor || "#ddd"};
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
@@ -86,6 +86,12 @@ function ReportCardComponent({ type, image }) {
       bgColor: "#28A745",
       icon: <HiOutlineEye />,
       color: "#28A745",
+    },
+    nearMiss: {
+      tag: "Near Miss",
+      bgColor: "#007BFF",
+      icon: <HiOutlineShieldCheck />, // Change icon if needed
+      color: "#007BFF",
     },
   };
 

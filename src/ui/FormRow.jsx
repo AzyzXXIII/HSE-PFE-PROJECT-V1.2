@@ -5,7 +5,6 @@ const StyledFormRow = styled.div`
   align-items: center;
   grid-template-columns: 24rem 1fr 1.2fr;
   gap: 2.4rem;
-
   padding: 1.2rem 0;
 
   &:first-child {
@@ -37,9 +36,12 @@ const Error = styled.span`
 `;
 
 function FormRow({ label, error, children }) {
+  // Prevents the error when children or id is undefined
+  const inputId = children?.props?.id || "";
+
   return (
     <StyledFormRow>
-      {label && <Label htmlFor={children.props.id}>{label}</Label>}
+      {label && <Label htmlFor={inputId}>{label}</Label>}
       {children}
       {error && <Error>{error}</Error>}
     </StyledFormRow>

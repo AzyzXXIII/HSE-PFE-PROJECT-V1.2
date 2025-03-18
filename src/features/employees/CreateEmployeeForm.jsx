@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
 import FormRow from "../../ui/FormRow";
+import Checkbox from "../../ui/Checkbox"; // ✅ Using your Checkbox component
 
 function CreateEmployeeForm({
   employeeToEdit = {},
@@ -12,25 +12,27 @@ function CreateEmployeeForm({
   setEmployees,
 }) {
   const isEditSession = Boolean(employeeToEdit?.id);
-  const { id: editId, ...editValues } = employeeToEdit;
+  const { id: editId, ...editValues } = employeeToEdit || {}; // Prevents errors if undefined
 
-  const { register, handleSubmit, reset, setValue, formState, getValues } =
+  const { register, handleSubmit, reset, setValue, getValues, formState } =
     useForm({
-      defaultValues: isEditSession ? editValues : {},
+      defaultValues: isEditSession
+        ? editValues
+        : {
+            approved: false,
+            canSendReports: false,
+            canEditReports: false,
+            canDeleteReports: false,
+          },
     });
 
   const { errors } = formState;
 
   function onSubmit(data) {
-    const image = typeof data.image === "string" ? data.image : data.image[0];
-    const qrCode =
-      typeof data.qrCode === "string" ? data.qrCode : data.qrCode[0];
-
     const newEmployeeData = {
-      id: isEditSession ? editId : Date.now(), // Mock ID for new employees
+      id: isEditSession ? editId : Date.now(),
       ...data,
-      image,
-      qrCode,
+      qrCode: getValues("qrCode"), // Ensures QR code is stored
     };
 
     setEmployees((prev) =>
@@ -104,6 +106,24 @@ function CreateEmployeeForm({
         <Input type="text" id="departmentId" {...register("departmentId")} />
       </FormRow>
 
+      <FormRow label="Approval Status">
+        <Checkbox id="approved" {...register("approved")}>
+          Approved
+        </Checkbox>
+      </FormRow>
+
+      <FormRow label="Permissions">
+        <Checkbox id="canSendReports" {...register("canSendReports")}>
+          Can Send Reports
+        </Checkbox>
+        <Checkbox id="canEditReports" {...register("canEditReports")}>
+          Can Edit Reports
+        </Checkbox>
+        <Checkbox id="canDeleteReports" {...register("canDeleteReports")}>
+          Can Delete Reports
+        </Checkbox>
+      </FormRow>
+
       <FormRow label="QR Code">
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
           <Input type="text" id="qrCode" disabled {...register("qrCode")} />
@@ -129,14 +149,7 @@ function CreateEmployeeForm({
         >
           Cancel
         </Button>
-        <Button
-          $variation="primary"
-          $size="medium"
-          type="submit"
-          onClick={() => {
-            console.log("clicked");
-          }}
-        >
+        <Button $variation="primary" $size="medium" type="submit">
           {isEditSession ? "Edit Employee" : "Create Employee"}
         </Button>
       </FormRow>
