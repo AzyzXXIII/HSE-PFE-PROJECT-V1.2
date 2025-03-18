@@ -4,7 +4,7 @@ import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FormRow from "../../ui/FormRow";
-import Checkbox from "../../ui/Checkbox"; // ✅ Using your Checkbox component
+import Checkbox from "../../ui/Checkbox";
 
 function CreateEmployeeForm({
   employeeToEdit = {},
