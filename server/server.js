@@ -1,8 +1,7 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 import cors from "cors";
-import pool from "./config/db.js"; // Import PostgreSQL connection
-
+import pool from "./config/db.js";
 dotenv.config();
 const app = express();
 

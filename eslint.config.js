@@ -10,7 +10,7 @@ export default [
     files: ["**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: globals.browser, // Browser globals for React
       parserOptions: {
         ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },
@@ -37,14 +37,22 @@ export default [
       "no-unused-vars": "warn",
     },
   },
+
+  // ✅ Add this override for Node.js files
   {
-    // Add this override for tailwind.config.js
-    files: ["tailwind.config.js"],
+    files: [
+      "server/**/*.js",
+      "server/**/*.mjs",
+      "server/**/*.cjs",
+      "server.js",
+    ],
     languageOptions: {
-      globals: globals.node, // Enable Node.js globals
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.node, // ✅ Enable Node.js globals (including process)
     },
     rules: {
-      "no-undef": "off", // Disable no-undef for this file
+      "no-undef": "off", // ✅ Prevent false 'process' undefined errors
     },
   },
 ];

@@ -1,16 +1,18 @@
-import pkg from "pg";
+import pg from "pg";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config(); // Load environment variables at the beginning
 
-const { Pool } = pkg;
+const { Pool } = pg; // Extract Pool from pg
+
+console.log("User:", process.env.DB_USERNAME); // Debugging
 
 const pool = new Pool({
-  host: process.env.PG_HOST,
-  port: process.env.PG_PORT,
-  user: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_DATABASE,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 pool.on("connect", () => {
