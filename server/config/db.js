@@ -1,11 +1,9 @@
 import pg from "pg";
 import dotenv from "dotenv";
 
-dotenv.config(); // Load environment variables at the beginning
+dotenv.config();
 
-const { Pool } = pg; // Extract Pool from pg
-
-console.log("User:", process.env.DB_USERNAME); // Debugging
+const { Pool } = pg;
 
 const pool = new Pool({
   host: process.env.DB_HOST,
