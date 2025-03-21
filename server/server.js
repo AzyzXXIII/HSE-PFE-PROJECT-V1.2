@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
+import reportsRoutes from "./routes/reportsApi.js";
 dotenv.config();
 const app = express();
 
@@ -17,6 +18,10 @@ pool.query("SELECT NOW()", (err, res) => {
     console.log("✅ Database connected at:", res.rows[0].now);
   }
 });
+
+// Routes
+app.use("/api/reports", reportsRoutes);
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
