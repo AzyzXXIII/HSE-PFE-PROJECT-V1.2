@@ -81,7 +81,7 @@ function ReportCardComponent({ type, image }) {
       icon: <HiOutlineShieldCheck />,
       color: "#FFA500",
     },
-    observation: {
+    observations: {
       tag: "Observation",
       bgColor: "#28A745",
       icon: <HiOutlineEye />,
@@ -90,7 +90,7 @@ function ReportCardComponent({ type, image }) {
     nearMiss: {
       tag: "Near Miss",
       bgColor: "#007BFF",
-      icon: <HiOutlineShieldCheck />, // Change icon if needed
+      icon: <HiOutlineShieldCheck />,
       color: "#007BFF",
     },
   };

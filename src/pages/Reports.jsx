@@ -43,12 +43,10 @@ export const Reports = () => {
   useEffect(() => {
     let filtered = [...reports];
 
-    // Apply Filtering
     if (filterStatus !== "all") {
       filtered = filtered.filter((report) => report.status === filterStatus);
     }
 
-    // Apply Sorting
     if (sortBy) {
       filtered.sort((a, b) => {
         if (sortBy === "startDate-desc") {

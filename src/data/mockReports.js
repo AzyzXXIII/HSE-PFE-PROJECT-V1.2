@@ -36,7 +36,7 @@ const mockData = {
       assignedTo: { name: "James Bond", email: "james@gmail.com" },
     },
   ],
-  observation: [
+  observations: [
     {
       id: 4,
       title: "Safety Equipment Misuse",

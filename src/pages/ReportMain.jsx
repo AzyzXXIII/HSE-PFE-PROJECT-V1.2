@@ -2,7 +2,7 @@ import ReportCardComponent from "./ReportCardComponent";
 import incidentImg from "../assets/incident.svg";
 import hazardImg from "../assets/hazard.svg";
 import observationImg from "../assets/observation.svg";
-import nearMissImg from "../assets/nearmiss.svg"; // ✅ Add Near Miss image
+import nearMissImg from "../assets/nearmiss.svg";
 
 function ReportsPage() {
   const reports = [
