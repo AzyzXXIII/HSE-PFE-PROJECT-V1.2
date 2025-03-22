@@ -1,33 +1,56 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import ReportTable from "../features/ReportTable";
 import ReportTableOperations from "../features/ReportTableOperations";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
-import { useState, useEffect } from "react";
-import { mockData } from "../data/mockReports.js";
 import Button from "../ui/Button";
 import ButtonGroup from "../ui/ButtonGroup.jsx";
 
 export const Reports = () => {
+  const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const reportType = searchParams.get("type");
   const filterStatus = searchParams.get("status") || "all";
   const sortBy = searchParams.get("sortBy") || "";
+
   useEffect(() => {
-    let reports =
-      reportType && mockData[reportType] ? [...mockData[reportType]] : [];
+    const fetchReports = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/reports?type=${reportType}`
+        );
+        const data = await response.json();
+
+        console.log(data);
+
+        setReports(data);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, [reportType]);
+
+  useEffect(() => {
+    let filtered = [...reports];
 
     // Apply Filtering
     if (filterStatus !== "all") {
-      reports = reports.filter((report) => report.status === filterStatus);
+      filtered = filtered.filter((report) => report.status === filterStatus);
     }
 
     // Apply Sorting
     if (sortBy) {
-      reports.sort((a, b) => {
+      filtered.sort((a, b) => {
         if (sortBy === "startDate-desc") {
           return new Date(b.date) - new Date(a.date);
         } else if (sortBy === "startDate-asc") {
@@ -41,8 +64,8 @@ export const Reports = () => {
       });
     }
 
-    setFilteredReports(reports);
-  }, [reportType, filterStatus, sortBy]);
+    setFilteredReports(filtered);
+  }, [reports, filterStatus, sortBy]);
 
   return (
     <>
@@ -53,7 +76,8 @@ export const Reports = () => {
         <ReportTableOperations />
       </Row>
 
-      <ReportTable reports={filteredReports} />
+      {loading ? <p>Loading...</p> : <ReportTable reports={filteredReports} />}
+
       <ButtonGroup>
         <Button
           $variation="primary"

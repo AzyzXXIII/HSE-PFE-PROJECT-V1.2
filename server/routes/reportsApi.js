@@ -3,13 +3,32 @@ import pool from "../config/db.js";
 
 const router = express.Router();
 
-router.get("/observations", async (req, res) => {
+// Handle dynamic report fetching based on query parameters
+router.get("/", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM observation;");
-    console.log(result.rows);
-    res.json(result.rows);
+    const reportType = req.query.type; // Get report type from query string
+
+    // Map report types to their corresponding database tables
+    const validReportTypes = {
+      observations: "observation",
+      hazards: "hazard",
+      incidents: "incident",
+      near_miss: "near_miss",
+    };
+
+    // Validate report type
+    if (!validReportTypes[reportType]) {
+      return res.status(400).json({ error: "Invalid report type" });
+    }
+
+    // Query the database
+    const tableName = validReportTypes[reportType];
+    const result = await pool.query(`SELECT * FROM ${tableName};`);
+
+    console.log(`✅ Fetched ${result.rows.length} records from ${tableName}`);
+    return res.json(result.rows);
   } catch (error) {
-    console.error("Error fetching observations:", error.message);
+    console.error("❌ Error fetching reports:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

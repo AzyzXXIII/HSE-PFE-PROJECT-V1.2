@@ -19,16 +19,16 @@ function ReportsPage() {
       image: hazardImg,
     },
     {
-      type: "observation",
+      type: "observations",
       count: 18,
       employees: 23,
       image: observationImg,
     },
     {
-      type: "nearMiss", // ✅ Add Near Miss
-      count: 12, // Example count
-      employees: 8, // Example employees
-      image: nearMissImg, // ✅ Use the correct image
+      type: "nearMiss",
+      count: 12,
+      employees: 8,
+      image: nearMissImg,
     },
   ];
 
