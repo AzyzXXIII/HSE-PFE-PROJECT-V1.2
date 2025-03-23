@@ -6,7 +6,7 @@ const router = express.Router();
 // Handle dynamic report fetching based on query parameters
 router.get("/", async (req, res) => {
   try {
-    const reportType = req.query.type; // Get report type from query string
+    const reportType = req.query.type;
 
     // Map report types to their corresponding database tables
     const validReportTypes = {
@@ -16,12 +16,10 @@ router.get("/", async (req, res) => {
       near_miss: "near_miss",
     };
 
-    // Validate report type
     if (!validReportTypes[reportType]) {
       return res.status(400).json({ error: "Invalid report type" });
     }
 
-    // Query the database
     const tableName = validReportTypes[reportType];
     const result = await pool.query(`SELECT * FROM ${tableName};`);
 

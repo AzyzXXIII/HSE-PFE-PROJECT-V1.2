@@ -9,7 +9,7 @@ import { IoPeople } from "react-icons/io5";
 import { MdOutlinePendingActions } from "react-icons/md";
 import Button from "../ui/Button";
 import DataItem from "../ui/DataItem";
-import { mockData } from "../data/mockReports"; // Import mock data
+import { mockData } from "../data/mockReports";
 
 const ReportCard = styled.div`
   width: 300px;
