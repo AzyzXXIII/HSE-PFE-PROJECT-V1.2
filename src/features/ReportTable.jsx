@@ -15,11 +15,10 @@ export const ReportTable = ({ reports }) => {
 
   return (
     <Menus>
-      <Table columns="0.8fr 1.5fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 5rem">
+      <Table columns="0.8fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 5rem">
         <Table.Header>
           <div>Title</div>
           <div>Submitted By</div>
-          <div>Assigned To</div>
           <div>Date</div>
           <div>Type</div>
           <div>Status</div>

@@ -27,8 +27,6 @@ export const Reports = () => {
         );
         const data = await response.json();
 
-        console.log(data);
-
         setReports(data);
       } catch (error) {
         console.error("Error fetching reports:", error);

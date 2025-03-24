@@ -39,28 +39,33 @@ const priorityColors = {
 };
 
 function ReportRow({ report }) {
+  console.log(report); // For debugging, check your object structure
   const navigate = useNavigate();
 
   const isValidDate = !isNaN(new Date(report.date));
 
+  // Safely access report.status, default to an empty string if undefined
+  const reportStatus = report.status || "";
+
   return (
     <Table.Row>
       <div style={{ fontSize: "1.6rem", fontWeight: 600 }}>{report.title}</div>
-
       <div>
-        <div>{report.submittedBy.name}</div>
+        <div>
+          {report.submitted_by_first_name} {report.submitted_by_last_name}
+        </div>
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
-          {report.submittedBy.email}
+          {report.submitted_by_email}
         </div>
       </div>
-
       <div>
-        <div>{report.assignedTo.name}</div>
+        <div>{report.location_name}</div>{" "}
+        {/* Use location_name instead of location */}
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
-          {report.assignedTo.email}
+          {report.assignedTo?.email || "No assignee"}{" "}
+          {/* Ensure that assignedTo is valid */}
         </div>
       </div>
-
       <div>
         <div>
           {isValidDate
@@ -73,30 +78,27 @@ function ReportRow({ report }) {
             : "Invalid time"}
         </div>
       </div>
-
-      <div>{report.type}</div>
-
+      <div>{report.observation_type}</div>{" "}
+      {/* Make sure to use observation_type correctly */}
       <Pill
-        $bgColor={statusColors[report.status]?.bg}
-        $textColor={statusColors[report.status]?.text}
+        $bgColor={statusColors[reportStatus]?.bg}
+        $textColor={statusColors[reportStatus]?.text}
       >
-        {report.status.replace("-", " ")}
+        {reportStatus.replace("-", " ")}{" "}
+        {/* Only call replace if reportStatus is valid */}
       </Pill>
-
       <Pill
         $bgColor={severityColors[report.severity]?.bg}
         $textColor={severityColors[report.severity]?.text}
       >
         {report.severity}
       </Pill>
-
       <Pill
         $bgColor={priorityColors[report.priority]?.bg}
         $textColor={priorityColors[report.priority]?.text}
       >
         {report.priority}
       </Pill>
-
       <Modal>
         <Menus.Menu>
           <Menus.Toggle id={report.id} />

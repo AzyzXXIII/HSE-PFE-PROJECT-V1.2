@@ -21,7 +21,24 @@ router.get("/", async (req, res) => {
     }
 
     const tableName = validReportTypes[reportType];
-    const result = await pool.query(`SELECT * FROM ${tableName};`);
+
+    // Fetch observation details with user, type, and location details
+    const query = `
+ SELECT 
+  o.*, 
+  ot.type AS observation_type,  -- Fix column name
+  l.name AS location_name,  -- Fetching the location name from the location table
+  u.first_name AS submitted_by_first_name, 
+  u.last_name AS submitted_by_last_name, 
+  u.email AS submitted_by_email
+FROM ${tableName} o
+LEFT JOIN observation_type ot ON o.type_id = ot.id
+LEFT JOIN location l ON o.location_id = l.id  -- This joins the location table
+LEFT JOIN users u ON o.submitted_by = u.id;
+
+  `;
+
+    const result = await pool.query(query);
 
     console.log(`✅ Fetched ${result.rows.length} records from ${tableName}`);
     return res.json(result.rows);
