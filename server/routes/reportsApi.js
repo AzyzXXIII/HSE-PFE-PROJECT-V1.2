@@ -8,7 +8,6 @@ router.get("/", async (req, res) => {
   try {
     const reportType = req.query.type;
 
-    // Map report types to their corresponding database tables
     const validReportTypes = {
       observations: "observation",
       hazards: "hazard",
@@ -22,7 +21,6 @@ router.get("/", async (req, res) => {
 
     const tableName = validReportTypes[reportType];
 
-    // Fetch observation details with user, type, and location details
     const query = `
  SELECT 
   o.*, 
