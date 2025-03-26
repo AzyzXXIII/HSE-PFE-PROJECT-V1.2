@@ -2,29 +2,28 @@ import ReportRow from "./ReportRow";
 import Table from "../ui/Table";
 import Menus from "../ui/Menus";
 import Empty from "../ui/Empty";
-import Spinner from "../ui/Spinner";
 import Pagination from "../ui/Pagination";
+import Spinner from "../ui/Spinner"; // Ensure you have a loading spinner component
 
-export const ReportTable = ({ reports }) => {
-  const isLoading = false;
+const ReportTable = ({ reports, isLoading }) => {
   const count = reports.length;
 
   if (isLoading) return <Spinner />;
 
-  if (!reports.length) return <Empty resourceName="reports" />;
+  if (!count) return <Empty resourceName="reports" />;
 
   return (
     <Menus>
-      <Table columns="0.8fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 5rem">
+      <Table columns="0.8fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 1fr  5rem">
         <Table.Header>
           <div>Title</div>
           <div>Submitted By</div>
-          <div>Date</div>
           <div>Type</div>
+          <div>Date</div>
+          <div>Location</div>
           <div>Status</div>
           <div>Severity</div>
           <div>Priority</div>
-          <div>Actions</div>
         </Table.Header>
 
         <Table.Body

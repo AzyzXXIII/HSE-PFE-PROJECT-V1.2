@@ -39,17 +39,17 @@ const priorityColors = {
 };
 
 function ReportRow({ report }) {
-  console.log(report); // For debugging, check your object structure
+  console.log(report); // Debugging: Check the structure
+  console.log(report.date); // Debugging: Check the structure
   const navigate = useNavigate();
 
-  const isValidDate = !isNaN(new Date(report.date));
-
-  // Safely access report.status, default to an empty string if undefined
-  const reportStatus = report.status || "";
+  const isValidDate = report.date && !isNaN(new Date(report.date));
+  const reportStatus = report.status || "Unknown"; // Default if status is undefined
 
   return (
     <Table.Row>
       <div style={{ fontSize: "1.6rem", fontWeight: 600 }}>{report.title}</div>
+
       <div>
         <div>
           {report.submitted_by_first_name} {report.submitted_by_last_name}
@@ -58,18 +58,15 @@ function ReportRow({ report }) {
           {report.submitted_by_email}
         </div>
       </div>
+
       <div>
-        <div>{report.location_name}</div>{" "}
-        {/* Use location_name instead of location */}
-        <div style={{ color: "gray", fontSize: "1.2rem" }}>
-          {report.assignedTo?.email || "No assignee"}{" "}
-          {/* Ensure that assignedTo is valid */}
-        </div>
+        <strong>{report.observation_type || "No type"}</strong>
       </div>
+
       <div>
         <div>
           {isValidDate
-            ? format(new Date(report.date), "MMM dd yyyy")
+            ? format(new Date(report.date), "MMM dd yyyy") // ✅ Fixed `report.Date`
             : "Invalid date"}
         </div>
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
@@ -78,27 +75,34 @@ function ReportRow({ report }) {
             : "Invalid time"}
         </div>
       </div>
-      <div>{report.observation_type}</div>{" "}
-      {/* Make sure to use observation_type correctly */}
+      <div>
+        <div>{report.location_name || "Unknown Location"}</div>
+        <div style={{ color: "gray", fontSize: "1.2rem" }}>
+          {report.assignedTo?.email || "No assignee"}
+        </div>
+      </div>
+
       <Pill
         $bgColor={statusColors[reportStatus]?.bg}
         $textColor={statusColors[reportStatus]?.text}
       >
-        {reportStatus.replace("-", " ")}{" "}
-        {/* Only call replace if reportStatus is valid */}
+        {reportStatus.replace("-", " ")}
       </Pill>
+
       <Pill
         $bgColor={severityColors[report.severity]?.bg}
         $textColor={severityColors[report.severity]?.text}
       >
-        {report.severity}
+        {report.severity || "Unknown"}
       </Pill>
+
       <Pill
         $bgColor={priorityColors[report.priority]?.bg}
         $textColor={priorityColors[report.priority]?.text}
       >
-        {report.priority}
+        {report.priority || "Normal"}
       </Pill>
+
       <Modal>
         <Menus.Menu>
           <Menus.Toggle id={report.id} />
