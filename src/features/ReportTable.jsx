@@ -3,7 +3,7 @@ import Table from "../ui/Table";
 import Menus from "../ui/Menus";
 import Empty from "../ui/Empty";
 import Pagination from "../ui/Pagination";
-import Spinner from "../ui/Spinner"; // Ensure you have a loading spinner component
+import Spinner from "../ui/Spinner";
 
 const ReportTable = ({ reports, isLoading }) => {
   const count = reports.length;

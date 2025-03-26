@@ -39,8 +39,7 @@ const priorityColors = {
 };
 
 function ReportRow({ report }) {
-  console.log(report); // Debugging: Check the structure
-  console.log(report.date); // Debugging: Check the structure
+  console.log(report);
   const navigate = useNavigate();
 
   const isValidDate = report.date && !isNaN(new Date(report.date));
@@ -66,7 +65,7 @@ function ReportRow({ report }) {
       <div>
         <div>
           {isValidDate
-            ? format(new Date(report.date), "MMM dd yyyy") // ✅ Fixed `report.Date`
+            ? format(new Date(report.date), "MMM dd yyyy")
             : "Invalid date"}
         </div>
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
