@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
+
 import { format } from "date-fns";
 import { HiEye, HiTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +41,9 @@ const priorityColors = {
 };
 
 function ReportRow({ report }) {
+  const [searchParams] = useSearchParams();
+  const reportType = searchParams.get("type");
+
   console.log(report);
   const navigate = useNavigate();
 
@@ -109,7 +114,9 @@ function ReportRow({ report }) {
             <Menus.Button
               icon={<HiEye />}
               onClick={() =>
-                navigate(`/reports/${report.id}`, { state: { report } })
+                navigate(`/reports/${report.id}`, {
+                  state: { reportType },
+                })
               }
             >
               See details

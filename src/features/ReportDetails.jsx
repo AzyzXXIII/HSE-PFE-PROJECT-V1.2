@@ -12,8 +12,10 @@ import Modal from "../ui/Modal";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import Spinner from "../ui/Spinner";
 import Empty from "../ui/Empty";
+import ReportTabs from "../features/ReportTabs";
 import ReportDataBox from "./ReportDataBox";
 
+// Styled components
 const HeadingGroup = styled.div`
   display: flex;
   gap: 2.4rem;
@@ -39,15 +41,20 @@ function ReportDetails() {
   const [status, setStatus] = useState("Open");
   const [priority, setPriority] = useState("Normal");
 
+  const { reportType } = location.state; // Extract reportType
+
+  // State to manage active tab and additional information to be shown
+  const [activeTab, setActiveTab] = useState("Report Details");
+
   useEffect(() => {
-    setTimeout(() => {
-      if (location.state?.report) {
-        setReport(location.state.report);
-        setStatus(location.state.report.status || "Open");
-        setPriority(location.state.report.priority || "Normal");
-      }
+    if (location.state?.report) {
+      setReport(location.state.report);
+      setStatus(location.state.report.status || "Open");
+      setPriority(location.state.report.priority || "Normal");
       setIsLoading(false);
-    }, 400);
+    } else {
+      setIsLoading(false);
+    }
   }, [location.state?.report]);
 
   if (isLoading) return <Spinner />;
@@ -59,8 +66,103 @@ function ReportDetails() {
     "In Progress": "silver",
   };
 
+  const tabTitles = ["Report Details", "Additional Information", "History"];
+
+  // Function to render report details
+  const renderReportDetails = () => {
+    return (
+      <ReportDataBox
+        report={report}
+        status={status}
+        setStatus={setStatus}
+        priority={priority}
+        setPriority={setPriority}
+      />
+    );
+  };
+
+  // Function to render additional information from other fields of the report
+  // Function to render additional information based on report type
+  const renderAdditionalInformation = () => {
+    switch (reportType) {
+      case "observations":
+        return (
+          <div>
+            <h3>Additional Information</h3>
+            <p>
+              <strong>Due date:</strong> {report.dueDate || "No due date"}
+            </p>
+            <p>
+              <strong>Observation details:</strong>{" "}
+              {report.observationDetails || "No details available"}
+            </p>
+          </div>
+        );
+      case "Hazard":
+        return (
+          <div>
+            <h3>Additional Information</h3>
+            <p>
+              <strong>Hazard description:</strong>{" "}
+              {report.hazardDescription || "No description available"}
+            </p>
+            <p>
+              <strong>Risk level:</strong> {report.riskLevel || "No risk level"}
+            </p>
+          </div>
+        );
+      case "Incident":
+        return (
+          <div>
+            <h3>Additional Information</h3>
+            <p>
+              <strong>Incident location:</strong>{" "}
+              {report.incidentLocation || "No location available"}
+            </p>
+            <p>
+              <strong>Incident cause:</strong>{" "}
+              {report.incidentCause || "No cause provided"}
+            </p>
+          </div>
+        );
+      case "Near Miss":
+        return (
+          <div>
+            <h3>Additional Information</h3>
+            <p>
+              <strong>Near miss details:</strong>{" "}
+              {report.nearMissDetails || "No details available"}
+            </p>
+            <p>
+              <strong>Preventative measures:</strong>{" "}
+              {report.preventativeMeasures || "No measures listed"}
+            </p>
+          </div>
+        );
+      default:
+        return (
+          <div>No additional information available for this report type.</div>
+        );
+    }
+  };
+
+  // Function to render history (if available)
+  const renderHistory = () => {
+    return (
+      <div>
+        <h3>History</h3>
+        <p>{report.history_actions || "No history available."}</p>
+      </div>
+    );
+  };
+
+  // Function to handle tab change
+  const handleTabClick = (tabTitle) => {
+    setActiveTab(tabTitle);
+  };
+
   return (
-    <>
+    <div>
       <Header>
         <HeadingGroup>
           <Heading as="h1">Report #{report.id}</Heading>
@@ -70,12 +172,15 @@ function ReportDetails() {
           <span>{format(new Date(report.date), "MMM dd yyyy, hh:mm a")}</span>
         </HeadingGroup>
       </Header>
-      <ReportDataBox
-        report={report}
-        status={status}
-        setStatus={setStatus}
-        priority={priority}
-        setPriority={setPriority}
+
+      {/* ReportTabs will handle the tabbed interface */}
+      <ReportTabs
+        tabTitles={tabTitles}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+        renderReportDetails={renderReportDetails}
+        renderAdditionalInformation={renderAdditionalInformation}
+        renderHistory={renderHistory}
       />
 
       <ButtonGroup>
@@ -105,7 +210,7 @@ function ReportDetails() {
           </Modal.Window>
         </Modal>
       </ButtonGroup>
-    </>
+    </div>
   );
 }
 

@@ -27,6 +27,12 @@ const DescriptionBox = styled.div`
   font-size: 1.6rem;
   line-height: 1.5;
   font-weight: 400;
+  ${(props) =>
+    props.hasDescription &&
+    `
+    background-color: var(--color-green-100);
+    color: var(--color-green-700);
+  `}
 `;
 
 const ReportDataBox = ({
@@ -36,49 +42,67 @@ const ReportDataBox = ({
   priority,
   setPriority,
 }) => {
+  // Check for undefined submittedBy and assignedTo
+
   return (
-    <div>
-      <DataItem icon={<HiOutlineUser />} label="Submitted By">
-        {report.submittedBy.name} ({report.submittedBy.email})
-      </DataItem>
-
-      <DataItem icon={<HiOutlineUser />} label="Assigned To">
-        {report.assignedTo.name} ({report.assignedTo.email})
-      </DataItem>
-
-      <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Type">
-        {report.type}
-      </DataItem>
-
-      <DataItem icon={<HiOutlineTag />} label="Severity">
-        {report.severity}
-      </DataItem>
-
-      <DescriptionBox hasDescription={!!report.description}>
-        <DataItem icon={<HiOutlineDocumentText />}>
-          {report.description ? report.description : "No description provided."}
+    console.log(report.history_actions),
+    (
+      <div>
+        <DataItem icon={<HiOutlineUser />} label="Submitted By">
+          {report.first_name
+            ? `${report.first_name} ${report.last_name} (${report.email})`
+            : "No name or email provided"}
         </DataItem>
-      </DescriptionBox>
 
-      <DataItem icon={<HiOutlineTag />} label="Status">
-        <Dropdown value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="Open">Open</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Closed">Closed</option>
-        </Dropdown>
-      </DataItem>
+        <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Type">
+          {report.type || "No type provided"}
+        </DataItem>
 
-      <DataItem icon={<HiChevronDown />} label="Priority">
-        <Dropdown
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
+        <DataItem icon={<HiOutlineTag />} label="Severity">
+          {report.severity || "No severity provided"}
+        </DataItem>
+
+        <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Cause">
+          {report.cause || "No casue provided"}
+        </DataItem>
+        <DataItem icon={<HiOutlineTag />} label="Action Taken">
+          {report.action_taken || "No action taken"}
+        </DataItem>
+        <DataItem
+          icon={<HiOutlineChatBubbleBottomCenterText />}
+          label="Recommendations"
         >
-          <option value="Normal">Normal</option>
-          <option value="Medium">Medium</option>
-          <option value="Urgent">Urgent</option>
-        </Dropdown>
-      </DataItem>
-    </div>
+          {report.recommendation || "No recommendation provided"}
+        </DataItem>
+
+        <DescriptionBox hasDescription={!!report.description}>
+          <DataItem icon={<HiOutlineDocumentText />}>
+            {report.description
+              ? report.description
+              : "No description provided."}
+          </DataItem>
+        </DescriptionBox>
+
+        <DataItem icon={<HiOutlineTag />} label="Status">
+          <Dropdown value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Closed">Closed</option>
+          </Dropdown>
+        </DataItem>
+
+        <DataItem icon={<HiChevronDown />} label="Priority">
+          <Dropdown
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          >
+            <option value="Normal">Normal</option>
+            <option value="Medium">Medium</option>
+            <option value="Urgent">Urgent</option>
+          </Dropdown>
+        </DataItem>
+      </div>
+    )
   );
 };
 

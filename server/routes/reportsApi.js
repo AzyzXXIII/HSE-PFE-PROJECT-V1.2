@@ -17,11 +17,11 @@ router.get("/", async (req, res) => {
           LEFT JOIN users u ON o.submitted_by = u.id
         `,
         extraColumns: `
-          ot.type AS observation_type,
+          ot.type AS type,
           l.name AS location_name,
-          u.first_name AS submitted_by_first_name,
-          u.last_name AS submitted_by_last_name,
-          u.email AS submitted_by_email
+          u.first_name AS first_name,
+          u.last_name AS last_name,
+          u.email AS email
         `,
       },
       hazards: {
