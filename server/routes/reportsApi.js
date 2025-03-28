@@ -9,36 +9,81 @@ router.get("/", async (req, res) => {
     const reportType = req.query.type;
 
     const validReportTypes = {
-      observations: "observation",
-      hazards: "hazard",
-      incidents: "incident",
-      near_miss: "near_miss",
+      observations: {
+        table: "observation",
+        joins: `
+          LEFT JOIN observation_type ot ON o.type_id = ot.id
+          LEFT JOIN location l ON o.location_id = l.id
+          LEFT JOIN users u ON o.submitted_by = u.id
+        `,
+        extraColumns: `
+          ot.type AS observation_type,
+          l.name AS location_name,
+          u.first_name AS submitted_by_first_name,
+          u.last_name AS submitted_by_last_name,
+          u.email AS submitted_by_email
+        `,
+      },
+      hazards: {
+        table: "hazard",
+        joins: `
+          LEFT JOIN location l ON o.location_id = l.id
+          LEFT JOIN users u ON o.submitted_by = u.id
+          LEFT JOIN equipment e ON o.equipment_id = e.id
+        `,
+        extraColumns: `
+          l.name AS location_name,
+          u.first_name AS submitted_by_first_name,
+          u.last_name AS submitted_by_last_name,
+          u.email AS submitted_by_email,
+          e.name AS equipment_name
+        `,
+      },
+      incidents: {
+        table: "incident",
+        joins: `
+          LEFT JOIN location l ON o.location_id = l.id
+          LEFT JOIN users u ON o.submitted_by = u.id
+        `,
+        extraColumns: `
+          l.name AS location_name,
+          u.first_name AS submitted_by_first_name,
+          u.last_name AS submitted_by_last_name,
+          u.email AS submitted_by_email
+        `,
+      },
+      near_miss: {
+        table: "near_miss",
+        joins: `
+          LEFT JOIN location l ON o.location_id = l.id
+          LEFT JOIN users u ON o.submitted_by = u.id
+        `,
+        extraColumns: `
+          l.name AS location_name,
+          u.first_name AS submitted_by_first_name,
+          u.last_name AS submitted_by_last_name,
+          u.email AS submitted_by_email
+        `,
+      },
     };
 
     if (!validReportTypes[reportType]) {
       return res.status(400).json({ error: "Invalid report type" });
     }
 
-    const tableName = validReportTypes[reportType];
+    const { table, joins, extraColumns } = validReportTypes[reportType];
 
     const query = `
- SELECT 
-  o.*, 
-  ot.type AS observation_type,  -- Fix column name
-  l.name AS location_name,  -- Fetching the location name from the location table
-  u.first_name AS submitted_by_first_name, 
-  u.last_name AS submitted_by_last_name, 
-  u.email AS submitted_by_email
-FROM ${tableName} o
-LEFT JOIN observation_type ot ON o.type_id = ot.id
-LEFT JOIN location l ON o.location_id = l.id  -- This joins the location table
-LEFT JOIN users u ON o.submitted_by = u.id;
-
-  `;
+      SELECT 
+        o.*, 
+        ${extraColumns}
+      FROM ${table} o
+      ${joins};
+    `;
 
     const result = await pool.query(query);
 
-    console.log(`✅ Fetched ${result.rows.length} records from ${tableName}`);
+    console.log(`✅ Fetched ${result.rows.length} records from ${table}`);
     return res.json(result.rows);
   } catch (error) {
     console.error("❌ Error fetching reports:", error.message);
