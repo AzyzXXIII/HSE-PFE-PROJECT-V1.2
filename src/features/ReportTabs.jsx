@@ -21,6 +21,7 @@ const TabContent = styled.div`
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   border-top: none;
+  margin-bottom: 2rem;
 `;
 
 function ReportTabs({

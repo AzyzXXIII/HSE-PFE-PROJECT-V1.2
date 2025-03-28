@@ -12,6 +12,7 @@ import Modal from "../ui/Modal";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import Spinner from "../ui/Spinner";
 import Empty from "../ui/Empty";
+import DataItem from "../ui/DataItem";
 import ReportTabs from "../features/ReportTabs";
 import ReportDataBox from "./ReportDataBox";
 
@@ -41,7 +42,7 @@ function ReportDetails() {
   const [status, setStatus] = useState("Open");
   const [priority, setPriority] = useState("Normal");
 
-  const { reportType } = location.state; // Extract reportType
+  const { reportType } = location.state || {};
 
   // State to manage active tab and additional information to be shown
   const [activeTab, setActiveTab] = useState("Report Details");
@@ -88,13 +89,8 @@ function ReportDetails() {
       case "observations":
         return (
           <div>
-            <h3>Additional Information</h3>
             <p>
-              <strong>Due date:</strong> {report.dueDate || "No due date"}
-            </p>
-            <p>
-              <strong>Observation details:</strong>{" "}
-              {report.observationDetails || "No details available"}
+              <strong>No further informations for Observation Report</strong>{" "}
             </p>
           </div>
         );

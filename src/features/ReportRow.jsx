@@ -115,7 +115,7 @@ function ReportRow({ report }) {
               icon={<HiEye />}
               onClick={() =>
                 navigate(`/reports/${report.id}`, {
-                  state: { reportType },
+                  state: { report, reportType },
                 })
               }
             >
