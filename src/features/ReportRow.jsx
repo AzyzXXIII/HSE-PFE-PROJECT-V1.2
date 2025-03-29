@@ -48,7 +48,7 @@ function ReportRow({ report }) {
   const navigate = useNavigate();
 
   const isValidDate = report.date && !isNaN(new Date(report.date));
-  const reportStatus = report.status || "Unknown"; // Default if status is undefined
+  const reportStatus = report.status || "Unknown";
 
   return (
     <Table.Row>

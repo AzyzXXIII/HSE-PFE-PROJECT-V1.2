@@ -44,7 +44,6 @@ function ReportDetails() {
 
   const { reportType } = location.state || {};
 
-  // State to manage active tab and additional information to be shown
   const [activeTab, setActiveTab] = useState("Report Details");
 
   useEffect(() => {
@@ -69,7 +68,6 @@ function ReportDetails() {
 
   const tabTitles = ["Report Details", "Additional Information", "History"];
 
-  // Function to render report details
   const renderReportDetails = () => {
     return (
       <ReportDataBox
@@ -82,8 +80,6 @@ function ReportDetails() {
     );
   };
 
-  // Function to render additional information from other fields of the report
-  // Function to render additional information based on report type
   const renderAdditionalInformation = () => {
     switch (reportType) {
       case "observations":
@@ -142,7 +138,6 @@ function ReportDetails() {
     }
   };
 
-  // Function to render history (if available)
   const renderHistory = () => {
     return (
       <div>
@@ -152,7 +147,6 @@ function ReportDetails() {
     );
   };
 
-  // Function to handle tab change
   const handleTabClick = (tabTitle) => {
     setActiveTab(tabTitle);
   };

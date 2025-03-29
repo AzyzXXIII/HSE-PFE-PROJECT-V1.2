@@ -42,8 +42,6 @@ const ReportDataBox = ({
   priority,
   setPriority,
 }) => {
-  // Check for undefined submittedBy and assignedTo
-
   return (
     console.log(report.history_actions),
     (

@@ -10,9 +10,9 @@ const TabContainer = styled.div`
 const Tab = styled.div`
   padding: 0.8rem 2rem;
   cursor: pointer;
-  background-color: ${({ active }) => (active ? "#3498db" : "#fff")};
-  color: ${({ active }) => (active ? "#fff" : "#3498db")};
-  border: ${({ active }) => (active ? "1px solid #3498db" : "1px solid #ddd")};
+  background-color: ${({ active }) => (active ? "#564ccf" : "#fff")};
+  color: ${({ active }) => (active ? "#fff" : "#564ccf")};
+  border: ${({ active }) => (active ? "1px solid #564ccf" : "1px solid #ddd")};
   border-radius: 8px 8px 0 0;
 `;
 
