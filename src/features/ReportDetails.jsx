@@ -16,7 +16,6 @@ import DataItem from "../ui/DataItem";
 import ReportTabs from "../features/ReportTabs";
 import ReportDataBox from "./ReportDataBox";
 
-// Styled components
 const HeadingGroup = styled.div`
   display: flex;
   gap: 2.4rem;

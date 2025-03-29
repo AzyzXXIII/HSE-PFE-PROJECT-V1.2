@@ -10,7 +10,6 @@ import Modal from "../ui/Modal";
 import Menus from "../ui/Menus";
 import ConfirmDelete from "../ui/ConfirmDelete";
 
-// Styled pill for status, severity, and priority
 const Pill = styled.div`
   display: inline-block;
   padding: 0.4rem 1rem;

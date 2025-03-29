@@ -12,7 +12,7 @@ function CreateEmployeeForm({
   setEmployees,
 }) {
   const isEditSession = Boolean(employeeToEdit?.id);
-  const { id: editId, ...editValues } = employeeToEdit || {}; // Prevents errors if undefined
+  const { id: editId, ...editValues } = employeeToEdit || {};
 
   const { register, handleSubmit, reset, setValue, getValues, formState } =
     useForm({
