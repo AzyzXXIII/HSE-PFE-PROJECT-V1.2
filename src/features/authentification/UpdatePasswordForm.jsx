@@ -17,7 +17,7 @@ function UpdatePasswordForm() {
       console.log("Password updated:", password);
       reset();
       setIsUpdating(false);
-    }, 1500); // Simulate a delay for UX
+    }, 1500);
   }
 
   return (

@@ -23,7 +23,7 @@ function SignupForm({ onCreateUser }) {
     const userData = {
       ...data,
       qrCode,
-      approved: false, // Requires admin approval
+      approved: false,
       permissions: data.permissions || {},
     };
 

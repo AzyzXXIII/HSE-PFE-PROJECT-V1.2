@@ -14,8 +14,8 @@ function Logout() {
     setTimeout(() => {
       console.log("User logged out (frontend only)");
       setIsLoading(false);
-      navigate("/login"); // Redirect to login page
-    }, 1500); // Simulate a delay for UX
+      navigate("/login");
+    }, 1500);
   }
 
   return (
