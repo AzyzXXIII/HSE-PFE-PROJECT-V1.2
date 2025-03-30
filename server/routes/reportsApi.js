@@ -3,7 +3,6 @@ import pool from "../config/db.js";
 
 const router = express.Router();
 
-// Handle dynamic report fetching based on query parameters
 router.get("/", async (req, res) => {
   try {
     const reportType = req.query.type;
