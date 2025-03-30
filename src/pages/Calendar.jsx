@@ -40,7 +40,6 @@ function CalendarComponent() {
     { id: "4", title: "Birthday Party", start: "2025-02-17T07:00:00" },
   ]);
 
-  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: "", time: "", date: "" });
 

@@ -32,7 +32,7 @@ function CreateEmployeeForm({
     const newEmployeeData = {
       id: isEditSession ? editId : Date.now(),
       ...data,
-      qrCode: getValues("qrCode"), // Ensures QR code is stored
+      qrCode: getValues("qrCode"),
     };
 
     setEmployees((prev) =>
