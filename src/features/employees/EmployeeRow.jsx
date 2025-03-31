@@ -106,7 +106,7 @@ function EmployeeRow({ employee, onAccept, onReject }) {
             <Modal.Window name="delete">
               <ConfirmDelete
                 resourceName="employees"
-                onConfirm={() => console.log(`Delete employee ${employeeId}`)} // Implement delete action as needed
+                onConfirm={() => console.log(`Delete employee ${employeeId}`)}
               />
             </Modal.Window>
           </Menus.Menu>
