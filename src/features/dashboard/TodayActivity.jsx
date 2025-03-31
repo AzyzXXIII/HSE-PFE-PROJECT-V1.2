@@ -36,7 +36,6 @@ const NoActivity = styled.p`
   margin-top: 0.8rem;
 `;
 
-// Hardcoded data for recent reports
 const activities = [
   {
     id: 1,

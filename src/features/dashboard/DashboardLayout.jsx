@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Stats from "./Stats";
-import ReportsChart from "./ReportsChart"; // Import the new chart
+import ReportsChart from "./ReportsChart";
 import TodayActivity from "./TodayActivity";
 import PieChart from "./PieChart";
 const StyledDashboardLayout = styled.div`

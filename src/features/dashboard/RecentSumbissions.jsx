@@ -39,7 +39,6 @@ const NoActivity = styled.p`
   margin-top: 0.8rem;
 `;
 
-// Hardcoded data
 const activities = [
   { id: 1, name: "Morning workout" },
   { id: 2, name: "Team meeting" },
