@@ -13,7 +13,7 @@ function ReportsPage() {
       image: incidentImg,
     },
     {
-      type: "hazard",
+      type: "hazards",
       count: 22,
       employees: 17,
       image: hazardImg,

@@ -14,7 +14,7 @@ const ReportTable = ({ reports, isLoading }) => {
 
   return (
     <Menus>
-      <Table columns="0.8fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 1fr  5rem">
+      <Table columns="0.6fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 1fr  5rem">
         <Table.Header>
           <div>Title</div>
           <div>Submitted By</div>

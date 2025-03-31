@@ -6,6 +6,7 @@ import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import Button from "../ui/Button";
 import ButtonGroup from "../ui/ButtonGroup.jsx";
+import Spinner from "../ui/Spinner.jsx";
 
 export const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -72,7 +73,7 @@ export const Reports = () => {
         <ReportTableOperations />
       </Row>
 
-      {loading ? <p>Loading...</p> : <ReportTable reports={filteredReports} />}
+      {loading ? <Spinner /> : <ReportTable reports={filteredReports} />}
 
       <ButtonGroup>
         <Button

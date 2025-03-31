@@ -55,15 +55,13 @@ function ReportRow({ report }) {
 
       <div>
         <div>
-          {report.submitted_by_first_name} {report.submitted_by_last_name}
+          {report.first_name} {report.last_name}
         </div>
-        <div style={{ color: "gray", fontSize: "1.2rem" }}>
-          {report.submitted_by_email}
-        </div>
+        <div style={{ color: "gray", fontSize: "1.2rem" }}>{report.email}</div>
       </div>
 
       <div>
-        <strong>{report.observation_type || "No type"}</strong>
+        <strong>{report.type || "No type"}</strong>
       </div>
 
       <div>

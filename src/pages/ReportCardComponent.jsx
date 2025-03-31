@@ -75,7 +75,7 @@ function ReportCardComponent({ type, image }) {
       icon: <HiOutlineExclamationCircle />,
       color: "#FF6347",
     },
-    hazard: {
+    hazards: {
       tag: "Hazard",
       bgColor: "#FFA500",
       icon: <HiOutlineShieldCheck />,
