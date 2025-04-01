@@ -16,7 +16,9 @@ const Dropdown = styled.select`
   cursor: pointer;
 `;
 
-const DescriptionBox = styled.div`
+const DescriptionBox = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "hasDescription", // This ensures `hasDescription` is not forwarded
+})`
   padding: 1.6rem 3.2rem;
   border-radius: var(--border-radius-sm);
   margin-top: 2.4rem;
@@ -27,6 +29,7 @@ const DescriptionBox = styled.div`
   font-size: 1.6rem;
   line-height: 1.5;
   font-weight: 400;
+
   ${(props) =>
     props.hasDescription &&
     `
@@ -64,13 +67,18 @@ const ReportDataBox = ({
           {report.cause || "No casue provided"}
         </DataItem>
         <DataItem icon={<HiOutlineTag />} label="Action Taken">
-          {report.action_taken || "No action taken"}
+          {Array.isArray(report.action_taken)
+            ? report.action_taken.join(", ") // Join array elements into a string
+            : report.action_taken || "No action taken"}
         </DataItem>
+
         <DataItem
           icon={<HiOutlineChatBubbleBottomCenterText />}
           label="Recommendations"
         >
-          {report.recommendation || "No recommendation provided"}
+          {Array.isArray(report.recommendation)
+            ? report.recommendation.join(", ") // Join array elements into a string
+            : report.recommendation || "No recommendation provided"}
         </DataItem>
 
         <DescriptionBox hasDescription={!!report.description}>

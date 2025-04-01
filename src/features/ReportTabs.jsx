@@ -7,7 +7,9 @@ const TabContainer = styled.div`
   border-bottom: 2px solid #ddd;
 `;
 
-const Tab = styled.div`
+const Tab = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "active", // This ensures the `active` prop is not passed to the DOM element
+})`
   padding: 0.8rem 2rem;
   cursor: pointer;
   background-color: ${({ active }) => (active ? "#564ccf" : "#fff")};

@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import styled from "styled-components";
 import { HiOutlineClock } from "react-icons/hi2";
+import {
+  HiOutlineTag,
+  HiOutlineChatBubbleBottomCenterText,
+} from "react-icons/hi2";
 
 import Button from "../ui/Button";
 import ButtonGroup from "../ui/ButtonGroup";
@@ -89,19 +93,36 @@ function ReportDetails() {
             </p>
           </div>
         );
-      case "Hazard":
+      case "hazards":
         return (
           <div>
             <h3>Additional Information</h3>
-            <p>
-              <strong>Hazard description:</strong>{" "}
-              {report.hazardDescription || "No description available"}
-            </p>
-            <p>
-              <strong>Risk level:</strong> {report.riskLevel || "No risk level"}
-            </p>
+
+            {/* Only show if the field is not already in ReportDataBox */}
+            <DataItem
+              icon={<HiOutlineChatBubbleBottomCenterText />}
+              label="Equipment Involved"
+            >
+              {report.equipment_name || "No equipment specified"}
+            </DataItem>
+
+            <DataItem icon={<HiOutlineTag />} label="Hazard Group">
+              {report.type || "No hazard group specified"}
+            </DataItem>
+
+            <DataItem
+              icon={<HiOutlineChatBubbleBottomCenterText />}
+              label="Risk Level"
+            >
+              {report.riskLevel || "No risk level provided"}
+            </DataItem>
+
+            <DataItem icon={<HiOutlineTag />} label="Location">
+              {report.location_name || "No location provided"}
+            </DataItem>
           </div>
         );
+
       case "Incident":
         return (
           <div>

@@ -37,9 +37,12 @@ router.get("/", async (req, res) => {
           u.last_name AS last_name,
           u.email AS email,
           e.name AS equipment_name,
-          hg.name AS type
+          hg.name AS type,
+          o.env_comment AS cause,  
+          o.corrective_actions AS recommendation  
         `,
       },
+
       incidents: {
         table: "incident",
         joins: `
