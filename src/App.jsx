@@ -1,7 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 import GlobalStyles from "./styles/GlobalStyles";
-//import Dashboard from "./pages/Dashboard";
 
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
@@ -12,14 +13,28 @@ import AppLayout from "./ui/AppLayout";
 import Reports from "./pages/Reports";
 import Report from "./pages/Report";
 import Employees from "./pages/Employees";
-
 import ReportMain from "./pages/ReportMain";
 import Calendar from "./pages/Calendar";
 import Dashboard from "./pages/Dashboard";
+
 function App() {
   return (
     <>
       <GlobalStyles />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
+
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
@@ -34,7 +49,6 @@ function App() {
             <Route path="account" element={<Account />} />
             <Route path="calendar" element={<Calendar />} />
           </Route>
-
           <Route path="login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

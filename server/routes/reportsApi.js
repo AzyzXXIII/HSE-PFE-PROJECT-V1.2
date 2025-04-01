@@ -94,5 +94,37 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reportType = req.query.type; // Report type must be passed in the query
+
+    const validReportTypes = {
+      observations: "observation",
+      hazards: "hazard",
+      incidents: "incident",
+      near_miss: "near_miss",
+    };
+
+    if (!validReportTypes[reportType]) {
+      return res.status(400).json({ error: "Invalid report type" });
+    }
+
+    const table = validReportTypes[reportType];
+
+    const query = `DELETE FROM ${table} WHERE id = $1 RETURNING *`;
+    const result = await pool.query(query, [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Report not found" });
+    }
+
+    console.log(`🗑️ Deleted report with ID: ${id} from ${table}`);
+    return res.json({ message: "Report deleted successfully" });
+  } catch (error) {
+    console.error("❌ Error deleting report:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 export default router;

@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import { useSearchParams } from "react-router-dom";
-
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { HiEye, HiTrash } from "react-icons/hi2";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Table from "../ui/Table";
 import Modal from "../ui/Modal";
 import Menus from "../ui/Menus";
 import ConfirmDelete from "../ui/ConfirmDelete";
+import { useDeleteReport } from "../hooks/useDeleteReports";
 
 const Pill = styled.div`
   display: inline-block;
@@ -41,13 +41,29 @@ const priorityColors = {
 
 function ReportRow({ report }) {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const reportType = searchParams.get("type");
 
-  console.log(report);
-  const navigate = useNavigate();
+  const { mutate: deleteReport } = useDeleteReport();
 
   const isValidDate = report.date && !isNaN(new Date(report.date));
   const reportStatus = report.status || "Unknown";
+
+  const handleDelete = () => {
+    deleteReport(
+      { id: report.id, type: reportType },
+      {
+        onSuccess: (data) => {
+          console.log("Report deleted successfully!", data);
+          toast.success("Report deleted successfully! ✅ ");
+        },
+        onError: (error) => {
+          console.error("Error deleting report:", error.message);
+          toast.error("Failed to delete report. ❌");
+        },
+      }
+    );
+  };
 
   return (
     <Table.Row>
@@ -76,6 +92,7 @@ function ReportRow({ report }) {
             : "Invalid time"}
         </div>
       </div>
+
       <div>
         <div>{report.location_name || "Unknown Location"}</div>
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
@@ -120,16 +137,15 @@ function ReportRow({ report }) {
             </Menus.Button>
 
             <Modal.Open opens="delete">
-              <Menus.Button icon={<HiTrash />}>Delete report</Menus.Button>
+              <Menus.Button icon={<HiTrash />} onClick={handleDelete}>
+                Delete report
+              </Menus.Button>
             </Modal.Open>
           </Menus.List>
         </Menus.Menu>
 
         <Modal.Window name="delete">
-          <ConfirmDelete
-            resourceName="report"
-            onConfirm={() => console.log("Deleting report", report.id)}
-          />
+          <ConfirmDelete resourceName="report" onConfirm={handleDelete} />
         </Modal.Window>
       </Modal>
     </Table.Row>

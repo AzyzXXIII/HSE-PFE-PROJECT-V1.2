@@ -2,11 +2,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import styled from "styled-components";
-import { HiOutlineClock } from "react-icons/hi2";
 import {
+  HiOutlineClock,
   HiOutlineTag,
   HiOutlineChatBubbleBottomCenterText,
 } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 import Button from "../ui/Button";
 import ButtonGroup from "../ui/ButtonGroup";
@@ -19,6 +20,7 @@ import Empty from "../ui/Empty";
 import DataItem from "../ui/DataItem";
 import ReportTabs from "../features/ReportTabs";
 import ReportDataBox from "./ReportDataBox";
+import { useDeleteReport } from "../hooks/useDeleteReports";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -44,6 +46,7 @@ function ReportDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState("Open");
   const [priority, setPriority] = useState("Normal");
+  const { mutate: deleteReport } = useDeleteReport();
 
   const { reportType } = location.state || {};
 
@@ -89,7 +92,7 @@ function ReportDetails() {
         return (
           <div>
             <p>
-              <strong>No further informations for Observation Report</strong>{" "}
+              <strong>No further information for Observation Report</strong>
             </p>
           </div>
         );
@@ -97,32 +100,26 @@ function ReportDetails() {
         return (
           <div>
             <h3>Additional Information</h3>
-
-            {/* Only show if the field is not already in ReportDataBox */}
             <DataItem
               icon={<HiOutlineChatBubbleBottomCenterText />}
               label="Equipment Involved"
             >
               {report.equipment_name || "No equipment specified"}
             </DataItem>
-
             <DataItem icon={<HiOutlineTag />} label="Hazard Group">
               {report.type || "No hazard group specified"}
             </DataItem>
-
             <DataItem
               icon={<HiOutlineChatBubbleBottomCenterText />}
               label="Risk Level"
             >
               {report.riskLevel || "No risk level provided"}
             </DataItem>
-
             <DataItem icon={<HiOutlineTag />} label="Location">
               {report.location_name || "No location provided"}
             </DataItem>
           </div>
         );
-
       case "Incident":
         return (
           <div>
@@ -183,7 +180,6 @@ function ReportDetails() {
         </HeadingGroup>
       </Header>
 
-      {/* ReportTabs will handle the tabbed interface */}
       <ReportTabs
         tabTitles={tabTitles}
         activeTab={activeTab}
@@ -213,8 +209,18 @@ function ReportDetails() {
             <ConfirmDelete
               resourceName="report"
               onConfirm={() => {
-                console.log("Deleted", report.id);
-                navigate(-1);
+                deleteReport(
+                  { id: report.id, type: reportType },
+                  {
+                    onSuccess: () => {
+                      toast.success("Report deleted successfully! ✅ ");
+                      navigate(-1);
+                    },
+                    onError: () => {
+                      toast.error("Failed to delete report. ❌");
+                    },
+                  }
+                );
               }}
             />
           </Modal.Window>
