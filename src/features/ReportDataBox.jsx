@@ -46,7 +46,7 @@ const ReportDataBox = ({
   setPriority,
 }) => {
   return (
-    console.log(report.history_actions),
+    console.log(report.pi_description),
     (
       <div>
         <DataItem icon={<HiOutlineUser />} label="Submitted By">

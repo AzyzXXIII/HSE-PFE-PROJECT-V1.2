@@ -20,23 +20,31 @@ const Pill = styled.div`
   color: ${(props) => props.$textColor || "white"};
   background-color: ${(props) => props.$bgColor || "gray"};
 `;
+const EmailColumn = styled.div`
+  max-width: 200px; /* Set a max width */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflowed content */
+  text-overflow: ellipsis; /* Add ellipsis (...) if the text overflows */
+  font-size: 1.2rem;
+  color: gray;
+`;
 
 const statusColors = {
   Open: { bg: "#3B82F6", text: "#FFFFFF" },
   "In Progress": { bg: "#6B7280", text: "#FFFFFF" },
-  Closed: { bg: "#10B981", text: "#FFFFFF" },
+  Resolved: { bg: "#10B981", text: "#FFFFFF" },
 };
 
 const severityColors = {
-  Critical: { bg: "#22C55E", text: "#FFFFFF" },
-  Medium: { bg: "#FACC15", text: "#000000" },
+  Minor: { bg: "#22C55E", text: "#FFFFFF" },
+  Moderate: { bg: "#FACC15", text: "#000000" },
   High: { bg: "#DC2626", text: "#FFFFFF" },
 };
 
 const priorityColors = {
-  Normal: { bg: "#22C55E", text: "#FFFFFF" },
+  Low: { bg: "#22C55E", text: "#FFFFFF" },
   Medium: { bg: "#FACC15", text: "#000000" },
-  Urgent: { bg: "#DC2626", text: "#FFFFFF" },
+  High: { bg: "#DC2626", text: "#FFFFFF" },
 };
 
 function ReportRow({ report }) {
@@ -67,16 +75,18 @@ function ReportRow({ report }) {
 
   return (
     <Table.Row>
-      <div style={{ fontSize: "1.6rem", fontWeight: 600 }}>{report.title}</div>
+      <div style={{ fontSize: "1.6rem", fontWeight: 600, maxWidth: "50px" }}>
+        {report.title}
+      </div>
 
       <div>
         <div>
           {report.first_name} {report.last_name}
         </div>
-        <div style={{ color: "gray", fontSize: "1.2rem" }}>{report.email}</div>
+        <EmailColumn>{report.email}</EmailColumn>{" "}
       </div>
 
-      <div>
+      <div style={{ fontSize: "1.6rem", fontWeight: 600, maxWidth: "20px" }}>
         <strong>{report.type || "No type"}</strong>
       </div>
 

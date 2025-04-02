@@ -120,7 +120,7 @@ function ReportDetails() {
             </DataItem>
           </div>
         );
-      case "Incident":
+      case "Incidents":
         return (
           <div>
             <h3>Additional Information</h3>

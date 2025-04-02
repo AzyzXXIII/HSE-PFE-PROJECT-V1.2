@@ -1,86 +1,19 @@
 import express from "express";
 import pool from "../config/db.js";
+import getReportConfig from "../config/reportConfig.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
     const reportType = req.query.type;
+    const reportConfig = getReportConfig(reportType);
 
-    const validReportTypes = {
-      observations: {
-        table: "observation",
-        joins: `
-          LEFT JOIN observation_type ot ON o.type_id = ot.id
-          LEFT JOIN location l ON o.location_id = l.id
-          LEFT JOIN users u ON o.submitted_by = u.id
-        `,
-        extraColumns: `
-          ot.type AS type,
-          l.name AS location_name,
-          u.first_name AS first_name,
-          u.last_name AS last_name,
-          u.email AS email
-        `,
-      },
-      hazards: {
-        table: "hazard",
-        joins: `
-          LEFT JOIN location l ON o.location_id = l.id
-          LEFT JOIN users u ON o.submitted_by = u.id
-          LEFT JOIN equipment e ON o.equipment_id = e.id
-          LEFT JOIN hazard_group hg ON o.group_id = hg.id
-        `,
-        extraColumns: `
-          l.name AS location_name,
-          u.first_name AS first_name,
-          u.last_name AS last_name,
-          u.email AS email,
-          e.name AS equipment_name,
-          hg.name AS type,
-          o.env_comment AS cause,  
-          o.corrective_actions AS recommendation  
-        `,
-      },
-
-      incidents: {
-        table: "incident",
-        joins: `
-          LEFT JOIN location l ON o.location_id = l.id
-          LEFT JOIN users u ON o.submitted_by = u.id
-          LEFT JOIN incident_type it ON o.primary_incident_type_id = it.id
-        `,
-        extraColumns: `
-          l.name AS location_name,
-          u.first_name AS first_name,
-          u.last_name AS last_name,
-          u.email AS email,
-          it.name AS type,
-          it.name AS title,
-          o.pi_actual_severity AS severity  -- Corrected this line
-        `,
-      },
-
-      near_miss: {
-        table: "near_miss",
-        joins: `
-          LEFT JOIN location l ON o.location_id = l.id
-          LEFT JOIN users u ON o.submitted_by = u.id
-        `,
-        extraColumns: `
-          l.name AS location_name,
-          u.first_name AS first_name,
-          u.last_name AS last_name,
-          u.email AS email
-        `,
-      },
-    };
-
-    if (!validReportTypes[reportType]) {
+    if (!reportConfig) {
       return res.status(400).json({ error: "Invalid report type" });
     }
 
-    const { table, joins, extraColumns } = validReportTypes[reportType];
+    const { table, joins, extraColumns } = reportConfig;
 
     const query = `
       SELECT 
@@ -92,30 +25,70 @@ router.get("/", async (req, res) => {
 
     const result = await pool.query(query);
 
-    console.log(`✅ Fetched ${result.rows.length} records from ${table}`);
-    return res.json(result.rows);
+    // Transform the data to structure the location info as its own object
+    const transformedResults = result.rows.map((row) => {
+      // Extract location-related fields
+      const {
+        location_id,
+        location_name,
+        department,
+        area_type,
+        floor,
+        location_code,
+        capacity,
+        hazard_level,
+        latitude,
+        longitude,
+        location_description, // Using aliased name for location description
+        ...reportData
+      } = row;
+
+      // Create a location object with relevant fields
+      const location = {
+        id: location_id,
+        name: location_name,
+        department,
+        area_type,
+        floor,
+        location_code,
+        capacity,
+        hazard_level,
+        latitude,
+        longitude,
+        description: location_description, // Ensure using the aliased name
+      };
+
+      // Return the transformed row with location as a nested object
+      return {
+        ...reportData,
+        location, // Location is now a nested object
+      };
+    });
+
+    console.log(result.rows); // Check the raw output of the query
+
+    console.log(
+      `✅ Fetched ${transformedResults.length} records from ${table}`
+    );
+    return res.json(transformedResults);
   } catch (error) {
     console.error("❌ Error fetching reports:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const reportType = req.query.type; // Report type must be passed in the query
+    const reportType = req.query.type;
 
-    const validReportTypes = {
-      observations: "observation",
-      hazards: "hazard",
-      incidents: "incident",
-      near_miss: "near_miss",
-    };
+    const reportConfig = getReportConfig(reportType);
 
-    if (!validReportTypes[reportType]) {
+    if (!reportConfig) {
       return res.status(400).json({ error: "Invalid report type" });
     }
 
-    const table = validReportTypes[reportType];
+    const table = reportConfig.table;
 
     const query = `DELETE FROM ${table} WHERE id = $1 RETURNING *`;
     const result = await pool.query(query, [id]);
