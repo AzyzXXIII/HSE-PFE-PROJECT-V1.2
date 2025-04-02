@@ -48,14 +48,19 @@ router.get("/", async (req, res) => {
         joins: `
           LEFT JOIN location l ON o.location_id = l.id
           LEFT JOIN users u ON o.submitted_by = u.id
+          LEFT JOIN incident_type it ON o.primary_incident_type_id = it.id
         `,
         extraColumns: `
           l.name AS location_name,
-          u.first_name AS submitted_by_first_name,
-          u.last_name AS submitted_by_last_name,
-          u.email AS submitted_by_email
+          u.first_name AS first_name,
+          u.last_name AS last_name,
+          u.email AS email,
+          it.name AS type,
+          it.name AS title,
+          o.pi_actual_severity AS severity  -- Corrected this line
         `,
       },
+
       near_miss: {
         table: "near_miss",
         joins: `
@@ -64,9 +69,9 @@ router.get("/", async (req, res) => {
         `,
         extraColumns: `
           l.name AS location_name,
-          u.first_name AS submitted_by_first_name,
-          u.last_name AS submitted_by_last_name,
-          u.email AS submitted_by_email
+          u.first_name AS first_name,
+          u.last_name AS last_name,
+          u.email AS email
         `,
       },
     };

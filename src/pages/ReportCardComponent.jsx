@@ -69,7 +69,7 @@ function ReportCardComponent({ type, image }) {
   const navigate = useNavigate();
 
   const reportData = {
-    incident: {
+    incidents: {
       tag: "Incident",
       bgColor: "#FF6347",
       icon: <HiOutlineExclamationCircle />,

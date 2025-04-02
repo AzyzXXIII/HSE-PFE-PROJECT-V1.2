@@ -7,7 +7,7 @@ import nearMissImg from "../assets/nearmiss.svg";
 function ReportsPage() {
   const reports = [
     {
-      type: "incident",
+      type: "incidents",
       count: 35,
       employees: 11,
       image: incidentImg,
