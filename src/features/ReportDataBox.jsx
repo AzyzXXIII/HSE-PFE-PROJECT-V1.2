@@ -17,7 +17,7 @@ const Dropdown = styled.select`
 `;
 
 const DescriptionBox = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "hasDescription", // This ensures `hasDescription` is not forwarded
+  shouldForwardProp: (prop) => prop !== "hasDescription",
 })`
   padding: 1.6rem 3.2rem;
   border-radius: var(--border-radius-sm);
@@ -77,7 +77,7 @@ const ReportDataBox = ({
           label="Recommendations"
         >
           {Array.isArray(report.recommendation)
-            ? report.recommendation.join(", ") // Join array elements into a string
+            ? report.recommendation.join(", ")
             : report.recommendation || "No recommendation provided"}
         </DataItem>
 

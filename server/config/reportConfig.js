@@ -1,4 +1,3 @@
-// reportConfig.js
 const getReportConfig = (reportType) => {
   const validReportTypes = {
     observations: {
