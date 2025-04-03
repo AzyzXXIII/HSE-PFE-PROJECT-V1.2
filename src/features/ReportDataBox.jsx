@@ -17,7 +17,7 @@ const Dropdown = styled.select`
 `;
 
 const DescriptionBox = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "hasDescription",
+  shouldForwardProp: (prop) => prop !== "hasDescription", // This ensures `hasDescription` is not forwarded
 })`
   padding: 1.6rem 3.2rem;
   border-radius: var(--border-radius-sm);

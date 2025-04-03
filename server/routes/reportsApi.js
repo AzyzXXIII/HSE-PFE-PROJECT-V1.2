@@ -43,7 +43,6 @@ router.get("/", async (req, res) => {
         ...reportData
       } = row;
 
-      // Create a location object with relevant fields
       const location = {
         id: location_id,
         name: location_name,
