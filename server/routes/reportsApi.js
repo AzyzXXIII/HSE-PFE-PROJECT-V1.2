@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
         hazard_level,
         latitude,
         longitude,
-        location_description, // Using aliased name for location description
+        location_description,
         ...reportData
       } = row;
 
@@ -54,7 +54,7 @@ router.get("/", async (req, res) => {
         hazard_level,
         latitude,
         longitude,
-        description: location_description, // Ensure using the aliased name
+        description: location_description,
       };
 
       // Return the transformed row with location as a nested object
