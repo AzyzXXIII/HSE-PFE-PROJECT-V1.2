@@ -8,7 +8,7 @@ const TabContainer = styled.div`
 `;
 
 const Tab = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "active", // This ensures the `active` prop is not passed to the DOM element
+  shouldForwardProp: (prop) => prop !== "active",
 })`
   padding: 0.8rem 2rem;
   cursor: pointer;
