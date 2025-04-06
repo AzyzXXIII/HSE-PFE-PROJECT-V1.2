@@ -57,7 +57,6 @@ router.get("/", async (req, res) => {
         description: location_description,
       };
 
-      // Return the transformed row with location as a nested object
       return {
         ...reportData,
         location, // Location is now a nested object
