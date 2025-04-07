@@ -105,7 +105,6 @@ function ReportDetails() {
               Additional Information
             </h3>
 
-            {/* Picture */}
             {report.picture ? (
               <div className="mb-4">
                 <img
@@ -118,7 +117,6 @@ function ReportDetails() {
               <p className="text-sm italic mb-4">No picture available</p>
             )}
 
-            {/* Hazard Info */}
             <DataItem
               icon={<HiOutlineChatBubbleBottomCenterText />}
               label="Equipment Involved:"
