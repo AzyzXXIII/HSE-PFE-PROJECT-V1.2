@@ -156,7 +156,6 @@ function ReportDetails() {
               {report.weather_condition || "No weather condition provided"}
             </DataItem>
 
-            {/* Location Details */}
             <h4 className="font-semibold text-md mt-4 mb-2">Location Info:</h4>
             {report.location ? (
               <div className="pl-4 space-y-1 text-sm">
