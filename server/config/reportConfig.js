@@ -27,7 +27,7 @@ const getReportConfig = (reportType) => {
         l.hazard_level,
         l.latitude,
         l.longitude,
-        l.description
+        l.loc_description
       `,
     },
     hazards: {
@@ -56,7 +56,7 @@ const getReportConfig = (reportType) => {
         l.hazard_level,
         l.latitude,
         l.longitude,
-        l.description
+        l.loc_description
       `,
     },
     incidents: {
@@ -84,7 +84,7 @@ const getReportConfig = (reportType) => {
         l.hazard_level,
         l.latitude,
         l.longitude,
-        l.description AS location_description
+        l.loc_description 
       `,
     },
     near_miss: {
@@ -107,7 +107,7 @@ const getReportConfig = (reportType) => {
         l.hazard_level,
         l.latitude,
         l.longitude,
-        l.description
+        l.loc_description
       `,
     },
   };

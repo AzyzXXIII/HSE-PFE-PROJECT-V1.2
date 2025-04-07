@@ -20,6 +20,8 @@ import Empty from "../ui/Empty";
 import DataItem from "../ui/DataItem";
 import ReportTabs from "../features/ReportTabs";
 import ReportDataBox from "./ReportDataBox";
+import LocationMap from "./components/LocationMap";
+
 import { useDeleteReport } from "../hooks/useDeleteReports";
 
 const HeadingGroup = styled.div`
@@ -99,41 +101,116 @@ function ReportDetails() {
       case "hazards":
         return (
           <div>
-            <h3>Additional Information</h3>
+            <h3 className="font-semibold text-lg mb-2">
+              Additional Information
+            </h3>
+
+            {/* Picture */}
+            {report.picture ? (
+              <div className="mb-4">
+                <img
+                  src={report.picture}
+                  alt="Hazard"
+                  className="w-full max-w-md rounded-lg shadow-md"
+                />
+              </div>
+            ) : (
+              <p className="text-sm italic mb-4">No picture available</p>
+            )}
+
+            {/* Hazard Info */}
             <DataItem
               icon={<HiOutlineChatBubbleBottomCenterText />}
-              label="Equipment Involved"
+              label="Equipment Involved:"
             >
               {report.equipment_name || "No equipment specified"}
             </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Hazard Group">
+
+            <DataItem icon={<HiOutlineTag />} label="Hazard Group:">
               {report.type || "No hazard group specified"}
             </DataItem>
+
             <DataItem
               icon={<HiOutlineChatBubbleBottomCenterText />}
-              label="Risk Level"
+              label="Risk Level:"
             >
-              {report.riskLevel || "No risk level provided"}
+              {report.risk_level || "No risk level provided"}
             </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Location">
-              {report.location_name || "No location provided"}
+
+            <DataItem icon={<HiOutlineTag />} label="Preventive Measures:">
+              {report.lt_preventive_measures?.join(", ") ||
+                "No preventive measures provided"}
             </DataItem>
+
+            <DataItem icon={<HiOutlineTag />} label="Temperature:">
+              {report.temperature || "No temperature provided"}
+            </DataItem>
+
+            <DataItem icon={<HiOutlineTag />} label="Noise Level:">
+              {report.noise_level || "No noise level provided"}
+            </DataItem>
+
+            <DataItem icon={<HiOutlineTag />} label="Lighting:">
+              {report.lighting || "No lighting provided"}
+            </DataItem>
+
+            <DataItem icon={<HiOutlineTag />} label="Weather Condition:">
+              {report.weather_condition || "No weather condition provided"}
+            </DataItem>
+
+            {/* Location Details */}
+            <h4 className="font-semibold text-md mt-4 mb-2">Location Info:</h4>
+            {report.location ? (
+              <div className="pl-4 space-y-1 text-sm">
+                <p>
+                  <strong>Name:</strong> {report.location.name}
+                </p>
+                <p>
+                  <strong>Department:</strong> {report.location.department}
+                </p>
+                <p>
+                  <strong>Area Type:</strong> {report.location.area_type}
+                </p>
+                <p>
+                  <strong>Floor:</strong> {report.location.floor}
+                </p>
+                <p>
+                  <strong>Location Code:</strong>{" "}
+                  {report.location.location_code}
+                </p>
+                <p>
+                  <strong>Capacity:</strong> {report.location.capacity}
+                </p>
+                <p>
+                  <strong>Hazard Level:</strong> {report.location.hazard_level}
+                </p>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {report.location.loc_description}
+                </p>
+
+                {/* Map Label */}
+                <DataItem icon={<HiOutlineTag />} label="Map Location:" />
+
+                {/* Embedded Map */}
+                {report.location.latitude && report.location.longitude ? (
+                  <LocationMap
+                    lat={parseFloat(report.location.latitude)}
+                    lng={parseFloat(report.location.longitude)}
+                    label={report.location.name}
+                  />
+                ) : (
+                  <p className="pl-8 text-sm italic">
+                    Coordinates not available
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="italic text-sm">No location data available</p>
+            )}
           </div>
         );
-      case "Incidents":
-        return (
-          <div>
-            <h3>Additional Information</h3>
-            <p>
-              <strong>Incident location:</strong>{" "}
-              {report.incidentLocation || "No location available"}
-            </p>
-            <p>
-              <strong>Incident cause:</strong>{" "}
-              {report.incidentCause || "No cause provided"}
-            </p>
-          </div>
-        );
+
       case "Near Miss":
         return (
           <div>

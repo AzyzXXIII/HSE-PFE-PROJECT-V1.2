@@ -46,69 +46,64 @@ const ReportDataBox = ({
   setPriority,
 }) => {
   return (
-    console.log(report.pi_description),
-    (
-      <div>
-        <DataItem icon={<HiOutlineUser />} label="Submitted By">
-          {report.first_name
-            ? `${report.first_name} ${report.last_name} (${report.email})`
-            : "No name or email provided"}
-        </DataItem>
+    <div>
+      <DataItem icon={<HiOutlineUser />} label="Submitted By">
+        {report.first_name
+          ? `${report.first_name} ${report.last_name} (${report.email})`
+          : "No name or email provided"}
+      </DataItem>
 
-        <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Type">
-          {report.type || "No type provided"}
-        </DataItem>
+      <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Type">
+        {report.type || "No type provided"}
+      </DataItem>
 
-        <DataItem icon={<HiOutlineTag />} label="Severity">
-          {report.severity || "No severity provided"}
-        </DataItem>
+      <DataItem icon={<HiOutlineTag />} label="Severity">
+        {report.severity || "No severity provided"}
+      </DataItem>
 
-        <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Cause">
-          {report.cause || "No casue provided"}
-        </DataItem>
-        <DataItem icon={<HiOutlineTag />} label="Action Taken">
-          {Array.isArray(report.action_taken)
-            ? report.action_taken.join(", ") // Join array elements into a string
-            : report.action_taken || "No action taken"}
-        </DataItem>
+      <DataItem icon={<HiOutlineChatBubbleBottomCenterText />} label="Cause">
+        {report.cause || "No casue provided"}
+      </DataItem>
+      <DataItem icon={<HiOutlineTag />} label="Action Taken">
+        {Array.isArray(report.action_taken)
+          ? report.action_taken.join(", ") // Join array elements into a string
+          : report.action_taken || "No action taken"}
+      </DataItem>
 
-        <DataItem
-          icon={<HiOutlineChatBubbleBottomCenterText />}
-          label="Recommendations"
+      <DataItem
+        icon={<HiOutlineChatBubbleBottomCenterText />}
+        label="Recommendations"
+      >
+        {Array.isArray(report.recommendation)
+          ? report.recommendation.join(", ")
+          : report.recommendation || "No recommendation provided"}
+      </DataItem>
+
+      <DescriptionBox hasDescription={!!report.description}>
+        <DataItem icon={<HiOutlineDocumentText />}>
+          {report.description ? report.description : "No description provided."}
+        </DataItem>
+      </DescriptionBox>
+
+      <DataItem icon={<HiOutlineTag />} label="Status">
+        <Dropdown value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed">Closed</option>
+        </Dropdown>
+      </DataItem>
+
+      <DataItem icon={<HiChevronDown />} label="Priority">
+        <Dropdown
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
         >
-          {Array.isArray(report.recommendation)
-            ? report.recommendation.join(", ")
-            : report.recommendation || "No recommendation provided"}
-        </DataItem>
-
-        <DescriptionBox hasDescription={!!report.description}>
-          <DataItem icon={<HiOutlineDocumentText />}>
-            {report.description
-              ? report.description
-              : "No description provided."}
-          </DataItem>
-        </DescriptionBox>
-
-        <DataItem icon={<HiOutlineTag />} label="Status">
-          <Dropdown value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="Open">Open</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Closed">Closed</option>
-          </Dropdown>
-        </DataItem>
-
-        <DataItem icon={<HiChevronDown />} label="Priority">
-          <Dropdown
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-          >
-            <option value="Normal">Normal</option>
-            <option value="Medium">Medium</option>
-            <option value="Urgent">Urgent</option>
-          </Dropdown>
-        </DataItem>
-      </div>
-    )
+          <option value="Normal">Normal</option>
+          <option value="Medium">Medium</option>
+          <option value="Urgent">Urgent</option>
+        </Dropdown>
+      </DataItem>
+    </div>
   );
 };
 

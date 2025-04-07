@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
         hazard_level,
         latitude,
         longitude,
-        location_description,
+        loc_description,
         ...reportData
       } = row;
 
@@ -54,7 +54,7 @@ router.get("/", async (req, res) => {
         hazard_level,
         latitude,
         longitude,
-        description: location_description,
+        loc_description,
       };
 
       return {
