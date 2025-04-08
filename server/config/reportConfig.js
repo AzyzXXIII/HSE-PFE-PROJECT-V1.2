@@ -6,6 +6,7 @@ const getReportConfig = (reportType) => {
         LEFT JOIN observation_type ot ON o.type_id = ot.id
         LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
+      
       `,
       extraColumns: `
         ot.type AS type,

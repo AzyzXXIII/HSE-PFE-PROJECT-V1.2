@@ -59,11 +59,11 @@ router.get("/", async (req, res) => {
 
       return {
         ...reportData,
-        location, // Location is now a nested object
+        location,
       };
     });
 
-    console.log(result.rows); // Check the raw output of the query
+    console.log(result.rows);
 
     console.log(
       `✅ Fetched ${transformedResults.length} records from ${table}`
