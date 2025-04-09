@@ -25,7 +25,6 @@ router.get("/", async (req, res) => {
 
     const result = await pool.query(query);
 
-    // Transform the data to structure the location info as its own object
     const transformedResults = result.rows.map((row) => {
       // Extract location-related fields
       const {
