@@ -2,11 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import styled from "styled-components";
-import {
-  HiOutlineClock,
-  HiOutlineTag,
-  HiOutlineChatBubbleBottomCenterText,
-} from "react-icons/hi2";
+import { HiOutlineClock } from "react-icons/hi2";
 import { toast } from "react-toastify";
 
 import Button from "../ui/Button";
@@ -17,12 +13,16 @@ import Modal from "../ui/Modal";
 import ConfirmDelete from "../ui/ConfirmDelete";
 import Spinner from "../ui/Spinner";
 import Empty from "../ui/Empty";
-import DataItem from "../ui/DataItem";
 import ReportTabs from "../features/ReportTabs";
 import ReportDataBox from "./ReportDataBox";
 import ReportLocationInfo from "./components/ReportLocationInfo";
 
 import { useDeleteReport } from "../hooks/useDeleteReports";
+
+// ReportTypes
+import ObservationsInfo from "./components/reportDetails/ObservationInfo";
+import HazardsInfo from "./components/reportDetails/HazardsInfo";
+import NearMissInfo from "./components/reportDetails/NearMissInfo";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -62,11 +62,10 @@ function ReportDetails() {
     setIsLoading(false);
   }, [location.state?.report]);
 
-  // ✅ Log a history entry when something changes
   const addHistoryAction = (actionText) => {
     const newAction = {
       action: actionText,
-      performed_by: "Admin", // Replace with logged-in user if available
+      performed_by: "Admin", // replace with actual user if available
       timestamp: new Date().toISOString(),
     };
 
@@ -76,13 +75,11 @@ function ReportDetails() {
     }));
   };
 
-  // ✅ Wrapped setter for status
   const handleStatusChange = (newStatus) => {
     setStatus(newStatus);
     addHistoryAction(`Status changed to ${newStatus}`);
   };
 
-  // ✅ Wrapped setter for priority
   const handlePriorityChange = (newPriority) => {
     setPriority(newPriority);
     addHistoryAction(`Priority changed to ${newPriority}`);
@@ -110,96 +107,21 @@ function ReportDetails() {
   );
 
   const renderAdditionalInformation = () => {
-    let extraInfo;
+    const normalizedType = (reportType || "")
+      .toLowerCase()
+      .replace(/\s+/g, "_");
 
-    switch (reportType) {
-      case "observations":
-        extraInfo = (
-          <p>
-            <strong>No further information for Observation Report</strong>
-          </p>
-        );
-        break;
-
-      case "hazards":
-        extraInfo = (
-          <>
-            <h3 className="font-semibold text-lg mb-2">
-              Additional Information
-            </h3>
-            {report.picture ? (
-              <div className="mb-4">
-                <img
-                  src={report.picture}
-                  alt="Hazard"
-                  className="w-full max-w-md rounded-lg shadow-md"
-                />
-              </div>
-            ) : (
-              <p className="text-sm italic mb-4">No picture available</p>
-            )}
-            <DataItem
-              icon={<HiOutlineChatBubbleBottomCenterText />}
-              label="Equipment Involved:"
-            >
-              {report.equipment_name || "No equipment specified"}
-            </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Hazard Group:">
-              {report.type || "No hazard group specified"}
-            </DataItem>
-            <DataItem
-              icon={<HiOutlineChatBubbleBottomCenterText />}
-              label="Risk Level:"
-            >
-              {report.risk_level || "No risk level provided"}
-            </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Preventive Measures:">
-              {report.lt_preventive_measures?.join(", ") ||
-                "No preventive measures provided"}
-            </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Temperature:">
-              {report.temperature || "No temperature provided"}
-            </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Noise Level:">
-              {report.noise_level || "No noise level provided"}
-            </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Lighting:">
-              {report.lighting || "No lighting provided"}
-            </DataItem>
-            <DataItem icon={<HiOutlineTag />} label="Weather Condition:">
-              {report.weather_condition || "No weather condition provided"}
-            </DataItem>
-          </>
-        );
-        break;
-
-      case "Near Miss":
-        extraInfo = (
-          <>
-            <h3 className="font-semibold text-lg mb-2">
-              Additional Information
-            </h3>
-            <p>
-              <strong>Near miss details:</strong>{" "}
-              {report.nearMissDetails || "No details available"}
-            </p>
-            <p>
-              <strong>Preventative measures:</strong>{" "}
-              {report.preventativeMeasures || "No measures listed"}
-            </p>
-          </>
-        );
-        break;
-
-      default:
-        extraInfo = (
-          <div>No additional information available for this report type.</div>
-        );
-    }
+    const reportComponents = {
+      observations: <ObservationsInfo />,
+      hazards: <HazardsInfo report={report} />,
+      near_miss: <NearMissInfo report={report} />,
+    };
 
     return (
       <div>
-        {extraInfo}
+        {reportComponents[normalizedType] || (
+          <div>No additional information available for this report type.</div>
+        )}
         <ReportLocationInfo location={report.location} />
       </div>
     );
@@ -213,7 +135,8 @@ function ReportDetails() {
         <ul className="space-y-2">
           {report.history_actions.map((entry, idx) => (
             <li key={idx} className="text-sm border-b pb-1">
-              <strong>{entry.performed_by}</strong>: {entry.action} <br />
+              <strong>{entry.performed_by}</strong>: {entry.action}
+              <br />
               <span className="text-xs text-gray-500">
                 {format(new Date(entry.timestamp), "PPpp")}
               </span>
