@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "leaflet/dist/leaflet.css";
 
 import App from "./App.jsx";
-import "./index.css";
 
 const queryClient = new QueryClient();
 
@@ -13,7 +12,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
-      <ReactQueryDevtools initialIsOpen={false} /> {/* ✅ Add Devtools */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>
 );

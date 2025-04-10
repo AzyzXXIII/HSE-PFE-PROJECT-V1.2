@@ -22,6 +22,7 @@ import { useDeleteReport } from "../hooks/useDeleteReports";
 // ReportTypes
 import ObservationsInfo from "./components/reportDetails/ObservationInfo";
 import HazardsInfo from "./components/reportDetails/HazardsInfo";
+import IncidentInfo from "./components/reportDetails/IncidentInfo";
 import NearMissInfo from "./components/reportDetails/NearMissInfo";
 
 const HeadingGroup = styled.div`
@@ -112,9 +113,10 @@ function ReportDetails() {
       .replace(/\s+/g, "_");
 
     const reportComponents = {
-      observations: <ObservationsInfo />,
+      observations: <ObservationsInfo report={report} />,
       hazards: <HazardsInfo report={report} />,
       near_miss: <NearMissInfo report={report} />,
+      incidents: <IncidentInfo report={report} />,
     };
 
     return (

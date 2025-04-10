@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import GlobalStyles from "./styles/GlobalStyles";
@@ -16,6 +16,8 @@ import Employees from "./pages/Employees";
 import ReportMain from "./pages/ReportMain";
 import Calendar from "./pages/Calendar";
 import Dashboard from "./pages/Dashboard";
+
+import "./index.css";
 
 function App() {
   return (
