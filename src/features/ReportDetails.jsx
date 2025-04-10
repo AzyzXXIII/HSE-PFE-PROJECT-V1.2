@@ -58,11 +58,35 @@ function ReportDetails() {
       setReport(location.state.report);
       setStatus(location.state.report.status || "Open");
       setPriority(location.state.report.priority || "Normal");
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, [location.state?.report]);
+
+  // ✅ Log a history entry when something changes
+  const addHistoryAction = (actionText) => {
+    const newAction = {
+      action: actionText,
+      performed_by: "Admin", // Replace with logged-in user if available
+      timestamp: new Date().toISOString(),
+    };
+
+    setReport((prev) => ({
+      ...prev,
+      history_actions: [...(prev.history_actions || []), newAction],
+    }));
+  };
+
+  // ✅ Wrapped setter for status
+  const handleStatusChange = (newStatus) => {
+    setStatus(newStatus);
+    addHistoryAction(`Status changed to ${newStatus}`);
+  };
+
+  // ✅ Wrapped setter for priority
+  const handlePriorityChange = (newPriority) => {
+    setPriority(newPriority);
+    addHistoryAction(`Priority changed to ${newPriority}`);
+  };
 
   if (isLoading) return <Spinner />;
   if (!report) return <Empty resourceName="report" />;
@@ -79,9 +103,9 @@ function ReportDetails() {
     <ReportDataBox
       report={report}
       status={status}
-      setStatus={setStatus}
+      setStatus={handleStatusChange}
       priority={priority}
-      setPriority={setPriority}
+      setPriority={handlePriorityChange}
     />
   );
 
@@ -114,7 +138,6 @@ function ReportDetails() {
             ) : (
               <p className="text-sm italic mb-4">No picture available</p>
             )}
-
             <DataItem
               icon={<HiOutlineChatBubbleBottomCenterText />}
               label="Equipment Involved:"
@@ -184,8 +207,22 @@ function ReportDetails() {
 
   const renderHistory = () => (
     <div>
-      <h3>History</h3>
-      <p>{report.history_actions || "No history available."}</p>
+      <h3 className="text-lg font-semibold mb-2">History</h3>
+      {Array.isArray(report.history_actions) &&
+      report.history_actions.length > 0 ? (
+        <ul className="space-y-2">
+          {report.history_actions.map((entry, idx) => (
+            <li key={idx} className="text-sm border-b pb-1">
+              <strong>{entry.performed_by}</strong>: {entry.action} <br />
+              <span className="text-xs text-gray-500">
+                {format(new Date(entry.timestamp), "PPpp")}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No history available.</p>
+      )}
     </div>
   );
 
@@ -236,7 +273,7 @@ function ReportDetails() {
                   { id: report.id, type: reportType },
                   {
                     onSuccess: () => {
-                      toast.success("Report deleted successfully! ✅ ");
+                      toast.success("Report deleted successfully! ✅");
                       navigate(-1);
                     },
                     onError: () => {
