@@ -18,6 +18,7 @@ import ReportDataBox from "./ReportDataBox";
 import ReportLocationInfo from "./components/ReportLocationInfo";
 
 import { useDeleteReport } from "../hooks/useDeleteReports";
+import { useUpdateReport } from "../hooks/useUpdateReport";
 
 // ReportTypes
 import ObservationsInfo from "./components/reportDetails/ObservationInfo";
@@ -50,6 +51,7 @@ function ReportDetails() {
   const [status, setStatus] = useState("Open");
   const [priority, setPriority] = useState("Normal");
   const { mutate: deleteReport } = useDeleteReport();
+  const { mutate: updateReport } = useUpdateReport();
 
   const { reportType } = location.state || {};
   const [activeTab, setActiveTab] = useState("Report Details");
@@ -63,27 +65,72 @@ function ReportDetails() {
     setIsLoading(false);
   }, [location.state?.report]);
 
-  const addHistoryAction = (actionText) => {
-    const newAction = {
-      action: actionText,
-      performed_by: "Admin", // replace with actual user if available
+  const handleStatusChange = (newStatus) => {
+    const historyAction = {
+      action: `Status changed to ${newStatus}`,
+      performed_by: "Admin",
       timestamp: new Date().toISOString(),
     };
 
+    // Update local UI
+    setStatus(newStatus);
     setReport((prev) => ({
       ...prev,
-      history_actions: [...(prev.history_actions || []), newAction],
+      status: newStatus,
+      history_actions: [...(prev.history_actions || []), historyAction],
     }));
-  };
 
-  const handleStatusChange = (newStatus) => {
-    setStatus(newStatus);
-    addHistoryAction(`Status changed to ${newStatus}`);
+    // Backend update with toast
+    updateReport(
+      {
+        id: report.id,
+        type: reportType,
+        status: newStatus,
+        priority,
+        historyAction,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Status updated successfully ✅");
+        },
+        onError: () => {
+          toast.error("Failed to update status ❌");
+        },
+      }
+    );
   };
 
   const handlePriorityChange = (newPriority) => {
+    const historyAction = {
+      action: `Priority changed to ${newPriority}`,
+      performed_by: "Admin",
+      timestamp: new Date().toISOString(),
+    };
+
     setPriority(newPriority);
-    addHistoryAction(`Priority changed to ${newPriority}`);
+    setReport((prev) => ({
+      ...prev,
+      priority: newPriority,
+      history_actions: [...(prev.history_actions || []), historyAction],
+    }));
+
+    updateReport(
+      {
+        id: report.id,
+        type: reportType,
+        status,
+        priority: newPriority,
+        historyAction,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Priority updated successfully ✅");
+        },
+        onError: () => {
+          toast.error("Failed to update priority ❌");
+        },
+      }
+    );
   };
 
   if (isLoading) return <Spinner />;

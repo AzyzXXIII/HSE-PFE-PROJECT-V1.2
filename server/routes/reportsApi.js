@@ -101,5 +101,44 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { type } = req.query;
+    const { status, priority, historyAction } = req.body;
+
+    const reportConfig = getReportConfig(type);
+    if (!reportConfig) {
+      return res.status(400).json({ error: "Invalid report type" });
+    }
+
+    const table = reportConfig.table;
+
+    const updateQuery = `
+      UPDATE ${table}
+      SET status = $1,
+          priority = $2,
+          history_actions = COALESCE(history_actions, '[]'::jsonb) || $3::jsonb
+      WHERE id = $4
+      RETURNING *;
+    `;
+
+    const result = await pool.query(updateQuery, [
+      status,
+      priority,
+      JSON.stringify([historyAction]),
+      id,
+    ]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Report not found" });
+    }
+
+    return res.json(result.rows[0]);
+  } catch (error) {
+    console.error("❌ Error updating report:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 export default router;
