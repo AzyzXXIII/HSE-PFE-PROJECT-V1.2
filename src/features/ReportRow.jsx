@@ -24,7 +24,7 @@ const EmailColumn = styled.div`
   max-width: 200px; /* Set a max width */
   white-space: nowrap; /* Prevent wrapping */
   overflow: hidden; /* Hide overflowed content */
-  text-overflow: ellipsis; /* Add ellipsis (...) if the text overflows */
+  text-overflow: ellipsis;
   font-size: 1.2rem;
   color: gray;
 `;

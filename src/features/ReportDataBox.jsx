@@ -40,9 +40,9 @@ const DescriptionBox = styled.div.withConfig({
 
 const ReportDataBox = ({
   report,
-  status,
+
   setStatus,
-  priority,
+
   setPriority,
 }) => {
   return (
@@ -86,21 +86,24 @@ const ReportDataBox = ({
       </DescriptionBox>
 
       <DataItem icon={<HiOutlineTag />} label="Status">
-        <Dropdown value={status} onChange={(e) => setStatus(e.target.value)}>
+        <Dropdown
+          value={report.status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
           <option value="Open">Open</option>
           <option value="In Progress">In Progress</option>
-          <option value="Closed">Closed</option>
+          <option value="Resolved">Resloved</option>
         </Dropdown>
       </DataItem>
 
       <DataItem icon={<HiChevronDown />} label="Priority">
         <Dropdown
-          value={priority}
+          value={report.priority}
           onChange={(e) => setPriority(e.target.value)}
         >
           <option value="Normal">Normal</option>
           <option value="Medium">Medium</option>
-          <option value="Urgent">Urgent</option>
+          <option value="High">High</option>
         </Dropdown>
       </DataItem>
     </div>
