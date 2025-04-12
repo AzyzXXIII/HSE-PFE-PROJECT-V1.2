@@ -88,8 +88,8 @@ const getReportConfig = (reportType) => {
         l.loc_description 
       `,
     },
-    near_miss: {
-      table: "near_miss",
+    nearMiss: {
+      table: `"nearMiss"`,
       joins: `
         LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
@@ -98,6 +98,10 @@ const getReportConfig = (reportType) => {
         u.first_name AS first_name,
         u.last_name AS last_name,
         u.email AS email,
+        o.status AS status,
+        o.priority AS priority,
+        o.date AS date,
+        o.description AS description,
         l.id AS location_id,
         l.name AS location_name,
         l.department,

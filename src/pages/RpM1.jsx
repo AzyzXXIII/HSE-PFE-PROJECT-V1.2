@@ -20,7 +20,7 @@ function ReportsPage() {
   useEffect(() => {
     const fetchAllStats = async () => {
       try {
-        const types = ["incidents", "hazards", "observations", "nearMiss"];
+        const types = ["incidents", "hazards", "observations"];
         const requests = types.map((type) =>
           axios.get(`/api/reports/stats?type=${type}`)
         );

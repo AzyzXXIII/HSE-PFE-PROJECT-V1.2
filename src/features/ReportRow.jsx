@@ -104,7 +104,7 @@ function ReportRow({ report }) {
       </div>
 
       <div>
-        <div>{report.location_name || "Unknown Location"}</div>
+        <div>{report.location.name || "Unknown Location"}</div>
         <div style={{ color: "gray", fontSize: "1.2rem" }}>
           {report.assignedTo?.email || "No assignee"}
         </div>

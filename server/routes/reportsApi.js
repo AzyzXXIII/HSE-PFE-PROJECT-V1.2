@@ -4,6 +4,7 @@ import getReportConfig from "../config/reportConfig.js";
 
 const router = express.Router();
 
+// Fetch all reports of a given type
 router.get("/", async (req, res) => {
   try {
     const reportType = req.query.type;
@@ -26,7 +27,6 @@ router.get("/", async (req, res) => {
     const result = await pool.query(query);
 
     const transformedResults = result.rows.map((row) => {
-      // Extract location-related fields
       const {
         location_id,
         location_name,
@@ -62,10 +62,8 @@ router.get("/", async (req, res) => {
       };
     });
 
-    console.log(result.rows);
-
     console.log(
-      `✅ Fetched ${transformedResults.length} records from ${table}`
+      `✅ Fetched ${transformedResults.length} records from ${reportType}`
     );
     return res.json(transformedResults);
   } catch (error) {
@@ -74,13 +72,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Delete a report
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const reportType = req.query.type;
 
     const reportConfig = getReportConfig(reportType);
-
     if (!reportConfig) {
       return res.status(400).json({ error: "Invalid report type" });
     }
@@ -101,6 +99,8 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Update a report
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -137,6 +137,66 @@ router.put("/:id", async (req, res) => {
     return res.json(result.rows[0]);
   } catch (error) {
     console.error("❌ Error updating report:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// ✅ GET individual stats for a single type (used by frontend)
+router.get("/stats", async (req, res) => {
+  try {
+    const type = req.query.type;
+    const reportConfig = getReportConfig(type);
+
+    if (!reportConfig) {
+      return res.status(400).json({ error: "Invalid report type" });
+    }
+
+    const { table } = reportConfig;
+
+    const statsQuery = `
+      SELECT 
+        COUNT(*) AS total_reports,
+        COUNT(DISTINCT submitted_by) AS unique_employees,
+        COUNT(*) FILTER (WHERE status = 'pending') AS pending_reports
+      FROM ${table};
+    `;
+
+    const result = await pool.query(statsQuery);
+    return res.json(result.rows[0]);
+  } catch (error) {
+    console.error("❌ Error fetching stats for type:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// ✅ GET all stats in one go (optional)
+router.get("/stats/all", async (req, res) => {
+  try {
+    const reportTypes = ["incidents", "hazards", "observations", "nearMiss"];
+    const stats = {};
+
+    for (const type of reportTypes) {
+      const reportConfig = getReportConfig(type);
+      if (!reportConfig) continue;
+      const reportType = req.query.type;
+
+      const table = reportType;
+
+      const statsQuery = `
+        SELECT 
+          COUNT(*) AS total_reports,
+          COUNT(DISTINCT submitted_by) AS unique_employees,
+          COUNT(*) FILTER (WHERE status = 'pending') AS pending_reports
+        FROM ${table};
+      `;
+
+      const result = await pool.query(statsQuery);
+      stats[type] = result.rows[0];
+    }
+
+    return res.json(stats);
+  } catch (error) {
+    console.error("❌ Error fetching all stats:", error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
