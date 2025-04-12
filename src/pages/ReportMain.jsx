@@ -1,44 +1,22 @@
-// ReportsPage.jsx
-import { useEffect, useState } from "react";
 import ReportCardComponent from "./ReportCardComponent";
 import incidentImg from "../assets/incident.svg";
 import hazardImg from "../assets/hazard.svg";
 import observationImg from "../assets/observation.svg";
 import nearMissImg from "../assets/nearmiss.svg";
-import axios from "axios";
+import { useReportStats } from "../hooks/useReportStats";
 
 function ReportsPage() {
-  const [reportStats, setReportStats] = useState({});
+  const incidentStats = useReportStats("incidents");
+  const hazardStats = useReportStats("hazards");
+  const observationStats = useReportStats("observations");
+  const nearMissStats = useReportStats("nearMiss");
 
-  const reports = [
-    { type: "incidents", image: incidentImg },
-    { type: "hazards", image: hazardImg },
-    { type: "observations", image: observationImg },
-    { type: "nearMiss", image: nearMissImg },
+  const reportStats = [
+    { type: "incidents", image: incidentImg, stats: incidentStats },
+    { type: "hazards", image: hazardImg, stats: hazardStats },
+    { type: "observations", image: observationImg, stats: observationStats },
+    { type: "nearMiss", image: nearMissImg, stats: nearMissStats },
   ];
-
-  useEffect(() => {
-    const fetchAllStats = async () => {
-      try {
-        const types = ["incidents", "hazards", "observations", "nearMiss"];
-        const requests = types.map((type) =>
-          axios.get(`/api/reports/stats?type=${type}`)
-        );
-
-        const responses = await Promise.all(requests);
-        const statsMap = {};
-        types.forEach((type, i) => {
-          statsMap[type] = responses[i].data;
-        });
-
-        setReportStats(statsMap);
-      } catch (error) {
-        console.error("Error fetching report stats:", error);
-      }
-    };
-
-    fetchAllStats();
-  }, []);
 
   return (
     <div
@@ -50,13 +28,32 @@ function ReportsPage() {
         flexWrap: "wrap",
       }}
     >
-      {reports.map((report) => (
-        <ReportCardComponent
-          key={report.type}
-          {...report}
-          stats={reportStats[report.type]}
-        />
-      ))}
+      {reportStats.map((report) => {
+        const { data, isLoading, isError } = report.stats;
+
+        return (
+          <ReportCardComponent
+            key={report.type}
+            type={report.type}
+            image={report.image}
+            stats={
+              isLoading
+                ? {
+                    total_reports: "...",
+                    pending_reports: "...",
+                    unique_employees: "...",
+                  }
+                : isError
+                ? {
+                    total_reports: "Error",
+                    pending_reports: "-",
+                    unique_employees: "-",
+                  }
+                : data
+            }
+          />
+        );
+      })}
     </div>
   );
 }
