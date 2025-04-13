@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-// Function to fetch report stats
 const fetchStats = async (type) => {
   const response = await axios.get(`/api/reports/stats?type=${type}`);
   return response.data;
