@@ -4,7 +4,6 @@ import getReportConfig from "../config/reportConfig.js";
 
 const router = express.Router();
 
-// Fetch all reports of a given type
 router.get("/", async (req, res) => {
   try {
     const reportType = req.query.type;
