@@ -182,6 +182,4 @@ router.get("/stats", async (req, res) => {
   }
 });
 
-// ✅ GET all stats in one go (optional)
-
 export default router;

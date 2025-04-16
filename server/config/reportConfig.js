@@ -117,7 +117,7 @@ const getReportConfig = (reportType) => {
         l.longitude,
         l.loc_description
       `,
-      severityColumn: null, // No severity in nearMiss
+      severityColumn: null,
     },
   };
 
