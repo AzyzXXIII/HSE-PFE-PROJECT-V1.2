@@ -10,11 +10,12 @@ export const useReportStats = (type) => {
   return useQuery({
     queryKey: ["reportStats", type],
     queryFn: () => fetchStats(type),
-    staleTime: 1000 * 60 * 10,
-    cacheTime: 1000 * 60 * 30,
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 1000 * 60 * 30, // Cache for 30 minutes
     retry: 1,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+    refetchOnWindowFocus: true, // Refetch when window regains focus
+    refetchOnReconnect: true, // Refetch when network reconnects
+    refetchInterval: 10000, // Refetch every 10 seconds
     enabled: true,
   });
 };

@@ -141,6 +141,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // ✅ GET individual stats for a single type (used by frontend)
+
 router.get("/stats", async (req, res) => {
   try {
     const type = req.query.type;
@@ -151,7 +152,9 @@ router.get("/stats", async (req, res) => {
     }
 
     const { table, severityColumn } = reportConfig;
-    console.log(severityColumn);
+
+    console.log("📊 Severity Column:", severityColumn);
+
     const baseQuery = `
       SELECT 
         COUNT(*) AS total_reports,
@@ -159,7 +162,7 @@ router.get("/stats", async (req, res) => {
         COUNT(*) FILTER (WHERE status = 'in progress') AS pending_reports
         ${
           severityColumn
-            ? `, COUNT(*) FILTER (WHERE ${severityColumn} = 'high') AS high_severity_count`
+            ? `, COUNT(*) FILTER (WHERE LOWER(${severityColumn}) = 'high') AS high_severity_count`
             : ""
         }
       FROM ${table};
