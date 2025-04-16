@@ -6,7 +6,6 @@ const getReportConfig = (reportType) => {
         LEFT JOIN observation_type ot ON o.type_id = ot.id
         LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
-      
       `,
       extraColumns: `
         ot.type AS type,
@@ -30,6 +29,7 @@ const getReportConfig = (reportType) => {
         l.longitude,
         l.loc_description
       `,
+      severityColumn: "severity",
     },
     hazards: {
       table: "hazard",
@@ -43,6 +43,7 @@ const getReportConfig = (reportType) => {
         u.first_name AS first_name,
         u.last_name AS last_name,
         u.email AS email,
+        o.severity,
         e.name AS equipment_name,
         hg.name AS type,
         o.env_comment AS cause,
@@ -59,6 +60,7 @@ const getReportConfig = (reportType) => {
         l.longitude,
         l.loc_description
       `,
+      severityColumn: "severity",
     },
     incidents: {
       table: "incident",
@@ -87,6 +89,7 @@ const getReportConfig = (reportType) => {
         l.longitude,
         l.loc_description 
       `,
+      severityColumn: "pi_actual_severity",
     },
     nearMiss: {
       table: `"nearMiss"`,
@@ -114,6 +117,7 @@ const getReportConfig = (reportType) => {
         l.longitude,
         l.loc_description
       `,
+      severityColumn: null, // No severity in nearMiss
     },
   };
 

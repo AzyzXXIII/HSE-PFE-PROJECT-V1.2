@@ -7,11 +7,7 @@ import { MdOutlinePendingActions } from "react-icons/md";
 
 import Stat from "./Stat";
 
-function Stats({ reports, confirmedStays, numEmployees, numHighSeverity }) {
-  const numReports = reports.length;
-
-  const checkins = confirmedStays.length;
-
+function Stats({ numReports, pendingReports, numEmployees, numHighSeverity }) {
   return (
     <>
       <Stat
@@ -29,11 +25,12 @@ function Stats({ reports, confirmedStays, numEmployees, numHighSeverity }) {
       />
 
       <Stat
-        title="in pending"
+        title="In Pending"
         color="indigo"
         icon={<MdOutlinePendingActions />}
-        value={checkins}
+        value={pendingReports}
       />
+
       <Stat
         title="High Severity"
         color="yellow"

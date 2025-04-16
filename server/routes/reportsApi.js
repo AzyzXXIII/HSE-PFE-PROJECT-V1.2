@@ -150,18 +150,29 @@ router.get("/stats", async (req, res) => {
       return res.status(400).json({ error: "Invalid report type" });
     }
 
-    const { table } = reportConfig;
-
-    const statsQuery = `
+    const { table, severityColumn } = reportConfig;
+    console.log(severityColumn);
+    const baseQuery = `
       SELECT 
         COUNT(*) AS total_reports,
         COUNT(DISTINCT submitted_by) AS unique_employees,
-        COUNT(*) FILTER (WHERE status = 'pending') AS pending_reports
+        COUNT(*) FILTER (WHERE status = 'in progress') AS pending_reports
+        ${
+          severityColumn
+            ? `, COUNT(*) FILTER (WHERE ${severityColumn} = 'high') AS high_severity_count`
+            : ""
+        }
       FROM ${table};
     `;
 
-    const result = await pool.query(statsQuery);
-    return res.json(result.rows[0]);
+    const result = await pool.query(baseQuery);
+    const stats = result.rows[0];
+
+    // Ensure consistent return shape
+    return res.json({
+      ...stats,
+      high_severity_count: stats.high_severity_count || 0,
+    });
   } catch (error) {
     console.error("❌ Error fetching stats for type:", error.message);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -169,35 +180,5 @@ router.get("/stats", async (req, res) => {
 });
 
 // ✅ GET all stats in one go (optional)
-router.get("/stats/all", async (req, res) => {
-  try {
-    const reportTypes = ["incidents", "hazards", "observations", "nearMiss"];
-    const stats = {};
-
-    for (const type of reportTypes) {
-      const reportConfig = getReportConfig(type);
-      if (!reportConfig) continue;
-      const reportType = req.query.type;
-
-      const table = reportType;
-
-      const statsQuery = `
-        SELECT 
-          COUNT(*) AS total_reports,
-          COUNT(DISTINCT submitted_by) AS unique_employees,
-          COUNT(*) FILTER (WHERE status = 'pending') AS pending_reports
-        FROM ${table};
-      `;
-
-      const result = await pool.query(statsQuery);
-      stats[type] = result.rows[0];
-    }
-
-    return res.json(stats);
-  } catch (error) {
-    console.error("❌ Error fetching all stats:", error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 
 export default router;
