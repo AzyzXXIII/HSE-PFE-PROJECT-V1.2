@@ -15,7 +15,7 @@ export const useReportStats = (type) => {
     retry: 1,
     refetchOnWindowFocus: true, // Refetch when window regains focus
     refetchOnReconnect: true, // Refetch when network reconnects
-    refetchInterval: 10000, // Refetch every 10 seconds
+    refetchInterval: 1000 * 60, // Refetch every 10 seconds
     enabled: true,
   });
 };

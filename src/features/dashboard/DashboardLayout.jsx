@@ -4,6 +4,7 @@ import ReportsChart from "./ReportsChart";
 import TodayActivity from "./TodayActivity";
 import PieChart from "./PieChart";
 import { useReportStats } from "../../hooks/useReportStats";
+import Spinner from "../../ui/Spinner";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -46,8 +47,8 @@ function DashboardLayout() {
   const hasError =
     errorIncidents || errorHazards || errorObservations || errorNearMiss;
 
-  if (isLoading) return <p>Loading dashboard...</p>;
-  if (hasError) return <p>Error loading dashboard stats</p>;
+  if (isLoading) return <Spinner />;
+  if (hasError) return <p>Error loading dashboard stats :(</p>;
 
   const numReports =
     Number(incidentsStats?.total_reports || 0) +
