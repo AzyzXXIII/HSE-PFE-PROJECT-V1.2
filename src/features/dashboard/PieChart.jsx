@@ -3,11 +3,9 @@ import { PieChart as RePieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import Heading from "../../ui/Heading";
 
 const ChartBox = styled.div`
-  /* Box */
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-
   padding: 2.4rem 3.2rem;
   grid-column: 3 / span 2;
   display: flex;
@@ -23,18 +21,51 @@ const ChartBox = styled.div`
   }
 `;
 
-const data = [
-  { name: "Incidents", value: 35, color: "#ef4444" },
-  { name: "Hazards", value: 50, color: "#facc15" },
-  { name: "Observations", value: 30, color: "#3b82f6" },
-  { name: "Near Misses", value: 18, color: "#10b981" },
-];
+const COLORS = {
+  Incidents: "#ef4444",
+  Hazards: "#facc15",
+  Observations: "#3b82f6",
+  "Near Misses": "#10b981",
+};
 
-export const PieChart = () => {
+const renderLabel = ({ name, value }) => {
+  if (value === 0) return null;
+  return `${name}: ${value}`;
+};
+
+const PieChart = ({
+  incidentsStats,
+  hazardsStats,
+  observationsStats,
+  nearMissStats,
+}) => {
+  const data = [
+    {
+      name: "Incidents",
+      value: Number(incidentsStats?.total_reports || 0),
+      color: COLORS["Incidents"],
+    },
+    {
+      name: "Hazards",
+      value: Number(hazardsStats?.total_reports || 0),
+      color: COLORS["Hazards"],
+    },
+    {
+      name: "Observations",
+      value: Number(observationsStats?.total_reports || 0),
+      color: COLORS["Observations"],
+    },
+    {
+      name: "Near Misses",
+      value: Number(nearMissStats?.total_reports || 0),
+      color: COLORS["Near Misses"],
+    },
+  ];
+
   return (
     <ChartBox>
       <Heading as="h2">Summary of Submitted Reports</Heading>
-      <RePieChart width={500} height={270}>
+      <RePieChart width={500} height={300}>
         <Pie
           data={data}
           dataKey="value"
@@ -42,8 +73,8 @@ export const PieChart = () => {
           cx="50%"
           cy="50%"
           outerRadius={100}
-          fill="#8884d8"
-          label
+          labelLine={true}
+          label={renderLabel}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
