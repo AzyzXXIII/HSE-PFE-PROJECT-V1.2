@@ -153,8 +153,6 @@ router.get("/stats", async (req, res) => {
 
     const { table, severityColumn } = reportConfig;
 
-    console.log("📊 Severity Column:", severityColumn);
-
     const baseQuery = `
       SELECT 
         COUNT(*) AS total_reports,

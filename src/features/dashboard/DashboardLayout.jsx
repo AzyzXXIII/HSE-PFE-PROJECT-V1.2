@@ -79,7 +79,12 @@ function DashboardLayout() {
         numHighSeverity={numHighSeverity}
       />
       <TodayActivity />
-      <PieChart />
+      <PieChart
+        incidentsStats={incidentsStats}
+        hazardsStats={hazardsStats}
+        observationsStats={observationsStats}
+        nearMissStats={nearMissStats}
+      />
       <ReportsChart />
     </StyledDashboardLayout>
   );
