@@ -179,5 +179,37 @@ router.get("/stats", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+// Count reports per month for timeline
+router.get("/timeline", async (req, res) => {
+  try {
+    const type = req.query.type;
+    const reportConfig = getReportConfig(type);
+
+    if (!reportConfig) {
+      return res.status(400).json({ error: "Invalid report type" });
+    }
+
+    const { table } = reportConfig;
+
+    const result = await pool.query(`
+      SELECT 
+        TO_CHAR(date, 'YYYY-MM') AS month,
+        COUNT(*) AS count
+      FROM ${table}
+      GROUP BY month
+      ORDER BY month;
+    `);
+
+    const timeline = result.rows.map((row) => ({
+      month: row.month,
+      count: parseInt(row.count),
+    }));
+
+    res.json(timeline);
+  } catch (error) {
+    console.error("❌ Error fetching timeline:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 export default router;

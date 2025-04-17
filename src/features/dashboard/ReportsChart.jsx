@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -12,6 +11,8 @@ import {
   Legend,
 } from "chart.js";
 import DashboardBox from "./DashboardBox";
+import { useTimelineData } from "../../hooks/useTimelineData";
+import Spinner from "../../ui/Spinner";
 
 ChartJS.register(
   LineElement,
@@ -33,60 +34,76 @@ const StyledReportsChart = styled(DashboardBox)`
     width: 100% !important;
     height: 100% !important;
   }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 function ReportsChart() {
-  const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+  const { data: incidents, isLoading: isLoadingIncidents } =
+    useTimelineData("incidents");
+  const { data: hazards, isLoading: isLoadingHazards } =
+    useTimelineData("hazards");
+  const { data: observations, isLoading: isLoadingObservations } =
+    useTimelineData("observations");
+  const { data: nearMisses, isLoading: isLoadingNearMisses } =
+    useTimelineData("nearMiss");
+
+  const isLoading =
+    isLoadingIncidents ||
+    isLoadingHazards ||
+    isLoadingObservations ||
+    isLoadingNearMisses;
+
+  const rawMonths = [
+    ...new Set([
+      ...(incidents || []).map((d) => d.month),
+      ...(hazards || []).map((d) => d.month),
+      ...(observations || []).map((d) => d.month),
+      ...(nearMisses || []).map((d) => d.month),
+    ]),
+  ].sort();
+
+  const formatter = new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "long",
+  });
+
+  const months = rawMonths;
+  const monthLabels = rawMonths.map((month) => {
+    const [year, monthIndex] = month.split("-");
+    const date = new Date(year, parseInt(monthIndex) - 1);
+    return formatter.format(date);
+  });
+
+  const formatDataset = (data, label, color) => ({
+    label,
+    data: months.map((month) => {
+      const entry = data?.find((d) => d.month === month);
+      return entry ? entry.count : 0;
+    }),
+    borderColor: color,
+    backgroundColor: `${color}33`,
+    pointBackgroundColor: color,
+    pointRadius: 5,
+    pointHoverRadius: 8,
+    pointHitRadius: 10,
+    tension: 0.3,
+    fill: true,
+  });
+
+  const chartData = {
+    labels: monthLabels,
     datasets: [
-      {
-        label: "Incidents",
-        data: [5, 10, 15, 25, 20, 30, 35],
-        borderColor: "#ef4444",
-        backgroundColor: "rgba(239, 68, 68, 0.2)",
-        pointBackgroundColor: "#ef4444",
-        pointRadius: 5, // Increases the point size
-        pointHoverRadius: 8, // Enlarges point when hovered
-        pointHitRadius: 10, // Expands clickable area
-        tension: 0.3, // Smooth curve
-      },
-      {
-        label: "Hazards",
-        data: [8, 12, 20, 28, 35, 40, 50],
-        borderColor: "#facc15",
-        backgroundColor: "rgba(250, 204, 21, 0.2)",
-        pointBackgroundColor: "#facc15",
-        pointRadius: 5,
-        pointHoverRadius: 8,
-        pointHitRadius: 10,
-        tension: 0.3,
-      },
-      {
-        label: "Observations",
-        data: [3, 7, 12, 18, 22, 25, 30],
-        borderColor: "#3b82f6",
-        backgroundColor: "rgba(59, 130, 246, 0.2)",
-        pointBackgroundColor: "#3b82f6",
-        pointRadius: 5,
-        pointHoverRadius: 8,
-        pointHitRadius: 10,
-        tension: 0.3,
-      },
-      {
-        label: "Near Misses",
-        data: [2, 5, 8, 10, 12, 15, 18],
-        borderColor: "#10b981",
-        backgroundColor: "rgba(16, 185, 129, 0.2)",
-        pointBackgroundColor: "#10b981",
-        pointRadius: 5,
-        pointHoverRadius: 8,
-        pointHitRadius: 10,
-        tension: 0.3,
-      },
+      formatDataset(incidents, "Incidents", "#ef4444"),
+      formatDataset(hazards, "Hazards", "#facc15"),
+      formatDataset(observations, "Observations", "#3b82f6"),
+      formatDataset(nearMisses, "Near Misses", "#10b981"),
     ],
   };
 
-  const options = {
+  const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -96,13 +113,13 @@ function ReportsChart() {
       },
       tooltip: {
         enabled: true,
-        mode: "nearest", // Ensures tooltips activate when close to a point
-        intersect: false, // Allows tooltips to appear even if not directly over the point
+        mode: "nearest",
+        intersect: false,
       },
     },
     interaction: {
-      mode: "nearest", // Improves hover detection
-      intersect: false, // Detects nearest point instead of requiring direct overlap
+      mode: "nearest",
+      intersect: false,
     },
     scales: {
       x: {
@@ -117,6 +134,9 @@ function ReportsChart() {
           text: "Number of Reports",
         },
         beginAtZero: true,
+        ticks: {
+          precision: 0,
+        },
       },
     },
   };
@@ -124,7 +144,11 @@ function ReportsChart() {
   return (
     <StyledReportsChart>
       <h3 className="text-lg font-semibold mb-2">Reports Over Time</h3>
-      <Line data={data} options={options} width={700} height={500} />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Line data={chartData} options={chartOptions} />
+      )}
     </StyledReportsChart>
   );
 }
