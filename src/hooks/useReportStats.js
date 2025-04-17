@@ -1,21 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const fetchStats = async (type) => {
-  const response = await axios.get(`/api/reports/stats?type=${type}`);
+const fetchStats = async (type, filter) => {
+  const response = await axios.get(`/api/reports/stats`, {
+    params: {
+      type,
+      last: filter, // e.g. "7", "30", "90", "all"
+    },
+  });
   return response.data;
 };
 
-export const useReportStats = (type) => {
+export const useReportStats = (type, filter = "all") => {
   return useQuery({
-    queryKey: ["reportStats", type],
-    queryFn: () => fetchStats(type),
-    staleTime: 0, // Always fetch fresh data
-    cacheTime: 1000 * 60 * 30, // Cache for 30 minutes
+    queryKey: ["reportStats", type, filter],
+    queryFn: () => fetchStats(type, filter),
+    staleTime: 0,
+    cacheTime: 1000 * 60 * 30,
     retry: 1,
-    refetchOnWindowFocus: true, // Refetch when window regains focus
-    refetchOnReconnect: true, // Refetch when network reconnects
-    refetchInterval: 1000 * 60, // Refetch every 10 seconds
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchInterval: 1000 * 60,
     enabled: true,
   });
 };

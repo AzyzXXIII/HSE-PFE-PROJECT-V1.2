@@ -13,6 +13,7 @@ import {
 import DashboardBox from "./DashboardBox";
 import { useTimelineData } from "../../hooks/useTimelineData";
 import Spinner from "../../ui/Spinner";
+import { useSearchParams } from "react-router-dom";
 
 ChartJS.register(
   LineElement,
@@ -41,14 +42,23 @@ const StyledReportsChart = styled(DashboardBox)`
 `;
 
 function ReportsChart() {
-  const { data: incidents, isLoading: isLoadingIncidents } =
-    useTimelineData("incidents");
-  const { data: hazards, isLoading: isLoadingHazards } =
-    useTimelineData("hazards");
+  const [searchParams] = useSearchParams();
+  const last = searchParams.get("last") || "all";
+
+  const { data: incidents, isLoading: isLoadingIncidents } = useTimelineData(
+    "incidents",
+    last
+  );
+  const { data: hazards, isLoading: isLoadingHazards } = useTimelineData(
+    "hazards",
+    last
+  );
   const { data: observations, isLoading: isLoadingObservations } =
-    useTimelineData("observations");
-  const { data: nearMisses, isLoading: isLoadingNearMisses } =
-    useTimelineData("nearMiss");
+    useTimelineData("observations", last);
+  const { data: nearMisses, isLoading: isLoadingNearMisses } = useTimelineData(
+    "nearMiss",
+    last
+  );
 
   const isLoading =
     isLoadingIncidents ||

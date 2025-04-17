@@ -145,6 +145,7 @@ router.put("/:id", async (req, res) => {
 router.get("/stats", async (req, res) => {
   try {
     const type = req.query.type;
+    const last = req.query.last; // could be 7, 30, 90, or "all"
     const reportConfig = getReportConfig(type);
 
     if (!reportConfig) {
@@ -153,6 +154,11 @@ router.get("/stats", async (req, res) => {
 
     const { table, severityColumn } = reportConfig;
 
+    let dateCondition = "";
+    if (last && last !== "all") {
+      dateCondition = `WHERE date >= CURRENT_DATE - INTERVAL '${last} days'`;
+    }
+
     const baseQuery = `
       SELECT 
         COUNT(*) AS total_reports,
@@ -160,16 +166,23 @@ router.get("/stats", async (req, res) => {
         COUNT(*) FILTER (WHERE status = 'in progress') AS pending_reports
         ${
           severityColumn
-            ? `, COUNT(*) FILTER (WHERE LOWER(${severityColumn}) = 'high') AS high_severity_count`
+            ? `, COUNT(*) FILTER (
+                WHERE LOWER(${severityColumn}) = 'high'
+                ${
+                  last && last !== "all"
+                    ? `AND date >= CURRENT_DATE - INTERVAL '${last} days'`
+                    : ""
+                }
+              ) AS high_severity_count`
             : ""
         }
-      FROM ${table};
+      FROM ${table}
+      ${dateCondition};
     `;
 
     const result = await pool.query(baseQuery);
     const stats = result.rows[0];
 
-    // Ensure consistent return shape
     return res.json({
       ...stats,
       high_severity_count: stats.high_severity_count || 0,
@@ -179,10 +192,11 @@ router.get("/stats", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
-// Count reports per month for timeline
+
 router.get("/timeline", async (req, res) => {
   try {
     const type = req.query.type;
+    const last = parseInt(req.query.last); // "7", "30", "90", etc.
     const reportConfig = getReportConfig(type);
 
     if (!reportConfig) {
@@ -190,12 +204,18 @@ router.get("/timeline", async (req, res) => {
     }
 
     const { table } = reportConfig;
+    let whereClause = "";
+
+    if (!isNaN(last)) {
+      whereClause = `WHERE date >= CURRENT_DATE - INTERVAL '${last} days'`;
+    }
 
     const result = await pool.query(`
       SELECT 
         TO_CHAR(date, 'YYYY-MM') AS month,
         COUNT(*) AS count
       FROM ${table}
+      ${whereClause}
       GROUP BY month
       ORDER BY month;
     `);

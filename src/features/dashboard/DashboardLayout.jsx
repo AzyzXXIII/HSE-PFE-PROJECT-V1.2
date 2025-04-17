@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Stats from "./Stats";
 import ReportsChart from "./ReportsChart";
@@ -14,29 +15,32 @@ const StyledDashboardLayout = styled.div`
 `;
 
 function DashboardLayout() {
+  const [searchParams] = useSearchParams();
+  const filter = searchParams.get("last") || "all";
+
   const {
     data: incidentsStats,
     isLoading: loadingIncidents,
     error: errorIncidents,
-  } = useReportStats("incidents");
+  } = useReportStats("incidents", filter);
 
   const {
     data: hazardsStats,
     isLoading: loadingHazards,
     error: errorHazards,
-  } = useReportStats("hazards");
+  } = useReportStats("hazards", filter);
 
   const {
     data: observationsStats,
     isLoading: loadingObservations,
     error: errorObservations,
-  } = useReportStats("observations");
+  } = useReportStats("observations", filter);
 
   const {
     data: nearMissStats,
     isLoading: loadingNearMiss,
     error: errorNearMiss,
-  } = useReportStats("nearMiss");
+  } = useReportStats("nearMiss", filter);
 
   const isLoading =
     loadingIncidents ||
