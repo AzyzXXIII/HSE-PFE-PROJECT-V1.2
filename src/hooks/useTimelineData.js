@@ -20,9 +20,16 @@ export const useTimelineData = (type, last) => {
         count: item.count ?? 0,
       }));
     },
-    staleTime: 5 * 60 * 1000,
+    // Poll for changes every 10s
+    refetchInterval: 10000,
+    refetchIntervalInBackground: true,
+
+    // Also refetch when tab gains focus or reconnects
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+
+    staleTime: 0,
     cacheTime: 10 * 60 * 1000,
     retry: 1,
-    refetchOnWindowFocus: false,
   });
 };
