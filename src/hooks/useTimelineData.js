@@ -20,11 +20,9 @@ export const useTimelineData = (type, last) => {
         count: item.count ?? 0,
       }));
     },
-    // Poll for changes every 10s
     refetchInterval: 10000,
     refetchIntervalInBackground: true,
 
-    // Also refetch when tab gains focus or reconnects
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
 
