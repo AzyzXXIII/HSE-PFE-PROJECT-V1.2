@@ -196,7 +196,7 @@ router.get("/stats", async (req, res) => {
 router.get("/timeline", async (req, res) => {
   try {
     const type = req.query.type;
-    const last = parseInt(req.query.last); // "7", "30", "90", etc.
+    const last = parseInt(req.query.last); // could be 7, 30, 90, or "all"
     const reportConfig = getReportConfig(type);
 
     if (!reportConfig) {
