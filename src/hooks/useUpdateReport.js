@@ -19,7 +19,6 @@ export function useUpdateReport() {
       return response.data;
     },
     onSuccess: (_, variables) => {
-      // Invalidate report list when update succeeds
       queryClient.invalidateQueries({ queryKey: ["reports", variables.type] });
     },
   });
