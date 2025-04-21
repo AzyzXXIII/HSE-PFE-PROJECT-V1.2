@@ -4,13 +4,16 @@ import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
+import { useEmployees } from "../../hooks/Users/useEmployees";
 
-function EmployeeTable({ employees }) {
+function EmployeeTable() {
   const [searchParams] = useSearchParams();
+  const { data: employees = [], isLoading } = useEmployees();
 
+  if (isLoading) return <Spinner />;
   if (!employees.length) return <Empty resourceName="employees" />;
 
-  // 1) FILTER by status
+  // Filter
   const statusFilter = searchParams.get("status") || "all";
   let filteredEmployees = employees;
   if (statusFilter !== "all") {
@@ -19,7 +22,7 @@ function EmployeeTable({ employees }) {
     );
   }
 
-  // 2) SORT employees
+  // Sort
   const sortBy = searchParams.get("sortBy") || "fullName-asc";
   const [field, direction] = sortBy.split("-");
   const modifier = direction === "asc" ? 1 : -1;
@@ -35,15 +38,15 @@ function EmployeeTable({ employees }) {
     <Menus>
       <Table columns="1fr 1.5fr 2fr 1.5fr 1fr 1fr 1fr 1fr 1fr">
         <Table.Header>
-          <div>Username</div>
-          <div>Full Name</div>
-          <div>Email</div>
-          <div>Phone</div>
-          <div>Address</div>
-          <div>Title</div>
-          <div>Department</div>
-          <div>Status</div>
-          <div>QR Code</div>
+          <div>USERNAME</div>
+          <div>FULL NAME</div>
+          <div>EMAIL</div>
+          <div>PHONE</div>
+          <div>LOCATION</div>
+          <div>TITLE</div>
+          <div>DEPARTMENT</div>
+          <div>STATUS</div>
+          <div>QR CODE</div>
         </Table.Header>
 
         <Table.Body

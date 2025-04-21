@@ -5,15 +5,7 @@ import ConfirmDelete from "../../ui/ConfirmDelete";
 import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 import CreateEmployeeForm from "./CreateEmployeeForm";
-
-const Img = styled.img`
-  display: block;
-  width: 6.4rem;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.5) translateX(-7px);
-`;
+import { useUpdateEmployeeStatus } from "../../hooks/Users/useUpdateEmployeeStatus";
 
 const Employee = styled.div`
   font-size: 1.6rem;
@@ -33,18 +25,33 @@ const Department = styled.div`
   color: var(--color-blue-700);
 `;
 
-const Status = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-  color: ${(props) =>
-    props.$status === "accepted"
-      ? "var(--color-green-700)"
-      : props.$status === "rejected"
-      ? "var(--color-red-700)"
-      : "var(--color-grey-700)"};
+const StatusBadge = styled.div`
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  background-color: ${({ $status }) =>
+    $status === "active"
+      ? "#d1fae5"
+      : $status === "rejected"
+      ? "#fee2e2"
+      : $status === "pending"
+      ? "#fef9c3"
+      : "#e5e7eb"};
+  color: ${({ $status }) =>
+    $status === "active"
+      ? "#047857"
+      : $status === "rejected"
+      ? "#b91c1c"
+      : $status === "pending"
+      ? "#92400e"
+      : "#374151"};
+  display: inline-block;
+  width: fit-content;
 `;
 
-function EmployeeRow({ employee, onAccept, onReject }) {
+function EmployeeRow({ employee }) {
   const {
     id: employeeId,
     username,
@@ -57,42 +64,40 @@ function EmployeeRow({ employee, onAccept, onReject }) {
     status,
   } = employee;
 
+  const { mutate: updateStatus } = useUpdateEmployeeStatus();
+
+  const handleAccept = () => updateStatus({ id: employeeId, action: "accept" });
+
+  const handleReject = () => updateStatus({ id: employeeId, action: "reject" });
+
   return (
     <Table.Row>
       <div>{username}</div>
       <Employee>{fullName}</Employee>
       <div>{email}</div>
       <div>{phone}</div>
-      <div>{address}</div>
+      <div>{address || "-"}</div> {/* Location shown here */}
       <Title>{titleId}</Title>
       <Department>{departmentId}</Department>
-      <Status $status={status}>{status}</Status>
+      <StatusBadge $status={status}>{status}</StatusBadge>
       <div>
         <Modal>
           <Menus.Menu>
             <Menus.Toggle id={employeeId} />
-
             <Menus.List id={employeeId}>
               <Modal.Open opens="edit">
                 <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
               </Modal.Open>
-
               <Modal.Open opens="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
 
               {status === "pending" && (
                 <>
-                  <Menus.Button
-                    icon={<HiCheck />}
-                    onClick={() => onAccept(employeeId)}
-                  >
+                  <Menus.Button icon={<HiCheck />} onClick={handleAccept}>
                     Accept
                   </Menus.Button>
-                  <Menus.Button
-                    icon={<HiX />}
-                    onClick={() => onReject(employeeId)}
-                  >
+                  <Menus.Button icon={<HiX />} onClick={handleReject}>
                     Reject
                   </Menus.Button>
                 </>
@@ -102,7 +107,6 @@ function EmployeeRow({ employee, onAccept, onReject }) {
             <Modal.Window name="edit">
               <CreateEmployeeForm employeeToEdit={employee} />
             </Modal.Window>
-
             <Modal.Window name="delete">
               <ConfirmDelete
                 resourceName="employees"
