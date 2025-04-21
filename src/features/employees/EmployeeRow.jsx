@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { HiPencil, HiTrash, HiCheck, HiX } from "react-icons/hi";
+
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 import CreateEmployeeForm from "./CreateEmployeeForm";
+
 import { useUpdateEmployeeStatus } from "../../hooks/Users/useUpdateEmployeeStatus";
+import { useDeleteEmployee } from "../../hooks/Users/useDeleteEmployee";
 
 const Employee = styled.div`
   font-size: 1.6rem;
@@ -65,9 +68,9 @@ function EmployeeRow({ employee }) {
   } = employee;
 
   const { mutate: updateStatus } = useUpdateEmployeeStatus();
+  const { mutate: deleteEmployee } = useDeleteEmployee();
 
   const handleAccept = () => updateStatus({ id: employeeId, action: "accept" });
-
   const handleReject = () => updateStatus({ id: employeeId, action: "reject" });
 
   return (
@@ -76,7 +79,7 @@ function EmployeeRow({ employee }) {
       <Employee>{fullName}</Employee>
       <div>{email}</div>
       <div>{phone}</div>
-      <div>{address || "-"}</div> {/* Location shown here */}
+      <div>{address || "-"}</div> {/* Now labeled as Location */}
       <Title>{titleId}</Title>
       <Department>{departmentId}</Department>
       <StatusBadge $status={status}>{status}</StatusBadge>
@@ -88,6 +91,7 @@ function EmployeeRow({ employee }) {
               <Modal.Open opens="edit">
                 <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
               </Modal.Open>
+
               <Modal.Open opens="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
@@ -107,10 +111,11 @@ function EmployeeRow({ employee }) {
             <Modal.Window name="edit">
               <CreateEmployeeForm employeeToEdit={employee} />
             </Modal.Window>
+
             <Modal.Window name="delete">
               <ConfirmDelete
-                resourceName="employees"
-                onConfirm={() => console.log(`Delete employee ${employeeId}`)}
+                resourceName="employee"
+                onConfirm={() => deleteEmployee(employeeId)}
               />
             </Modal.Window>
           </Menus.Menu>
