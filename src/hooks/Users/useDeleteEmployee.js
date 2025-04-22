@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const deleteEmployee = async (id) => {
   const res = await axios.delete(`/api/users/${id}`);
