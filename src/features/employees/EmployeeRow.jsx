@@ -58,12 +58,13 @@ function EmployeeRow({ employee }) {
   const {
     id: employeeId,
     username,
+    firstName,
+    lastName,
     fullName,
     email,
     phone,
-    address,
-    titleId,
-    departmentId,
+    roleTitle,
+    department,
     status,
   } = employee;
 
@@ -79,9 +80,9 @@ function EmployeeRow({ employee }) {
       <Employee>{fullName}</Employee>
       <div>{email}</div>
       <div>{phone}</div>
-      <div>{address || "-"}</div> {/* Now labeled as Location */}
-      <Title>{titleId}</Title>
-      <Department>{departmentId}</Department>
+      <div>{department || "-"}</div> {/* Now labeled as Location */}
+      <Title>{roleTitle}</Title>
+      <Department>{department}</Department>
       <StatusBadge $status={status}>{status}</StatusBadge>
       <div>
         <Modal>
