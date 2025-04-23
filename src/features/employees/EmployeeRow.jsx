@@ -80,7 +80,7 @@ function EmployeeRow({ employee }) {
       <Employee>{fullName}</Employee>
       <div>{email}</div>
       <div>{phone}</div>
-      <div>{department || "-"}</div> {/* Now labeled as Location */}
+      <div>{department || "-"}</div>
       <Title>{roleTitle}</Title>
       <Department>{department}</Department>
       <StatusBadge $status={status}>{status}</StatusBadge>
