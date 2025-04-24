@@ -116,6 +116,7 @@ const getReportConfig = (reportType) => {
         l.latitude,
         l.longitude,
         l.loc_description
+      
       `,
       severityColumn: null,
     },
