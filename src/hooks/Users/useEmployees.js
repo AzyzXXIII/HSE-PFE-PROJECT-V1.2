@@ -19,8 +19,8 @@ export function useEmployees() {
         titleId: user.role_name,
         departmentId: user.location_name,
         status: user.status || "pending",
-        can_send_reports: user.can_send_reports, // Make sure the names match here
-        can_edit_reports: user.can_edit_reports, // Same for other fields
+        can_send_reports: user.can_send_reports,
+        can_edit_reports: user.can_edit_reports,
         can_delete_reports: user.can_delete_reports,
         qrCode: user.qr_code,
       }));
