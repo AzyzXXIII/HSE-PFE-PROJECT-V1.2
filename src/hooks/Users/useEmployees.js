@@ -7,7 +7,6 @@ export function useEmployees() {
       const res = await fetch("http://localhost:5000/api/users");
       if (!res.ok) throw new Error("Failed to fetch users");
       const data = await res.json();
-      console.log(data);
       return data.map((user) => ({
         id: user.id,
         username: user.email.split("@")[0],
