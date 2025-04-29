@@ -4,7 +4,6 @@ const getReportConfig = (reportType) => {
       table: "observation",
       joins: `
         LEFT JOIN observation_type ot ON o.type_id = ot.id
-        LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
       `,
       extraColumns: `
@@ -34,9 +33,7 @@ const getReportConfig = (reportType) => {
     hazards: {
       table: "hazard",
       joins: `
-        LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
-        LEFT JOIN equipment e ON o.equipment_id = e.id
         LEFT JOIN hazard_group hg ON o.group_id = hg.id
       `,
       extraColumns: `
@@ -44,21 +41,11 @@ const getReportConfig = (reportType) => {
         u.last_name AS last_name,
         u.email AS email,
         o.severity,
-        e.name AS equipment_name,
-        hg.name AS type,
+        hg.group AS type,
         o.env_comment AS cause,
         o.corrective_actions AS recommendation,
-        l.id AS location_id,
-        l.name AS location_name,
-        l.department,
-        l.area_type,
-        l.floor,
-        l.location_code,
-        l.capacity,
-        l.hazard_level,
-        l.latitude,
-        l.longitude,
-        l.loc_description
+        o.latitude,
+        o.longitude
       `,
       severityColumn: "severity",
     },
