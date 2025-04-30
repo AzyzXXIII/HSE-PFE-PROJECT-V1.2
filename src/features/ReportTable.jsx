@@ -9,33 +9,33 @@ const ReportTable = ({ reports, isLoading }) => {
   const count = reports.length;
 
   if (isLoading) return <Spinner />;
-
   if (!count) return <Empty resourceName="reports" />;
 
   return (
-    <Menus>
-      <Table columns="0.6fr 1.5fr 1.2fr 1fr 1fr 1fr 1fr 1fr  5rem">
-        <Table.Header>
-          <div>Title</div>
-          <div>Submitted By</div>
-          <div>Type</div>
-          <div>Date</div>
-          <div>Location</div>
-          <div>Status</div>
-          <div>Severity</div>
-          <div>Priority</div>
-        </Table.Header>
+    <div style={{ overflowX: "auto" }}>
+      <Menus>
+        <Table columns="1fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr 5rem">
+          <Table.Header>
+            <div>Title</div>
+            <div>Submitted By</div>
+            <div>Type</div>
+            <div>Date</div>
+            <div>Status</div>
+            <div>Severity</div>
+            <div>Priority</div>
+          </Table.Header>
 
-        <Table.Body
-          data={reports}
-          render={(report) => <ReportRow key={report.id} report={report} />}
-        />
+          <Table.Body
+            data={reports}
+            render={(report) => <ReportRow key={report.id} report={report} />}
+          />
 
-        <Table.Footer>
-          <Pagination count={count} />
-        </Table.Footer>
-      </Table>
-    </Menus>
+          <Table.Footer>
+            <Pagination count={count} />
+          </Table.Footer>
+        </Table>
+      </Menus>
+    </div>
   );
 };
 

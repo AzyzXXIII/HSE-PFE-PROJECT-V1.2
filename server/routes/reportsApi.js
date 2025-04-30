@@ -143,9 +143,11 @@ router.put("/:id", async (req, res) => {
 // ✅ GET individual stats for a single type (used by frontend)
 
 router.get("/stats", async (req, res) => {
+  console.log("🔍 Requested report type:", req.query.type);
+
   try {
-    const type = req.query.type;
-    const last = req.query.last; // could be 7, 30, 90, or "all"
+    const type = req.query.type?.toLowerCase();
+    const last = req.query.last;
     const reportConfig = getReportConfig(type);
 
     if (!reportConfig) {

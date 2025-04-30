@@ -20,10 +20,11 @@ const Pill = styled.div`
   color: ${(props) => props.$textColor || "white"};
   background-color: ${(props) => props.$bgColor || "gray"};
 `;
+
 const EmailColumn = styled.div`
-  max-width: 200px; /* Set a max width */
-  white-space: nowrap; /* Prevent wrapping */
-  overflow: hidden; /* Hide overflowed content */
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
   font-size: 1.2rem;
   color: gray;
@@ -45,6 +46,7 @@ const priorityColors = {
   Low: { bg: "#22C55E", text: "#FFFFFF" },
   Medium: { bg: "#FACC15", text: "#000000" },
   High: { bg: "#DC2626", text: "#FFFFFF" },
+  Critical: { bg: "#6B7280", text: "#FFFFFF" },
 };
 
 function ReportRow({ report }) {
@@ -62,11 +64,9 @@ function ReportRow({ report }) {
       { id: report.id, type: reportType },
       {
         onSuccess: (data) => {
-          console.log("Report deleted successfully!", data);
-          toast.success("Report deleted successfully! ✅ ");
+          toast.success("Report deleted successfully! ✅");
         },
         onError: (error) => {
-          console.error("Error deleting report:", error.message);
           toast.error("Failed to delete report. ❌");
         },
       }
@@ -75,7 +75,17 @@ function ReportRow({ report }) {
 
   return (
     <Table.Row>
-      <div style={{ fontSize: "1.6rem", fontWeight: 600, maxWidth: "50px" }}>
+      <div
+        style={{
+          fontSize: "1.6rem",
+          fontWeight: 600,
+          maxWidth: "150px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+        title={report.title}
+      >
         {report.title}
       </div>
 
@@ -83,10 +93,20 @@ function ReportRow({ report }) {
         <div>
           {report.first_name} {report.last_name}
         </div>
-        <EmailColumn>{report.email}</EmailColumn>{" "}
+        <EmailColumn title={report.email}>{report.email}</EmailColumn>
       </div>
 
-      <div style={{ fontSize: "1.6rem", fontWeight: 600, maxWidth: "20px" }}>
+      <div
+        style={{
+          fontSize: "1.6rem",
+          fontWeight: 600,
+          maxWidth: "150px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+        title={report.type}
+      >
         <strong>{report.type || "No type"}</strong>
       </div>
 
@@ -100,13 +120,6 @@ function ReportRow({ report }) {
           {isValidDate
             ? format(new Date(report.date), "hh:mm a")
             : "Invalid time"}
-        </div>
-      </div>
-
-      <div>
-        <div>{report.location.name || "Unknown Location"}</div>
-        <div style={{ color: "gray", fontSize: "1.2rem" }}>
-          {report.assignedTo?.email || "No assignee"}
         </div>
       </div>
 
@@ -137,6 +150,7 @@ function ReportRow({ report }) {
           <Menus.List id={report.id}>
             <Menus.Button
               icon={<HiEye />}
+              aria-label="See report details"
               onClick={() =>
                 navigate(`/reports/${report.id}`, {
                   state: { report, reportType },
@@ -147,7 +161,11 @@ function ReportRow({ report }) {
             </Menus.Button>
 
             <Modal.Open opens="delete">
-              <Menus.Button icon={<HiTrash />} onClick={handleDelete}>
+              <Menus.Button
+                icon={<HiTrash />}
+                onClick={handleDelete}
+                aria-label="Delete report"
+              >
                 Delete report
               </Menus.Button>
             </Modal.Open>
