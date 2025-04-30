@@ -9,13 +9,13 @@ function ReportsPage() {
   const incidentStats = useReportStats("incidents");
   const hazardStats = useReportStats("hazards");
   const observationStats = useReportStats("observations");
-  const nearMissStats = useReportStats("nearMiss");
+  const nearMissStats = useReportStats("nearmiss");
 
   const reportStats = [
     { type: "incidents", image: incidentImg, stats: incidentStats },
     { type: "hazards", image: hazardImg, stats: hazardStats },
     { type: "observations", image: observationImg, stats: observationStats },
-    { type: "nearMiss", image: nearMissImg, stats: nearMissStats },
+    { type: "nearmiss", image: nearMissImg, stats: nearMissStats },
   ];
 
   return (

@@ -87,7 +87,7 @@ function ReportCardComponent({ type, image, stats }) {
       color: "#28A745",
     },
 
-    nearMiss: {
+    nearmiss: {
       tag: "Near Miss",
       bgColor: "#007BFF",
       icon: <HiOutlineShieldCheck />,

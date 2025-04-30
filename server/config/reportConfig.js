@@ -70,8 +70,8 @@ const getReportConfig = (reportType) => {
       severityColumn: "pi_actual_severity",
     },
 
-    nearMiss: {
-      table: `"nearMiss"`,
+    nearmiss: {
+      table: "nearmiss",
       joins: `
         LEFT JOIN users u ON o.submitted_by = u.id
         LEFT JOIN near_miss_type nmt ON o.type_id = nmt.id  
@@ -82,6 +82,7 @@ const getReportConfig = (reportType) => {
         u.email AS email,
         o.status AS status,
         o.priority AS priority,
+        o.primary_cause AS cause,
         o.date AS date,
         o.description AS description,
         nmt.type AS type
