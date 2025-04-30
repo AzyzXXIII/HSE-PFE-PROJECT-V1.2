@@ -15,18 +15,8 @@ const getReportConfig = (reportType) => {
         o.date AS date,
         o.status AS status,
         o.priority AS priority,
-        o.severity AS severity,
-        l.id AS location_id,
-        l.name AS location_name,
-        l.department,
-        l.area_type,
-        l.floor,
-        l.location_code,
-        l.capacity,
-        l.hazard_level,
-        l.latitude,
-        l.longitude,
-        l.loc_description
+        o.severity AS severity
+    
       `,
       severityColumn: "severity",
     },
@@ -52,37 +42,39 @@ const getReportConfig = (reportType) => {
     incidents: {
       table: "incident",
       joins: `
-        LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
-        LEFT JOIN incident_type it ON o.primary_incident_type_id = it.id
+        LEFT JOIN injury_incident ii ON o.id = ii.incident_id
+        LEFT JOIN injured_type itype ON ii.injured_type_id = itype.id
+        LEFT JOIN users injured ON ii.injured_person_id = injured.id
       `,
       extraColumns: `
-        u.first_name AS first_name,
-        u.last_name AS last_name,
-        u.email AS email,
-        it.name AS type,
-        it.name AS title,
-        o.pi_actual_severity AS severity,
-        o.pi_description AS description,
-        l.id AS location_id,
-        l.name AS location_name,
-        l.department,
-        l.area_type,
-        l.floor,
-        l.location_code,
-        l.capacity,
-        l.hazard_level,
-        l.latitude,
-        l.longitude,
-        l.loc_description 
-      `,
+      u.first_name AS first_name,
+      u.last_name AS last_name,
+      u.email AS email,
+      o.pi_actual_severity AS severity,
+      o.pi_description AS description,
+      ii.activity,
+      ii.affected_body_parts,
+      ii.injury_nature,
+      ii.classification,
+      ii.first_aid_measures,
+      ii.days_absent,
+      ii.lost_time_minutes,
+      ii.lost_consciousness,
+      ii.was_transferred_to_hospital,
+      itype.type AS type, 
+      injured.first_name AS injured_first_name,
+      injured.last_name AS injured_last_name,
+      injured.email AS injured_email
+    `,
       severityColumn: "pi_actual_severity",
     },
+
     nearMiss: {
       table: `"nearMiss"`,
       joins: `
-        LEFT JOIN location l ON o.location_id = l.id
         LEFT JOIN users u ON o.submitted_by = u.id
+        LEFT JOIN near_miss_type nmt ON o.type_id = nmt.id  
       `,
       extraColumns: `
         u.first_name AS first_name,
@@ -92,18 +84,7 @@ const getReportConfig = (reportType) => {
         o.priority AS priority,
         o.date AS date,
         o.description AS description,
-        l.id AS location_id,
-        l.name AS location_name,
-        l.department,
-        l.area_type,
-        l.floor,
-        l.location_code,
-        l.capacity,
-        l.hazard_level,
-        l.latitude,
-        l.longitude,
-        l.loc_description
-      
+        nmt.type AS type
       `,
       severityColumn: null,
     },

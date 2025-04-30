@@ -162,7 +162,7 @@ function ReportDetails() {
     const reportComponents = {
       observations: <ObservationsInfo report={report} />,
       hazards: <HazardsInfo report={report} />,
-      near_miss: <NearMissInfo report={report} />,
+      nearmiss: <NearMissInfo report={report} />,
       incidents: <IncidentInfo report={report} />,
     };
 
