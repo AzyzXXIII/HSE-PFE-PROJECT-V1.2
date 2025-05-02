@@ -61,5 +61,4 @@ Button.defaultProps = {
   $variation: "primary",
   $size: "medium",
 };
-console.log(sizes);
 export default Button;
