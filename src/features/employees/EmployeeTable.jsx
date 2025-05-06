@@ -11,16 +11,14 @@ function EmployeeTable() {
   const { data: employees = [], isLoading } = useEmployees();
 
   if (isLoading) return <Spinner />;
-  if (!employees.length) return <Empty resourceName="employees" />;
+  if (employees.length === 0) return <Empty resourceName="employees" />;
 
-  // Filter
+  // Filter by status
   const statusFilter = searchParams.get("status") || "all";
-  let filteredEmployees = employees;
-  if (statusFilter !== "all") {
-    filteredEmployees = employees.filter(
-      (employee) => employee.status === statusFilter
-    );
-  }
+  const filteredEmployees =
+    statusFilter === "all"
+      ? employees
+      : employees.filter((emp) => emp.status === statusFilter);
 
   // Sort
   const sortBy = searchParams.get("sortBy") || "fullName-asc";
@@ -28,31 +26,29 @@ function EmployeeTable() {
   const modifier = direction === "asc" ? 1 : -1;
 
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
-    if (a[field] && b[field]) {
-      return a[field].localeCompare(b[field]) * modifier;
-    }
-    return 0;
+    const valA = a[field]?.toString().toLowerCase() || "";
+    const valB = b[field]?.toString().toLowerCase() || "";
+    return valA.localeCompare(valB) * modifier;
   });
 
   return (
     <Menus>
-      <Table columns="1fr 1.5fr 2fr 1.5fr 1fr 1fr 1fr 1fr 1fr">
+      <Table columns="1fr 1.5fr 2fr 1.5fr 1.5fr 1.5fr 1fr 1fr">
         <Table.Header>
           <div>USERNAME</div>
           <div>FULL NAME</div>
           <div>EMAIL</div>
           <div>PHONE</div>
-          <div>LOCATION</div>
-          <div>TITLE</div>
+          <div>ROLE</div>
           <div>DEPARTMENT</div>
           <div>STATUS</div>
-          <div>QR CODE</div>
+          <div>ACTIONS</div>
         </Table.Header>
 
         <Table.Body
           data={sortedEmployees}
           render={(employee) => (
-            <EmployeeRow employee={employee} key={employee.id} />
+            <EmployeeRow key={employee.id} employee={employee} />
           )}
         />
       </Table>

@@ -10,14 +10,14 @@ import CreateEmployeeForm from "./CreateEmployeeForm";
 import { useUpdateEmployeeStatus } from "../../hooks/Users/useUpdateEmployeeStatus";
 import { useDeleteEmployee } from "../../hooks/Users/useDeleteEmployee";
 
-const Employee = styled.div`
+const EmployeeName = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
-  color: var(--color-grey-600);
+  color: var(--color-grey-700);
   font-family: "Sono";
 `;
 
-const Title = styled.div`
+const Role = styled.div`
   font-family: "Sono";
   font-weight: 500;
 `;
@@ -55,48 +55,35 @@ const StatusBadge = styled.div`
 `;
 
 function EmployeeRow({ employee }) {
-  const {
-    id: employeeId,
-    username,
-    firstName,
-    lastName,
-    fullName,
-    email,
-    phone,
-    roleTitle,
-    department,
-    status,
-  } = employee;
+  const { id, username, fullName, email, phone, role, location, status } =
+    employee;
 
   const { mutate: updateStatus } = useUpdateEmployeeStatus();
   const { mutate: deleteEmployee } = useDeleteEmployee();
 
-  const handleAccept = () => updateStatus({ id: employeeId, action: "accept" });
-  const handleReject = () => updateStatus({ id: employeeId, action: "reject" });
+  const handleAccept = () => updateStatus({ id, action: "accept" });
+  const handleReject = () => updateStatus({ id, action: "reject" });
 
   return (
     <Table.Row>
       <div>{username}</div>
-      <Employee>{fullName}</Employee>
+      <EmployeeName>{fullName}</EmployeeName>
       <div>{email}</div>
       <div>{phone}</div>
-      <div>{department || "-"}</div>
-      <Title>{roleTitle}</Title>
-      <Department>{department}</Department>
+      <Role>{role}</Role>
+      <Department>{location}</Department>
       <StatusBadge $status={status}>{status}</StatusBadge>
       <div>
         <Modal>
           <Menus.Menu>
-            <Menus.Toggle id={employeeId} />
-            <Menus.List id={employeeId}>
+            <Menus.Toggle id={id} />
+            <Menus.List id={id}>
               <Modal.Open opens="edit">
                 <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
               </Modal.Open>
-
               <Modal.Open opens="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
-
               {status === "pending" && (
                 <>
                   <Menus.Button icon={<HiCheck />} onClick={handleAccept}>
@@ -116,7 +103,7 @@ function EmployeeRow({ employee }) {
             <Modal.Window name="delete">
               <ConfirmDelete
                 resourceName="employee"
-                onConfirm={() => deleteEmployee(employeeId)}
+                onConfirm={() => deleteEmployee(id)}
               />
             </Modal.Window>
           </Menus.Menu>

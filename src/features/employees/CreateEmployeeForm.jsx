@@ -1,18 +1,20 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FormRow from "../../ui/FormRow";
-import Checkbox from "../../ui/Checkbox";
-import { toast } from "react-hot-toast";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import Select from "../../ui/Select";
+import { useEditEmployee } from "../../hooks/Users/useEditEmployee";
 
 function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
   const isEditSession = Boolean(employeeToEdit?.id);
-  const { id: editId, ...editValues } = employeeToEdit;
   const queryClient = useQueryClient();
+  const editId = employeeToEdit?.id;
 
   const { data: roles = [] } = useQuery({
     queryKey: ["roles"],
@@ -24,6 +26,12 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
     queryFn: () => axios.get("/api/users/locations").then((res) => res.data),
   });
 
+  const { data: accessGroups = [] } = useQuery({
+    queryKey: ["access-groups"],
+    queryFn: () =>
+      axios.get("/api/users/access-groups").then((res) => res.data),
+  });
+
   const {
     register,
     handleSubmit,
@@ -33,66 +41,102 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: employeeToEdit.firstName || "",
+      lastName: employeeToEdit.lastName || "",
+      email: employeeToEdit.email || "",
       password: "",
-      phone: "",
-      titleId: "",
-      departmentId: "",
-      status: "",
-      can_send_reports: false,
-      can_edit_reports: false,
-      can_delete_reports: false,
-      qr_code: "",
+      phone: employeeToEdit.phone || "",
+      titleId: employeeToEdit.role ? String(employeeToEdit.role) : "",
+      departmentId: employeeToEdit.location
+        ? String(employeeToEdit.location)
+        : "",
+      status: employeeToEdit.status || "",
+      qr_code: employeeToEdit.qr_code || "",
+      access_group_id: employeeToEdit.access_group_id
+        ? String(employeeToEdit.access_group_id)
+        : "",
     },
   });
 
   useEffect(() => {
     if (isEditSession) {
-      Object.entries(editValues).forEach(([key, value]) => {
-        const formattedValue =
-          ["titleId", "departmentId"].includes(key) && value !== null
-            ? String(value)
-            : value ?? "";
-        setValue(key, formattedValue);
+      reset({
+        firstName: employeeToEdit.firstName || "",
+        lastName: employeeToEdit.lastName || "",
+        email: employeeToEdit.email || "",
+        password: "",
+        phone: employeeToEdit.phone || "",
+        titleId: employeeToEdit.role ? String(employeeToEdit.role) : "",
+        departmentId: employeeToEdit.location
+          ? String(employeeToEdit.location)
+          : "",
+        status: employeeToEdit.status || "",
+        qr_code: employeeToEdit.qr_code || "",
+        access_group_id: employeeToEdit.access_group_id
+          ? String(employeeToEdit.access_group_id)
+          : "",
       });
     }
-  }, [editValues, isEditSession, setValue]);
+  }, [isEditSession, employeeToEdit, reset]);
 
-  const mutation = useMutation({
-    mutationFn: async (data) => {
-      const res = isEditSession
-        ? await axios.put(`/api/users/${editId}`, data)
-        : await axios.post("/api/users", data);
-      return res.data;
-    },
+  const mutationCreate = useMutation({
+    mutationFn: (data) =>
+      axios.post("/api/users", data).then((res) => res.data),
     onSuccess: () => {
-      toast.success(
-        `Employee ${isEditSession ? "updated" : "created"} successfully`
-      );
+      toast.success("Employee created successfully");
       queryClient.invalidateQueries(["employees"]);
       reset();
       onCloseModal?.();
     },
-    onError: () => toast.error("Something went wrong"),
+    onError: () => toast.error("Error creating employee"),
   });
 
+  const editMutation = useEditEmployee();
+
   const onSubmit = (data) => {
-    mutation.mutate({
-      ...data,
-      titleId: data.titleId ? Number(data.titleId) : null,
-      departmentId: data.departmentId ? Number(data.departmentId) : null,
+    const payload = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: isEditSession ? "" : data.password,
+      phone: data.phone,
+      titleId: data.titleId
+        ? Number(data.titleId)
+        : employeeToEdit.role || null,
+      departmentId: data.departmentId
+        ? Number(data.departmentId)
+        : employeeToEdit.location || null,
+      status: data.status,
       qr_code: getValues("qr_code"),
-    });
+      access_group_id: data.access_group_id
+        ? Number(data.access_group_id)
+        : employeeToEdit.access_group_id || null,
+    };
+
+    if (isEditSession) {
+      editMutation.mutate(
+        { id: editId, data: payload },
+        {
+          onSuccess: () => {
+            toast.success("Employee updated successfully");
+            queryClient.invalidateQueries(["employees"]);
+            reset();
+            onCloseModal?.();
+          },
+          onError: () => toast.error("Error updating employee"),
+        }
+      );
+    } else {
+      mutationCreate.mutate(payload);
+    }
   };
 
   const generateQRCode = () => {
-    const qrData = getValues("email") || "employee-qr";
-    const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-      qrData
+    const email = getValues("email") || "employee-qr";
+    const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+      email
     )}`;
-    setValue("qr_code", qrCodeURL);
+    setValue("qr_code", qrURL);
   };
 
   return (
@@ -103,7 +147,6 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
       <FormRow label="First Name" error={errors?.firstName?.message}>
         <Input
           type="text"
-          id="first_name"
           {...register("firstName", { required: "Required" })}
         />
       </FormRow>
@@ -111,74 +154,73 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
       <FormRow label="Last Name" error={errors?.lastName?.message}>
         <Input
           type="text"
-          id="last_name"
           {...register("lastName", { required: "Required" })}
         />
       </FormRow>
 
       <FormRow label="Email" error={errors?.email?.message}>
-        <Input
-          type="email"
-          id="email"
-          {...register("email", { required: "Required" })}
-        />
+        <Input type="email" {...register("email", { required: "Required" })} />
       </FormRow>
 
       {!isEditSession && (
         <FormRow label="Password" error={errors?.password?.message}>
           <Input
             type="password"
-            id="password"
             {...register("password", { required: "Required" })}
           />
         </FormRow>
       )}
 
       <FormRow label="Phone">
-        <Input type="text" id="phone" {...register("phone")} />
+        <Input type="text" {...register("phone")} />
       </FormRow>
 
-      <FormRow label="Role">
-        <select id="role_id" {...register("titleId")}>
-          <option value="">Select Role</option>
-          {roles.map((role) => (
-            <option key={role.id} value={role.id}>
-              {role.role_name}
-            </option>
-          ))}
-        </select>
+      <FormRow label="Choose a Role">
+        <Select
+          options={[
+            { value: "{ titleId }", label: "Select Role" },
+            ...roles.map((r) => ({
+              value: String(r.id),
+              label: r.role_name,
+            })),
+          ]}
+          value={getValues("titleId")}
+          onChange={(e) => setValue("titleId", e.target.value)}
+        />
       </FormRow>
 
       <FormRow label="Location">
-        <select id="location_id" {...register("departmentId")}>
-          <option value="">Select Location</option>
-          {locations.map((loc) => (
-            <option key={loc.id} value={loc.id}>
-              {loc.name}
-            </option>
-          ))}
-        </select>
+        <Select
+          options={[
+            { value: "", label: "Select Location" },
+            ...locations.map((l) => ({ value: String(l.id), label: l.name })),
+          ]}
+          value={getValues("departmentId")}
+          onChange={(e) => setValue("departmentId", e.target.value)}
+        />
       </FormRow>
 
       <FormRow label="Status">
-        <Input type="text" id="status" {...register("status")} />
+        <Input type="text" {...register("status")} />
       </FormRow>
 
-      <FormRow label="Permissions">
-        <Checkbox id="can_send_reports" {...register("can_send_reports")}>
-          Send Reports
-        </Checkbox>
-        <Checkbox id="can_edit_reports" {...register("can_edit_reports")}>
-          Edit Reports
-        </Checkbox>
-        <Checkbox id="can_delete_reports" {...register("can_delete_reports")}>
-          Delete Reports
-        </Checkbox>
+      <FormRow label="Access Group">
+        <Select
+          options={[
+            { value: "", label: "Select Access Group" },
+            ...accessGroups.map((g) => ({
+              value: String(g.id),
+              label: g.name,
+            })),
+          ]}
+          value={getValues("access_group_id")}
+          onChange={(e) => setValue("access_group_id", e.target.value)}
+        />
       </FormRow>
 
       <FormRow label="QR Code">
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <Input type="text" id="qr_code" disabled {...register("qr_code")} />
+          <Input type="text" disabled {...register("qr_code")} />
           <Button
             $variation="primary"
             $size="medium"
@@ -194,14 +236,14 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
         style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
       >
         <Button
-          $variation="secondary"
-          $size="medium"
           type="reset"
           onClick={onCloseModal}
+          $variation="secondary"
+          $size="medium"
         >
           Cancel
         </Button>
-        <Button $variation="primary" $size="medium" type="submit">
+        <Button type="submit" $size="medium" $variation="primary">
           {isEditSession ? "Update" : "Create"}
         </Button>
       </FormRow>
