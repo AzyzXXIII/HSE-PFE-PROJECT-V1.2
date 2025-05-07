@@ -33,16 +33,16 @@ function EmployeeTable() {
 
   return (
     <Menus>
-      <Table columns="1fr 1.5fr 2fr 1.5fr 1.5fr 1.5fr 1fr 1fr">
+      <Table columns="1.2fr 1.5fr 2.5fr 1.2fr 1.2fr 1.5fr 1fr 0.8fr">
         <Table.Header>
           <div>USERNAME</div>
           <div>FULL NAME</div>
           <div>EMAIL</div>
           <div>PHONE</div>
           <div>ROLE</div>
-          <div>DEPARTMENT</div>
+          <div>Department</div>
           <div>STATUS</div>
-          <div>ACTIONS</div>
+          <div></div>
         </Table.Header>
 
         <Table.Body

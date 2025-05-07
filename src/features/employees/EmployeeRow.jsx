@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import { HiPencil, HiTrash, HiCheck, HiX } from "react-icons/hi";
+import {
+  HiPencil,
+  HiTrash,
+  HiCheck,
+  HiX,
+  HiLockClosed,
+  HiLockOpen,
+} from "react-icons/hi";
 
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
@@ -15,6 +22,8 @@ const EmployeeName = styled.div`
   font-weight: 600;
   color: var(--color-grey-700);
   font-family: "Sono";
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
 const Role = styled.div`
@@ -41,6 +50,8 @@ const StatusBadge = styled.div`
       ? "#fee2e2"
       : $status === "pending"
       ? "#fef9c3"
+      : $status === "blocked"
+      ? "#f3f4f6"
       : "#e5e7eb"};
   color: ${({ $status }) =>
     $status === "active"
@@ -49,6 +60,8 @@ const StatusBadge = styled.div`
       ? "#b91c1c"
       : $status === "pending"
       ? "#92400e"
+      : $status === "blocked"
+      ? "#1f2937"
       : "#374151"};
   display: inline-block;
   width: fit-content;
@@ -63,12 +76,16 @@ function EmployeeRow({ employee }) {
 
   const handleAccept = () => updateStatus({ id, action: "accept" });
   const handleReject = () => updateStatus({ id, action: "reject" });
+  const handleBlockToggle = () =>
+    updateStatus({ id, action: status === "active" ? "block" : "unblock" });
 
   return (
     <Table.Row>
       <div>{username}</div>
       <EmployeeName>{fullName}</EmployeeName>
-      <div>{email}</div>
+      <div style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}>
+        {email}
+      </div>
       <div>{phone}</div>
       <Role>{role}</Role>
       <Department>{location}</Department>
@@ -84,6 +101,7 @@ function EmployeeRow({ employee }) {
               <Modal.Open opens="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
+
               {status === "pending" && (
                 <>
                   <Menus.Button icon={<HiCheck />} onClick={handleAccept}>
@@ -93,6 +111,21 @@ function EmployeeRow({ employee }) {
                     Reject
                   </Menus.Button>
                 </>
+              )}
+
+              {status === "active" && (
+                <Menus.Button
+                  icon={<HiLockClosed />}
+                  onClick={handleBlockToggle}
+                >
+                  Block
+                </Menus.Button>
+              )}
+
+              {status === "inactive" && (
+                <Menus.Button icon={<HiLockOpen />} onClick={handleBlockToggle}>
+                  Unblock
+                </Menus.Button>
               )}
             </Menus.List>
 

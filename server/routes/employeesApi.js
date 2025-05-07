@@ -54,6 +54,31 @@ router.patch("/:id/reject", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+// Block employee (set status to 'inactive')
+router.patch("/:id/block", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query("UPDATE users SET status = 'inactive' WHERE id = $1", [
+      id,
+    ]);
+    res.status(200).json({ message: "Employee blocked" });
+  } catch (err) {
+    console.error("Block employee error:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Unblock employee (set status to 'active')
+router.patch("/:id/unblock", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query("UPDATE users SET status = 'active' WHERE id = $1", [id]);
+    res.status(200).json({ message: "Employee unblocked" });
+  } catch (err) {
+    console.error("Unblock employee error:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 // DELETE employee by ID
 router.delete("/:id", async (req, res) => {
@@ -71,12 +96,12 @@ router.delete("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const {
-      first_name,
-      last_name,
+      firstName,
+      lastName,
       email,
       password,
-      role_id,
-      location_id,
+      titleId,
+      departmentId,
       phone,
       status,
       access_group_id,
@@ -101,12 +126,12 @@ router.post("/", async (req, res) => {
         access_group_id, qr_code
       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
       [
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
         password,
-        role_id,
-        location_id,
+        titleId,
+        departmentId,
         phone,
         status || "pending",
         access_group_id ? parseInt(access_group_id) : null,
