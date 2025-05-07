@@ -233,5 +233,57 @@ router.get("/timeline", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.get("/recent", async (req, res) => {
+  try {
+    const tables = ["observation", "incident", "nearmiss", "hazard"];
+    console.log("✅ Fetching recent reports...");
+
+    // Fetch reports from all tables
+    const recentReports = await Promise.all(
+      tables.map(async (table) => {
+        console.log(`✅ Fetching from table: ${table}`);
+
+        // Check if the 'time' column exists in the table by querying the information_schema
+        const checkTimeColumnQuery = `
+          SELECT column_name
+          FROM information_schema.columns
+          WHERE table_name = $1 AND column_name = 'time';
+        `;
+        const timeColumnResult = await pool.query(checkTimeColumnQuery, [
+          table,
+        ]);
+
+        let query = `SELECT *, '${table}' AS report_type FROM ${table} ORDER BY date DESC`;
+
+        // If the 'time' column exists, include it in the ORDER BY clause
+        if (timeColumnResult.rows.length > 0) {
+          query += `, time DESC`; // Add sorting by time
+        }
+
+        // Fetch the data
+        const result = await pool.query(query);
+        console.log(`✅ ${table} reports fetched:`, result.rows.length);
+        return result.rows;
+      })
+    );
+
+    // Flatten, sort by date and time (if present), then slice to get the 5 most recent reports
+    const allReports = recentReports
+      .flat()
+      .sort(
+        (a, b) =>
+          new Date(b.date) - new Date(a.date) ||
+          new Date(b.time) - new Date(a.time)
+      )
+      .slice(0, 5);
+
+    console.log("✅ All reports combined:", allReports.length);
+    res.json(allReports);
+  } catch (error) {
+    console.error("❌ Error fetching recent submissions:", error.message);
+    console.error(error.stack); // Print full stack trace
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 export default router;

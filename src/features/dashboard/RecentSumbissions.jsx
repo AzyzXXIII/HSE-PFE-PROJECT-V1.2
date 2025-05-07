@@ -1,17 +1,14 @@
 import styled from "styled-components";
-
+import { useState, useEffect } from "react";
 import Heading from "../../ui/Heading";
 import Row from "../../ui/Row";
-
 import Spinner from "../../ui/Spinner";
 import TodayItem from "./TodayItem";
 
 const StyledToday = styled.div`
-  /* Box */
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-
   padding: 3.2rem;
   display: flex;
   flex-direction: column;
@@ -21,10 +18,10 @@ const StyledToday = styled.div`
 `;
 
 const TodayList = styled.ul`
-  overflow: scroll;
+  overflow-y: auto;
+  max-height: 300px;
   overflow-x: hidden;
 
-  /* Removing scrollbars for webkit, firefox, and ms, respectively */
   &::-webkit-scrollbar {
     width: 0 !important;
   }
@@ -39,32 +36,53 @@ const NoActivity = styled.p`
   margin-top: 0.8rem;
 `;
 
-const activities = [
-  { id: 1, name: "Morning workout" },
-  { id: 2, name: "Team meeting" },
-  { id: 3, name: "Project coding session" },
-];
-
 function RecentActivity() {
-  const isLoading = false;
+  const [activities, setActivities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchReports() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/api/reports/recent");
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setActivities(data);
+      } catch (error) {
+        setError(error.message);
+        console.error("❌ Error fetching recent submissions:", error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchReports();
+  }, []);
+
   return (
     <StyledToday>
       <Row type="horizontal">
         <Heading as="h2">Recent Submissions</Heading>
       </Row>
 
-      {!isLoading ? (
-        activities.length > 0 ? (
-          <TodayList>
-            {activities.map((activity) => (
-              <TodayItem activity={activity} key={activity.id} />
-            ))}
-          </TodayList>
-        ) : (
-          <NoActivity>No activity today...</NoActivity>
-        )
-      ) : (
+      {isLoading ? (
         <Spinner />
+      ) : error ? (
+        <NoActivity>{error}</NoActivity>
+      ) : activities.length > 0 ? (
+        <TodayList>
+          {activities.map((activity) => (
+            <TodayItem report={activity} key={activity.id} />
+          ))}
+        </TodayList>
+      ) : (
+        <NoActivity>No recent submissions...</NoActivity>
       )}
     </StyledToday>
   );
