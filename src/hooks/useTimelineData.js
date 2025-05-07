@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const VALID_TYPES = ["incidents", "hazards", "observations", "nearMiss"];
+const VALID_TYPES = ["incidents", "hazards", "observations", "nearmiss"];
 
 export const useTimelineData = (type, last) => {
   const isValidType = VALID_TYPES.includes(type);

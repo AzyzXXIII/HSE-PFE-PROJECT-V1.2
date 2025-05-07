@@ -9,6 +9,7 @@ import { useEmployees } from "../../hooks/Users/useEmployees";
 function EmployeeTable() {
   const [searchParams] = useSearchParams();
   const { data: employees = [], isLoading } = useEmployees();
+  console.log(employees);
 
   if (isLoading) return <Spinner />;
   if (employees.length === 0) return <Empty resourceName="employees" />;
@@ -26,6 +27,30 @@ function EmployeeTable() {
   const modifier = direction === "asc" ? 1 : -1;
 
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
+    if (field === "fullName") {
+      const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+      const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+      return nameA.localeCompare(nameB) * modifier;
+    }
+
+    // Special handling for department sorting (compare by numeric departmentId)
+    if (field === "departmentId") {
+      const deptA = a.department?.name || String(a.departmentId);
+      const deptB = b.department?.name || String(b.departmentId);
+      if (typeof deptA === "number" && typeof deptB === "number") {
+        return (deptA - deptB) * modifier; // Compare as numbers if they are numeric
+      }
+      return deptA.localeCompare(deptB) * modifier; // Fallback to string comparison
+    }
+
+    // Special handling for title/role sorting (compare by numeric titleId)
+    if (field === "titleId") {
+      const roleA = a.role || String(a.titleId);
+      const roleB = b.role || String(b.titleId);
+      return roleA.localeCompare(roleB) * modifier; // Compare roles as strings
+    }
+
+    // Default sorting for other fields
     const valA = a[field]?.toString().toLowerCase() || "";
     const valB = b[field]?.toString().toLowerCase() || "";
     return valA.localeCompare(valB) * modifier;

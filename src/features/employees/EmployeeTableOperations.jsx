@@ -11,6 +11,7 @@ export const EmployeeTableOperations = () => {
           { value: "all", label: "All" },
           { value: "pending", label: "Pending" },
           { value: "accepted", label: "Accepted" },
+          { value: "inactive", label: "Blocked" },
           { value: "rejected", label: "Rejected" },
         ]}
       />

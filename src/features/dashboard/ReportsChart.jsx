@@ -56,7 +56,7 @@ function ReportsChart() {
   const { data: observations, isLoading: isLoadingObservations } =
     useTimelineData("observations", last);
   const { data: nearMisses, isLoading: isLoadingNearMisses } = useTimelineData(
-    "nearMiss",
+    "nearmiss",
     last
   );
 
