@@ -267,7 +267,6 @@ router.get("/recent", async (req, res) => {
       })
     );
 
-    // Flatten, sort by date and time (if present), then slice to get the 5 most recent reports
     const allReports = recentReports
       .flat()
       .sort(
