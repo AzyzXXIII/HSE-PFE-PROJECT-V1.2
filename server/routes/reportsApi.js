@@ -277,7 +277,6 @@ router.get("/recent", async (req, res) => {
       .slice(0, 5);
 
     console.log("✅ All reports combined:", allReports.length);
-    console.log("✅ All reports combined:", allReports.length);
 
     res.json(allReports);
   } catch (error) {
