@@ -1,8 +1,6 @@
-// src/models/reportModel.js
 import pool from "../config/db.js";
 import getReportConfig from "../config/reportConfig.js";
 
-// Existing function (no change)
 export const fetchReportsByType = async (reportType) => {
   const reportConfig = getReportConfig(reportType);
 
@@ -24,7 +22,6 @@ export const fetchReportsByType = async (reportType) => {
   return result.rows;
 };
 
-// ✅ New function for fetching stats
 export const fetchReportStats = async (reportType, last) => {
   const reportConfig = getReportConfig(reportType);
   if (!reportConfig) {
@@ -63,7 +60,6 @@ export const fetchReportStats = async (reportType, last) => {
   return result.rows[0];
 };
 
-// ✅ New function for fetching report timeline
 export const fetchReportTimeline = async (reportType, last) => {
   const reportConfig = getReportConfig(reportType);
   if (!reportConfig) {
@@ -118,7 +114,6 @@ export const fetchRecentReports = async () => {
         query += `, time DESC`;
       }
 
-      // Fetch the data
       const result = await pool.query(query);
       console.log(`✅ ${table} reports fetched:`, result.rows.length);
       return result.rows;
@@ -157,7 +152,6 @@ export const deleteReportById = async (reportType, id) => {
   return result.rows[0];
 };
 
-// ✅ New function for updating a report
 export const updateReportById = async (
   reportType,
   id,

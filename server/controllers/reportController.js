@@ -57,7 +57,6 @@ export const getReports = async (req, res) => {
   }
 };
 
-// ✅ New function for getting report stats
 export const getStats = async (req, res) => {
   console.log("🔍 Requested report type for stats:", req.query.type);
   try {
@@ -114,7 +113,6 @@ export const getRecentReports = async (req, res) => {
   }
 };
 
-// ✅ New function for deleting a report
 export const deleteReport = async (req, res) => {
   console.log("🗑️ Deleting report...");
   try {
@@ -133,7 +131,6 @@ export const deleteReport = async (req, res) => {
   }
 };
 
-// ✅ New function for updating a report
 export const updateReport = async (req, res) => {
   console.log("✏️ Updating report...");
   try {
