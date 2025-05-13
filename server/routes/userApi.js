@@ -1,5 +1,5 @@
 import express from "express";
-import pool from "../config/db.js"; // Correctly import the pool using ES Modules
+import pool from "../config/db.js";
 import {
   getAllUsers,
   changeUserStatus,
@@ -15,10 +15,9 @@ router.get("/", getAllUsers);
 router.patch("/:id/status", changeUserStatus);
 router.delete("/:id", deleteUser);
 router.post("/", createNewUser);
-router.patch("/:id", updateUserDetails); // For full user update
+router.patch("/:id", updateUserDetails);
 
 router.patch("/:id/:action", changeUserStatus);
-// GET roles
 router.get("/roles", async (req, res) => {
   try {
     const result = await pool.query("SELECT id, role_name FROM role");

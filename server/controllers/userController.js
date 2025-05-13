@@ -1,4 +1,3 @@
-// src/controllers/userController.js
 import {
   fetchAllUsers,
   updateUserStatus,
@@ -7,7 +6,6 @@ import {
   updateUser,
 } from "../models/userModel.js";
 
-// ✅ Get all users
 export const getAllUsers = async (req, res) => {
   try {
     const users = await fetchAllUsers();
@@ -18,7 +16,6 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// ✅ Change user status
 export const changeUserStatus = async (req, res) => {
   try {
     const { id, action } = req.params;
