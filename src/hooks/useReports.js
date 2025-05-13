@@ -12,7 +12,7 @@ export const useReports = (reportType) => {
   return useQuery({
     queryKey: ["reports", reportType],
     queryFn: () => fetchReports(reportType),
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
-    retry: 2, // Retry fetching 2 times if it fails
+    staleTime: 1000 * 60 * 5,
+    retry: 2,
   });
 };

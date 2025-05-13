@@ -20,6 +20,7 @@ pool.query("SELECT NOW()", (err, res) => {
     console.log("✅ Database connected at:", res.rows[0].now);
   }
 });
+console.log("🚀 Server is running...");
 
 app.use("/api/reports", reportsRoutes);
 app.use("/api/users", userRoutes);
