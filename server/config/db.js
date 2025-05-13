@@ -1,4 +1,3 @@
-// src/config/db.js
 import pg from "pg";
 import dotenv from "dotenv";
 
@@ -18,7 +17,6 @@ pool.on("connect", () => {
   console.log("✅ Connected to PostgreSQL");
 });
 
-// Test the connection directly
 (async () => {
   try {
     const res = await pool.query("SELECT NOW()");

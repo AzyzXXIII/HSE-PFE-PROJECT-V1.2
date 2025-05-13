@@ -1,4 +1,3 @@
-// src/hooks/Users/useEditEmployee.js
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
