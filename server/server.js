@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
 import reportsRoutes from "./routes/reportsApi.js";
-import userRoutes from "./routes/employeesApi.js";
+import userRoutes from "./routes/userApi.js";
 
 dotenv.config();
 const app = express();

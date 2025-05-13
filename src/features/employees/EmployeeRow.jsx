@@ -14,7 +14,7 @@ import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 import CreateEmployeeForm from "./CreateEmployeeForm";
 
-import { useUpdateEmployeeStatus } from "../../hooks/Users/useUpdateEmployeeStatus";
+import { useUpdateUserStatus } from "../../hooks/Users/useUpdateUserStatus";
 import { useDeleteEmployee } from "../../hooks/Users/useDeleteEmployee";
 
 const EmployeeName = styled.div`
@@ -71,7 +71,7 @@ function EmployeeRow({ employee }) {
   const { id, username, fullName, email, phone, role, location, status } =
     employee;
 
-  const { mutate: updateStatus } = useUpdateEmployeeStatus();
+  const { mutate: updateStatus } = useUpdateUserStatus();
   const { mutate: deleteEmployee } = useDeleteEmployee();
 
   const handleAccept = () => updateStatus({ id, action: "accept" });
