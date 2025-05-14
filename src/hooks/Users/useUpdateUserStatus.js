@@ -1,4 +1,3 @@
-// src/hooks/useUpdateUserStatus.js
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -25,7 +24,6 @@ export function useUpdateUserStatus() {
         draggable: true,
       };
 
-      // ✅ Toast messages now use "User" instead of "Employee"
       switch (action) {
         case "accept":
           toast.success("✅ User Accepted", {
