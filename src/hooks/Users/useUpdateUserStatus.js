@@ -3,13 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// ✅ Keep the action system and API path structure the same
 const updateStatus = async ({ id, action }) => {
   const res = await axios.patch(`/api/users/${id}/${action}`);
   return res.data;
 };
 
-// ✅ Renamed the hook to useUpdateUserStatus
 export function useUpdateUserStatus() {
   const queryClient = useQueryClient();
 
