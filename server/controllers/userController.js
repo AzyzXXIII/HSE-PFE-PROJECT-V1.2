@@ -20,7 +20,6 @@ export const changeUserStatus = async (req, res) => {
   try {
     const { id, action } = req.params;
 
-    // Map actions to statuses
     const statusMapping = {
       accept: "active",
       reject: "rejected",
