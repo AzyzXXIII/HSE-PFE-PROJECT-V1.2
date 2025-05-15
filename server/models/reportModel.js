@@ -99,7 +99,6 @@ export const fetchRecentReports = async () => {
     tables.map(async (table) => {
       console.log(`✅ Fetching from table: ${table}`);
 
-      // Check if the 'time' column exists in the table
       const checkTimeColumnQuery = `
         SELECT column_name
         FROM information_schema.columns
