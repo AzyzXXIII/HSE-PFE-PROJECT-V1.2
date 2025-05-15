@@ -10,7 +10,6 @@ import {
 
 const router = express.Router();
 
-// User routes
 router.get("/", getAllUsers);
 router.patch("/:id/status", changeUserStatus);
 router.delete("/:id", deleteUser);

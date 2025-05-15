@@ -1,4 +1,3 @@
-// src/models/userModel.js
 import pool from "../config/db.js";
 
 // ✅ Fetch all users with related data
