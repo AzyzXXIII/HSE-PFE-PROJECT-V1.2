@@ -178,13 +178,13 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
       <FormRow label="Choose a Role">
         <Select
           options={[
-            { value: "", label: "Select Role" }, // Fixed default option
+            { value: "", label: "Select Role" },
             ...roles.map((r) => ({
               value: String(r.id),
               label: r.role_name,
             })),
           ]}
-          {...register("titleId")} // Uses register instead of manual value/onChange
+          {...register("titleId")}
         />
       </FormRow>
 
@@ -197,7 +197,7 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
               label: l.name,
             })),
           ]}
-          {...register("departmentId")} // Uses register
+          {...register("departmentId")}
         />
       </FormRow>
 
