@@ -1,6 +1,5 @@
 import pool from "../config/db.js";
 
-// ✅ Fetch all users with related data
 export const fetchAllUsers = async () => {
   const result = await pool.query(`
     SELECT 
