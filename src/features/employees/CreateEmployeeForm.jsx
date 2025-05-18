@@ -214,7 +214,7 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
               label: g.name,
             })),
           ]}
-          {...register("access_group_id")} // Uses register
+          {...register("access_group_id")}
         />
       </FormRow>
 
