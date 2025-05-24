@@ -13,7 +13,9 @@ const router = express.Router();
 router.get("/", getAllUsers);
 router.patch("/:id/status", changeUserStatus);
 router.delete("/:id", deleteUser);
+
 router.post("/", createNewUser);
+
 router.patch("/:id", updateUserDetails);
 
 router.patch("/:id/:action", changeUserStatus);

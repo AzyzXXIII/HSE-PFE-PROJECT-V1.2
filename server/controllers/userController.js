@@ -53,13 +53,14 @@ export const deleteUser = async (req, res) => {
 };
 
 // ✅ Create User
+
 export const createNewUser = async (req, res) => {
   try {
     const user = await createUser(req.body);
     res.status(201).json(user);
   } catch (error) {
     console.error("❌ Error creating user:", error.message);
-    res.status(500).json({ error: error.message });
+    res.status(error.status || 500).json({ error: error.message });
   }
 };
 

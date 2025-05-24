@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -174,8 +174,7 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
       <FormRow label="Phone">
         <Input type="text" {...register("phone")} />
       </FormRow>
-
-      <FormRow label="Choose a Role">
+      <FormRow label="Choose a Role" error={errors?.titleId?.message}>
         <Select
           options={[
             { value: "", label: "Select Role" },
@@ -184,7 +183,7 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
               label: r.role_name,
             })),
           ]}
-          {...register("titleId")}
+          {...register("titleId", { required: "Role is required" })}
         />
       </FormRow>
 
@@ -205,7 +204,7 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
         <Input type="text" {...register("status")} />
       </FormRow>
 
-      <FormRow label="Access Group">
+      <FormRow label="Access Group" error={errors?.access_group_id?.message}>
         <Select
           options={[
             { value: "", label: "Select Access Group" },
@@ -214,7 +213,9 @@ function CreateEmployeeForm({ employeeToEdit = {}, onCloseModal }) {
               label: g.name,
             })),
           ]}
-          {...register("access_group_id")}
+          {...register("access_group_id", {
+            required: "Access Group is required",
+          })}
         />
       </FormRow>
 

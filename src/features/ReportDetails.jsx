@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import styled from "styled-components";
-import { HiOutlineClock } from "react-icons/hi2";
+import { HiOutlineClock, HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { toast } from "react-toastify";
 
 import Button from "../ui/Button";
@@ -48,6 +48,7 @@ function ReportDetails() {
   const navigate = useNavigate();
   const [report, setReport] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
   const [status, setStatus] = useState("Open");
   const [priority, setPriority] = useState("Normal");
   const { mutate: deleteReport } = useDeleteReport();
@@ -131,6 +132,73 @@ function ReportDetails() {
         },
       }
     );
+  };
+
+  // CSV Export Handler
+  const handleExportCSV = async () => {
+    if (!report || !reportType) {
+      toast.error("Cannot export: Missing report data");
+      return;
+    }
+
+    setIsExporting(true);
+
+    try {
+      const response = await fetch(
+        `/api/reports/${report.id}/export/csv?type=${encodeURIComponent(
+          reportType
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "text/csv",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to export CSV");
+      }
+
+      // Get the filename from the response headers
+      const contentDisposition = response.headers.get("Content-Disposition");
+      let filename = `report_${report.id}_${reportType}_${
+        new Date().toISOString().split("T")[0]
+      }.csv`;
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (filenameMatch) {
+          filename = filenameMatch[1];
+        }
+      }
+
+      // Get the CSV content
+      const csvContent = await response.text();
+
+      // Create and trigger download
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+
+      link.setAttribute("href", url);
+      link.setAttribute("download", filename);
+      link.style.visibility = "hidden";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+
+      toast.success("Report exported to CSV successfully! 📄");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error(`Failed to export CSV: ${error.message}`);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   if (isLoading) return <Spinner />;
@@ -222,6 +290,24 @@ function ReportDetails() {
       />
 
       <ButtonGroup>
+        <Button
+          $variation="primary"
+          $size="medium"
+          onClick={() => navigate(-1)}
+        >
+          VALIDATE
+        </Button>
+
+        <Button
+          $variation="export"
+          $size="medium"
+          onClick={handleExportCSV}
+          disabled={isExporting}
+        >
+          <HiOutlineDocumentArrowDown />
+          {isExporting ? "Exporting..." : "Export CSV"}
+        </Button>
+
         <Modal>
           <Modal.Open opens="delete">
             <Button $variation="danger" $size="medium">

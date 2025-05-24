@@ -12,8 +12,16 @@ export function useCreateEmployee() {
       toast.success("Employee created");
       queryClient.invalidateQueries(["employees"]);
     },
-    onError: () => {
-      toast.error("Failed to create employee");
+    onError: (error) => {
+      const serverMessage = error?.response?.data?.error;
+
+      if (serverMessage === "Error creating Employee") {
+        toast.error(
+          "This email is already registered. Please use another one."
+        );
+      } else {
+        toast.error("Failed to create employee");
+      }
     },
   });
 }

@@ -34,27 +34,27 @@ const ModalContent = styled.div`
 
 function CalendarComponent() {
   const [events, setEvents] = useState([
-    { id: "1", title: "Meeting", start: "2025-02-17T10:30:00" },
-    { id: "2", title: "Lunch", start: "2025-02-17T12:00:00" },
-    { id: "3", title: "Conference", start: "2025-02-16" },
+    { id: "1", title: "Meeting", start: "2025-05-10T10:30:00" },
+    { id: "2", title: "Meeting", start: "2025-05-14T12:00:00" },
+    { id: "3", title: "Conference", start: "2025-05-23" },
     { id: "4", title: "Birthday Party", start: "2025-02-17T07:00:00" },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: "", time: "", date: "" });
 
-  // Handle date click to open modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
+
   const handleDateClick = (info) => {
     setNewEvent({ title: "", time: "", date: info.dateStr });
     setIsModalOpen(true);
   };
 
-  // Handle input change
   const handleChange = (e) => {
     setNewEvent({ ...newEvent, [e.target.name]: e.target.value });
   };
 
-  // Add new event to state
   const handleAddEvent = () => {
     if (!newEvent.title || !newEvent.time) return;
     const eventDateTime = `${newEvent.date}T${newEvent.time}:00`;
@@ -68,6 +68,24 @@ function CalendarComponent() {
       },
     ]);
     setIsModalOpen(false);
+  };
+
+  const handleEventClick = (info) => {
+    setEventToDelete(info.event);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event.id !== eventToDelete.id)
+    );
+    setIsDeleteModalOpen(false);
+    setEventToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setEventToDelete(null);
   };
 
   return (
@@ -84,6 +102,7 @@ function CalendarComponent() {
         selectable={true}
         events={events}
         dateClick={handleDateClick}
+        eventClick={handleEventClick}
         eventTimeFormat={{
           hour: "numeric",
           minute: "2-digit",
@@ -97,7 +116,6 @@ function CalendarComponent() {
         <ModalOverlay>
           <ModalContent>
             <h3>Add Event</h3>
-
             <Input
               type="text"
               name="title"
@@ -123,6 +141,31 @@ function CalendarComponent() {
                 $variation="secondary"
                 $size="medium"
                 onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </Button>
+            </ButtonGroup>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+
+      {isDeleteModalOpen && (
+        <ModalOverlay>
+          <ModalContent>
+            <h3>Delete Event</h3>
+            <p>Are you sure you want to delete {eventToDelete?.title}?</p>
+            <ButtonGroup>
+              <Button
+                $variation="danger"
+                $size="medium"
+                onClick={handleConfirmDelete}
+              >
+                Yes, Delete
+              </Button>
+              <Button
+                $variation="secondary"
+                $size="medium"
+                onClick={handleCancelDelete}
               >
                 Cancel
               </Button>

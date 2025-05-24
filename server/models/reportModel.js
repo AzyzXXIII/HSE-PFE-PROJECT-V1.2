@@ -188,3 +188,56 @@ export const updateReportById = async (
 
   return result.rows[0];
 };
+
+export const fetchReportById = async (reportType, reportId) => {
+  try {
+    console.log(`🔍 Fetching ${reportType} report with ID: ${reportId}`);
+
+    // Get the report configuration to get the correct table name
+    const reportConfig = getReportConfig(reportType);
+    if (!reportConfig) {
+      throw new Error("Invalid report type");
+    }
+
+    const { table } = reportConfig;
+
+    // Query to fetch the specific report with all its details
+    const query = `SELECT * FROM ${table} WHERE id = $1`;
+
+    const result = await pool.query(query, [reportId]);
+
+    if (result.rows.length === 0) {
+      console.log(`❌ No ${reportType} report found with ID: ${reportId}`);
+      return null;
+    }
+
+    const report = result.rows[0];
+
+    // Parse JSON fields if they exist and are strings
+    if (report.location && typeof report.location === "string") {
+      try {
+        report.location = JSON.parse(report.location);
+      } catch (e) {
+        console.warn("Could not parse location JSON:", e);
+      }
+    }
+
+    if (report.history_actions && typeof report.history_actions === "string") {
+      try {
+        report.history_actions = JSON.parse(report.history_actions);
+      } catch (e) {
+        console.warn("Could not parse history_actions JSON:", e);
+        report.history_actions = [];
+      }
+    }
+
+    console.log(`✅ Successfully fetched ${reportType} report:`, report.id);
+    return report;
+  } catch (error) {
+    console.error(
+      `❌ Error fetching ${reportType} report by ID:`,
+      error.message
+    );
+    throw error;
+  }
+};

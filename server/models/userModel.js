@@ -54,7 +54,9 @@ export const createUser = async (userData) => {
   );
 
   if (emailCheckResult.rows.length > 0) {
-    throw new Error("Email already exists");
+    const error = new Error("Email already exists");
+    error.status = 409; // HTTP 409 Conflict for duplicate resource
+    throw error;
   }
 
   const result = await pool.query(
@@ -79,6 +81,7 @@ export const createUser = async (userData) => {
 
   return result.rows[0];
 };
+
 // ✅ Update User
 export const updateUser = async (id, userData) => {
   const existingUser = await pool.query("SELECT * FROM users WHERE id = $1", [

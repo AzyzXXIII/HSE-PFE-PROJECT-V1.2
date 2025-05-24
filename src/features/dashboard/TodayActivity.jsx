@@ -42,6 +42,38 @@ function TodayActivity() {
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Function to detect report type based on data structure
+  const detectReportType = (report) => {
+    if (
+      report.pi_description !== undefined ||
+      report.primary_incident_type !== undefined
+    ) {
+      return "incidents";
+    }
+    if (
+      report.potential_consequences !== undefined &&
+      report.corrective_actions !== undefined
+    ) {
+      return "hazards";
+    }
+    if (report.title !== undefined && report.type_id !== undefined) {
+      return "observations";
+    }
+    if (
+      report.potential_consequences !== undefined &&
+      report.contributing_factor !== undefined
+    ) {
+      return "nearmiss";
+    }
+
+    // Fallback: check if there's a report_category field from your unified query
+    if (report.report_category) {
+      return report.report_category;
+    }
+
+    return "report"; // default fallback
+  };
+
   useEffect(() => {
     async function fetchReports() {
       try {
@@ -71,7 +103,11 @@ function TodayActivity() {
       ) : activities.length > 0 ? (
         <TodayList>
           {activities.map((activity) => (
-            <TodayItem report={activity} key={activity.id} />
+            <TodayItem
+              report={activity}
+              reportType={detectReportType(activity)}
+              key={activity.id}
+            />
           ))}
         </TodayList>
       ) : (

@@ -72,7 +72,7 @@ function MainNav() {
         <li>
           <StyledNavLink to="/employees">
             <HiOutlineBriefcase />
-            <span>Employees</span>
+            <span>Manage Users</span>
           </StyledNavLink>
         </li>
         <li>
