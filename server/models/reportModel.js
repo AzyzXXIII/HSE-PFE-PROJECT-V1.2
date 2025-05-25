@@ -39,7 +39,7 @@ export const fetchReportStats = async (reportType, last) => {
     SELECT 
       COUNT(*) AS total_reports,
       COUNT(DISTINCT submitted_by) AS unique_employees,
-      COUNT(*) FILTER (WHERE status = 'in progress') AS pending_reports
+      COUNT(*) FILTER (WHERE status = 'pending') AS pending_reports
       ${
         severityColumn
           ? `, COUNT(*) FILTER (

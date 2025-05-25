@@ -47,11 +47,12 @@ const variations = {
     }
   `,
   export: css`
-    color: var(--color-green-50);
-    background-color: var(--color-green-600);
+    background-color: var(--color-green-700);
+    color: var(--color-grey-0);
 
     &:hover {
-      background-color: var(--color-green-700);
+      background-color: var(--color-grey-0);
+      color: var(--color-green-700);
     }
   `,
 };

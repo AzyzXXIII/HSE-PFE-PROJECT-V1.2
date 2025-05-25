@@ -119,33 +119,25 @@ export const updateReport = async (req, res) => {
   }
 };
 
-// NEW CSV Export Controller
 export const exportReportCSV = async (req, res) => {
   console.log("📄 Exporting report to CSV...");
 
   try {
     const { id } = req.params;
     const { type } = req.query;
-
     if (!type) {
       return res.status(400).json({ error: "Report type is required" });
     }
-
     if (!id) {
       return res.status(400).json({ error: "Report ID is required" });
     }
-
-    // Fetch the complete report data
     const report = await fetchReportById(type, id);
 
     if (!report) {
       return res.status(404).json({ error: "Report not found" });
     }
-
-    // Generate CSV content based on report type
     const csvContent = generateReportCSV(report, type);
 
-    // Set CSV headers
     const filename = `report_${id}_${type}_${
       new Date().toISOString().split("T")[0]
     }.csv`;

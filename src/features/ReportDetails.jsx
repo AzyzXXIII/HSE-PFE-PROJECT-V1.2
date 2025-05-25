@@ -205,9 +205,9 @@ function ReportDetails() {
   if (!report) return <Empty resourceName="report" />;
 
   const statusToTagName = {
-    Open: "blue",
-    Closed: "green",
-    "In Progress": "silver",
+    escalated: "red",
+    resolved: "green",
+    pending: "silver",
   };
 
   const tabTitles = ["Report Details", "Additional Information", "History"];
@@ -273,7 +273,9 @@ function ReportDetails() {
       <Header>
         <HeadingGroup>
           <Heading as="h1">Report #{report.id}</Heading>
-          <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+          <Tag type={statusToTagName[status] || "grey"}>
+            {status.replace("-", " ")}
+          </Tag>
           <span>{report.title}</span>
           <HiOutlineClock />
           <span>{format(new Date(report.date), "MMM dd yyyy, hh:mm a")}</span>
