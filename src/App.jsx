@@ -46,7 +46,6 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            {/* Protected Routes - wrapped with ProtectedRoute */}
             <Route
               element={
                 <ProtectedRoute>
@@ -66,7 +65,6 @@ function App() {
               <Route path="calendar" element={<Calendar />} />
             </Route>
 
-            {/* Public Route - Login page */}
             <Route
               path="login"
               element={
