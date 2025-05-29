@@ -3,19 +3,18 @@ import ButtonIcon from "../../ui/ButtonIcon";
 import SpinnerMini from "../../ui/SpinnerMini";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; // Add this import
+import { useAuth } from "../../context/AuthContext";
 
 function Logout() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth(); // Add this line
+  const { logout } = useAuth();
 
   function handleLogout() {
     setIsLoading(true);
 
     setTimeout(() => {
-      // Clear authentication state and localStorage
-      logout(); // Add this line
+      logout();
       console.log("User logged out successfully");
       setIsLoading(false);
       navigate("/login");
