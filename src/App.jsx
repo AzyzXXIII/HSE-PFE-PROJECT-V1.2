@@ -4,6 +4,12 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GlobalStyles from "./styles/GlobalStyles";
 
+import { AuthProvider } from "./context/AuthContext";
+import {
+  ProtectedRoute,
+  PublicRoute,
+} from "./features/components/ProtectedRoute";
+
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
@@ -38,22 +44,41 @@ function App() {
       />
 
       <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="reportCategory" element={<ReportMain />} />
-            <Route path="reports" element={<Reports />} />
-            <Route path="reports/:id" element={<Report />} />
-            <Route path="employees" element={<Employees />} />
-            <Route path="users" element={<Users />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="account" element={<Account />} />
-            <Route path="calendar" element={<Calendar />} />
-          </Route>
-          <Route path="login" element={<Login />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            {/* Protected Routes - wrapped with ProtectedRoute */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="reportCategory" element={<ReportMain />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="reports/:id" element={<Report />} />
+              <Route path="employees" element={<Employees />} />
+              <Route path="users" element={<Users />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="account" element={<Account />} />
+              <Route path="calendar" element={<Calendar />} />
+            </Route>
+
+            {/* Public Route - Login page */}
+            <Route
+              path="login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
+
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </>
   );

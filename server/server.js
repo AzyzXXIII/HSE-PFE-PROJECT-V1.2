@@ -4,7 +4,8 @@ import cors from "cors";
 import pool from "./config/db.js";
 import reportsRoutes from "./routes/reportsApi.js";
 import userRoutes from "./routes/userApi.js";
-import calendarRoutes from "./routes/calendarRoutes.js"; // ✅ fix here
+import calendarRoutes from "./routes/calendarRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -27,6 +28,7 @@ console.log("🚀 Server is running...");
 app.use("/api/reports", reportsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/calendar", calendarRoutes);
+app.use("/api/auth", authRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
