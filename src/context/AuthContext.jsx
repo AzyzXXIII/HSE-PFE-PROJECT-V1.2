@@ -7,13 +7,13 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on app start
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
 
     if (token && userData) {
       try {
-        setUser(JSON.parse(userData));
+        const parsed = JSON.parse(userData);
+        setUser(parsed);
       } catch (error) {
         console.error("Error parsing user data:", error);
         localStorage.removeItem("token");
@@ -37,6 +37,18 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = !!user;
 
+  // Check if user has permission
+  const hasPermission = (perm) => {
+    return user?.permissions?.includes(perm);
+  };
+
+  const hasAnyPermission = (perms = []) => {
+    return perms.some((p) => user?.permissions?.includes(p));
+  };
+
+  const hasRole = (role) => user?.role_name === role;
+  const hasAnyRole = (roles = []) => roles.includes(user?.role_name);
+
   return (
     <AuthContext.Provider
       value={{
@@ -45,6 +57,10 @@ export function AuthProvider({ children }) {
         logout,
         isAuthenticated,
         isLoading,
+        hasPermission,
+        hasAnyPermission,
+        hasRole,
+        hasAnyRole,
       }}
     >
       {children}

@@ -22,6 +22,7 @@ import Employees from "./pages/Employees";
 import ReportMain from "./pages/ReportMain";
 import Calendar from "./pages/Calendar";
 import Dashboard from "./pages/Dashboard";
+import Unauthorized from "./pages/Unauthorized";
 
 import "./index.css";
 
@@ -54,17 +55,41 @@ function App() {
               }
             >
               <Route index element={<Navigate replace to="dashboard" />} />
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route
+                path="dashboard"
+                element={
+                  <ProtectedRoute requiredPermissions={["view_dashboard"]}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="reportCategory" element={<ReportMain />} />
               <Route path="reports" element={<Reports />} />
               <Route path="reports/:id" element={<Report />} />
-              <Route path="employees" element={<Employees />} />
               <Route path="users" element={<Users />} />
-              <Route path="settings" element={<Settings />} />
+              {/* Role-based route (only admins) */}
+              <Route
+                path="settings"
+                element={
+                  <ProtectedRoute requiredRoles={["Admin"]}>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Permission-based route */}
+              <Route
+                path="employees"
+                element={
+                  <ProtectedRoute requiredPermissions={["manage_users"]}>
+                    <Employees />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="account" element={<Account />} />
               <Route path="calendar" element={<Calendar />} />
             </Route>
 
+            {/* Public Routes */}
             <Route
               path="login"
               element={
@@ -74,6 +99,10 @@ function App() {
               }
             />
 
+            {/* Unauthorized access */}
+            <Route path="unauthorized" element={<Unauthorized />} />
+
+            {/* Fallback */}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </AuthProvider>
