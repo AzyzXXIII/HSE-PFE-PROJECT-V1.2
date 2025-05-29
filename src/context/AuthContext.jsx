@@ -16,7 +16,6 @@ export function AuthProvider({ children }) {
         setUser(JSON.parse(userData));
       } catch (error) {
         console.error("Error parsing user data:", error);
-        // Clear invalid data
         localStorage.removeItem("token");
         localStorage.removeItem("user");
       }
