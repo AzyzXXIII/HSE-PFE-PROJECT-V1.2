@@ -60,14 +60,14 @@ function UpdatePasswordForm() {
 
       <FormRow>
         <Button
-          size="medium"
+          $size="medium"
           onClick={reset}
           type="reset"
-          variation="secondary"
+          $variation="secondary"
         >
           Cancel
         </Button>
-        <Button variation="primary" size="medium" disabled={isUpdating}>
+        <Button $variation="primary" $size="medium" disabled={isUpdating}>
           Update password
         </Button>
       </FormRow>
