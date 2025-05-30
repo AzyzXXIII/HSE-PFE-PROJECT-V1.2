@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; // Add this import
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 
 export function useLogin() {
   const navigate = useNavigate();
-  const { login: setAuthUser } = useAuth(); // Add this line
+  const { login: setAuthUser } = useAuth();
 
   const mutation = useMutation({
     mutationFn: async ({ email, password }) => {
@@ -16,11 +16,21 @@ export function useLogin() {
       return response.data; // { token, user }
     },
     onSuccess: (data) => {
-      // Update auth context (this will also update localStorage)
-      setAuthUser(data.user, data.token); // Changed this line
+      const { user, token } = data;
+      setAuthUser(user, token);
 
-      // Navigate to dashboard on successful login
-      navigate("/dashboard"); // Changed from "/home" to "/dashboard"
+      // 🔁 Redirect based on permission
+      if (user.permissions?.includes("view_dashboard")) {
+        navigate("/dashboard");
+      } else if (user.permissions?.includes("manage_users")) {
+        navigate("/employees");
+      } else if (user.role_name === "Supervisor") {
+        navigate("/reportCategory");
+      } else if (user.permissions?.length > 0) {
+        navigate("/account"); // or any page they are allowed
+      } else {
+        navigate("/unauthorized");
+      }
     },
     onError: (err) => {
       console.error(

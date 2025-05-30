@@ -10,7 +10,6 @@ import {
   PublicRoute,
 } from "./features/components/ProtectedRoute";
 
-import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
@@ -66,12 +65,11 @@ function App() {
               <Route path="reportCategory" element={<ReportMain />} />
               <Route path="reports" element={<Reports />} />
               <Route path="reports/:id" element={<Report />} />
-              <Route path="users" element={<Users />} />
               {/* Role-based route (only admins) */}
               <Route
                 path="settings"
                 element={
-                  <ProtectedRoute requiredRoles={["Admin"]}>
+                  <ProtectedRoute requiredPermissions={["manage_users"]}>
                     <Settings />
                   </ProtectedRoute>
                 }
@@ -99,10 +97,8 @@ function App() {
               }
             />
 
-            {/* Unauthorized access */}
             <Route path="unauthorized" element={<Unauthorized />} />
 
-            {/* Fallback */}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </AuthProvider>

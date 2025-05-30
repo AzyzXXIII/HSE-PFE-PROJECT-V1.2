@@ -60,7 +60,7 @@ function MainNav() {
         <li>
           <StyledNavLink to="/dashboard">
             <HiOutlineHome />
-            <span>Home</span>
+            <span>Dashboard</span>
           </StyledNavLink>
         </li>
         <li>
@@ -71,7 +71,7 @@ function MainNav() {
         </li>
         <li>
           <StyledNavLink to="/employees">
-            <HiOutlineBriefcase />
+            <HiOutlineUsers />
             <span>Manage Users</span>
           </StyledNavLink>
         </li>
@@ -81,12 +81,7 @@ function MainNav() {
             <span>Calendar</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/users">
-            <HiOutlineUsers />
-            <span>Users</span>
-          </StyledNavLink>
-        </li>
+
         <li>
           <StyledNavLink to="/settings">
             <HiOutlineCog6Tooth />

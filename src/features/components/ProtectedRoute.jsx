@@ -17,12 +17,13 @@ export function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  // Check role-based access if required
-  if (requiredRoles.length > 0 && !requiredRoles.includes(user?.role)) {
+  if (
+    requiredRoles.length > 0 &&
+    (!user?.role_name || !requiredRoles.includes(user.role_name))
+  ) {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  // Check permission-based access if required
   if (
     requiredPermissions.length > 0 &&
     !requiredPermissions.every((perm) => user?.permissions?.includes(perm))
@@ -32,11 +33,20 @@ export function ProtectedRoute({
 
   return children;
 }
+
 export function PublicRoute({ children }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    if (user?.permissions?.includes("view_dashboard")) {
+      return <Navigate to="/dashboard" replace />;
+    } else if (user?.permissions?.includes("manage_users")) {
+      return <Navigate to="/employees" replace />;
+    } else if (user?.permissions?.includes("manage_reports")) {
+      return <Navigate to="/reportCategory" replace />;
+    } else {
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
 
   return children;
