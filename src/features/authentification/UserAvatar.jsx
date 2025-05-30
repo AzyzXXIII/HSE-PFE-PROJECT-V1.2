@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import avatar from "../../assets/profil.png";
+import defaultAvatar from "../../assets/profil.png";
+import { useAuth } from "../../context/AuthContext";
+
 const StyledUserAvatar = styled.div`
   display: flex;
   gap: 1.2rem;
@@ -20,15 +22,17 @@ const Avatar = styled.img`
 `;
 
 function UserAvatar() {
-  const user = {
-    fullName: "Azyz Hcini",
-    avatar: avatar, // Change this to your default user image
-  };
+  const { user } = useAuth();
+
+  const avatarSrc = user?.avatar || defaultAvatar;
+  const fullName = user
+    ? `${user.first_name || ""} ${user.last_name || ""}`.trim()
+    : "Unknown User";
 
   return (
     <StyledUserAvatar>
-      <Avatar src={user.avatar} alt={"azyz"} />
-      <span>{user.fullName}</span>
+      <Avatar src={avatarSrc} alt={fullName} />
+      <span>{fullName}</span>
     </StyledUserAvatar>
   );
 }

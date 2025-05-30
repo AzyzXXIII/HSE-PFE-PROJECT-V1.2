@@ -29,6 +29,8 @@ export async function login(req, res) {
       role_id: user.role_id,
       role_name: user.role_name,
       permissions: user.permissions || [],
+      first_name: user.first_name,
+      last_name: user.last_name,
     });
 
     res.json({
@@ -36,6 +38,8 @@ export async function login(req, res) {
       user: {
         id: user.id,
         email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
         role_id: user.role_id,
         role_name: user.role_name,
         permissions: user.permissions || [],

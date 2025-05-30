@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import {
   fetchAllUsers,
   updateUserStatus,
@@ -52,11 +53,18 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-// ✅ Create User
-
+// ✅ Create User with Password Hashing
 export const createNewUser = async (req, res) => {
   try {
-    const user = await createUser(req.body);
+    const userData = { ...req.body };
+
+    // Hash password if provided
+    if (userData.password) {
+      const saltRounds = 12;
+      userData.password = await bcrypt.hash(userData.password, saltRounds);
+    }
+
+    const user = await createUser(userData);
     res.status(201).json(user);
   } catch (error) {
     console.error("❌ Error creating user:", error.message);
@@ -64,11 +72,19 @@ export const createNewUser = async (req, res) => {
   }
 };
 
-// ✅ Update User (PATCH)
+// ✅ Update User (PATCH) with Optional Password Hashing
 export const updateUserDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedUser = await updateUser(id, req.body);
+    const updateData = { ...req.body };
+
+    // Hash password if it's being updated
+    if (updateData.password) {
+      const saltRounds = 12;
+      updateData.password = await bcrypt.hash(updateData.password, saltRounds);
+    }
+
+    const updatedUser = await updateUser(id, updateData);
     res.status(200).json(updatedUser);
   } catch (error) {
     console.error("❌ Error updating user:", error.message);

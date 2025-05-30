@@ -1,7 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
-:root {
+/* Light mode (default) */
+:root,
+:root.light-mode {
   /* Indigo */
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
@@ -56,6 +58,57 @@ const GlobalStyles = createGlobalStyle`
   --image-opacity: 100%;
 }
 
+/* Dark mode */
+:root.dark-mode {
+  /* Keep brand colors similar but adjust for dark theme */
+  --color-brand-50: #312e81;
+  --color-brand-100: #3730a3;
+  --color-brand-200: #4338ca;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #8b5cf6;
+  --color-brand-700: #a78bfa;
+  --color-brand-800: #c4b5fd;
+  --color-brand-900: #e0e7ff;
+
+  /* Grey - inverted for dark mode */
+  --color-grey-0: #18212f;
+  --color-grey-50: #111827;
+  --color-grey-100: #1f2937;
+  --color-grey-200: #374151;
+  --color-grey-300: #4b5563;
+  --color-grey-400: #6b7280;
+  --color-grey-500: #9ca3af;
+  --color-grey-600: #d1d5db;
+  --color-grey-700: #e5e7eb;
+  --color-grey-800: #f3f4f6;
+  --color-grey-900: #f9fafb;
+
+  --color-blue-100: #1e3a8a;
+  --color-blue-700: #dbeafe;
+  --color-green-100: #14532d;
+  --color-green-700: #dcfce7;
+  --color-yellow-100: #92400e;
+  --color-yellow-700: #fef9c3;
+  --color-silver-100: #374151;
+  --color-silver-700: #e5e7eb;
+  --color-indigo-100: #3730a3;
+  --color-indigo-700: #e0e7ff;
+
+  --color-red-100: #7f1d1d;
+  --color-red-700: #fca5a5;
+  --color-red-800: #dc2626;
+
+  --backdrop-color: rgba(0, 0, 0, 0.3);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0px 0.6rem 2.4rem rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.4);
+
+  /* Dark mode image adjustments */
+  --image-grayscale: 10%;
+  --image-opacity: 90%;
+}
+
 *,
 *::before,
 *::after {
@@ -74,6 +127,7 @@ html {
 body {
   font-family: "Poppins", sans-serif;
   color: var(--color-grey-700);
+  background-color: var(--color-grey-0);
 
   transition: color 0.3s, background-color 0.3s;
   min-height: 100vh;
@@ -141,6 +195,25 @@ img {
 
   /* For dark mode */
   filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
+}
+
+/* Additional dark mode adjustments for common elements */
+.dark-mode {
+  /* Force white backgrounds to be dark */
+  .white-bg,
+  .bg-white {
+    background-color: var(--color-grey-100) !important;
+  }
+  
+  /* Adjust borders that might be too light */
+  .light-border {
+    border-color: var(--color-grey-300) !important;
+  }
+  
+  /* Logo adjustments - uncomment if using white logo */
+  /* .logo-white {
+    filter: invert(1) brightness(0.8);
+  } */
 }
 
 `;

@@ -8,7 +8,7 @@ export const AddEmployee = ({ setEmployees }) => {
       <Modal>
         <Modal.Open opens="employee-form">
           <Button $variation="primary" $size="medium">
-            Add Employee
+            Add User
           </Button>
         </Modal.Open>
 

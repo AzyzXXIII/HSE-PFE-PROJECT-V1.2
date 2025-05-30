@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import GlobalStyles from "./styles/GlobalStyles";
 
 import { AuthProvider } from "./context/AuthContext";
+import { DarkModeProvider } from "./context/DarkModeContext"; // Import DarkModeProvider
 import {
   ProtectedRoute,
   PublicRoute,
@@ -27,7 +28,7 @@ import "./index.css";
 
 function App() {
   return (
-    <>
+    <DarkModeProvider>
       <GlobalStyles />
       <ToastContainer
         position="top-center"
@@ -103,7 +104,7 @@ function App() {
           </Routes>
         </AuthProvider>
       </BrowserRouter>
-    </>
+    </DarkModeProvider>
   );
 }
 
